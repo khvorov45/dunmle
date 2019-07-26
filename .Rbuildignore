@@ -1,1 +1,3 @@
 ^devtesting$
+^.*\.Rproj$
+^\.Rproj\.user$
