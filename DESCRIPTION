@@ -1,13 +1,13 @@
 Package: dunmle
-Title: What the Package Does (One Line, Title Case)
+Title: MLE Estimation of the Dunning Model
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Arseniy",
+           family = "Khvorov",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: What license it uses
+           email = "khvorov45@gmail.com")
+Description: Estimates the parameters of the protection correlate model 
+    proposed in Dunning (2006).
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
