@@ -1,0 +1,27 @@
+Scaled logit model in: A model for immunological correlates of protection. Statistics in Medicine 2006; 25(9):1485-1497.
+ 
+SAS CODE TO FIT THE MODEL USING PROC NLMIXED
+ 
+* By default, the code operates on a dataset called '(work.)corrprot' containing the variables 
+'assayval' and 'disease'; 
+ 
+* Suggested starting values for nlmixed: 
+lambda = 2*mean(disease), 
+alpha = -beta*mean(assayval), 
+beta = 1; 
+
+proc nlmixed data=corrprot cov; 
+parms lambda=.1 alpha=-2 beta=1; 
+model disease ~ binary(lambda /(1+exp(alpha + beta*assayval))); 
+predict alpha+beta*assayval out= fitted; 
+run; 
+ 
+data fitcurve; set fitted; 
+probprot= 1-1/(1+exp(Pred)); 
+lwciprot= 1-1/(1+exp(Lower)); 
+upciprot= 1-1/(1+exp(Upper)); 
+run; 
+ 
+proc sort data=fitcurve; by assayval; run; 
+ 
+proc plot data= fitcurve; plot probprot*assayval='*' lwciprot*assayval='L' upciprot*assayval='U' /overlay; run; quit; 

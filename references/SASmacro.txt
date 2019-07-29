@@ -1,0 +1,149 @@
+* Scaled logit model in: A model for immunological correlates of protection.
+Statistics in Medicine 2006, 25(9):1485-1497.
+ 
+SAS macro code to implement the fitting algorithm;
+ 
+ 
+%macro maxlike(in=corrprot, assayval=assayval, disease=disease, numiters=10, stepsize=1,
+firstlam=, firstalp=, firstbet=);
+ 
+/* By default, the macro operates on a dataset called '(work.)corrprot' containing the variables
+'assayval' and 'disease'.
+ 
+Macro parameters:
+  'numiters' = number of iterations to perform; default = 10.
+  'stepsize' = step size at each iteration; default = 1.
+  'firstlam' = starting value for lambda; default = 1.5*mean(disease).
+  'firstalp' = starting value for alpha; default = -mean(assayval).
+  'firstbet' = starting value for beta; default = 1.
+ 
+  title4 and title5 are used for printing results.
+    */
+ 
+data crrprt; length mergekey $8; set &in;
+  mergekey='mergekey';
+  assayval= &assayval;
+  disease= &disease;
+  keep assayval disease mergekey; 
+run;
+ 
+proc means data=crrprt noprint;
+  var assayval disease;
+  output out=firstges mean(assayval)= mean(disease)= min(assayval)= max(assayval)= /autoname;
+run;
+ 
+data paramest params;
+  set firstges;
+  call symput('nobs',_FREQ_);
+  mergekey='mergekey';
+  if resolve('%datatyp(&firstlam)')= 'NUMERIC' then lambda=1*symget('firstlam');
+    else lambda= 1.5*disease_Mean;
+  if resolve('%datatyp(&firstalp)')= 'NUMERIC' then alpha=1*symget('firstalp');
+    else alpha=-assayval_Mean;
+  if resolve('%datatyp(&firstbet)')= 'NUMERIC' then beta=1*symget('firstbet');
+    else beta= 1;
+  call symput('assaymin',assayval_Min);
+  call symput('assaymax',assayval_Max);
+  keep mergekey lambda alpha beta;
+run;
+ 
+%do iter = 1 %to &numiters;
+ 
+data lh_score(keep= likelihd dl_dl dl_da dl_db) 
+     infomat(keep= col1 col2 col3);
+  merge crrprt(rename= (disease=yi assayval=ti))
+        params;
+  by mergekey;
+  retain likelihd 1 dl_dl dl_da dl_db d2l_dl2 d2l_dlda d2l_dldb d2l_dadb d2l_da2 d2l_db2 0;
+  likelihd= likelihd * (lambda/(1+exp(alpha+beta*ti)))**yi *
+     ((1+exp(alpha+beta*ti)-lambda)/(1+exp(alpha+beta*ti)))**(1-yi);
+  dl_dl= dl_dl + yi/lambda - (1-yi)/(1+exp(alpha+beta*ti)-lambda);
+  dl_da= dl_da + (1-yi)*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)
+     - exp(alpha+beta*ti)/(1+exp(alpha+beta*ti));
+  dl_db= dl_db + (1-yi)*ti*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)
+     - ti*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti));
+  d2l_dl2= d2l_dl2 - yi/lambda**2 - (1-yi)/(1+exp(alpha+beta*ti)-lambda)**2;
+  d2l_dlda= d2l_dlda + (1-yi)*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)**2;
+  d2l_dldb= d2l_dldb + (1-yi)*ti*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)**2;
+  d2l_da2= d2l_da2 + (1-yi)*(1-lambda)*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)**2
+           - exp(alpha+beta*ti)/(1+exp(alpha+beta*ti))**2;
+  d2l_dadb= d2l_dadb + (1-yi)*ti*(1-lambda)*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)**2
+           - ti*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti))**2;
+  d2l_db2= d2l_db2 + (1-yi)*ti**2*(1-lambda)*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti)-lambda)**2
+           - ti**2*exp(alpha+beta*ti)/(1+exp(alpha+beta*ti))**2;
+  if _n_=&nobs then do;
+    output lh_score;
+    col1= -d2l_dl2; col2= -d2l_dlda; col3= -d2l_dldb; output infomat;
+    col1= -d2l_dlda; col2= -d2l_da2; col3= -d2l_dadb; output infomat;
+    col1= -d2l_dldb; col2= -d2l_dadb; col3= -d2l_db2; output infomat;
+    end;
+run;
+ 
+proc iml;
+use infomat;
+read all into infomat;
+use lh_score;
+read all var {dl_dl dl_da dl_db} into score;
+covrmt= inv(infomat);
+delta=score*covrmt;
+create delta from delta;
+append from delta;
+create covrmt from covrmt;
+append from covrmt;
+quit;
+ 
+data newvalus; merge lh_score delta; run;
+ 
+data paramest(keep= mergekey lambda alpha beta likelihd dl_dl dl_da dl_db col1 col2 col3)
+     params(keep= mergekey lambda alpha beta);
+  set paramest newvalus;
+  retain mrgky lamb alph bet;
+  if _n_ le &iter then do;
+    mrgky= mergekey;
+    lamb= lambda;
+    alph= alpha;
+    bet= beta;
+    end;
+  else do;
+    mergekey= mrgky;
+    lambda= lamb+col1*&stepsize;
+    alpha= alph+col2*&stepsize;
+    beta= bet+col3*&stepsize;
+    output params;
+    end;
+  output paramest;
+run;
+ 
+%end;
+ 
+data covarmat; set covrmt; param= scan('lambda alpha beta',_n_);
+rename col1=lambda col2=alpha col3=beta; 
+if _n_=2 then do; call symput('varalpha',col2); call symput('coalpbet',col3); end;
+if _n_=3 then call symput('varbeta',col3); run;
+ 
+data probprot;
+  set params;
+  do assayval= floor(symget('assaymin')) to ceil(symget('assaymax')) by .5;
+  probprot= exp(alpha+beta*assayval)/(1+exp(alpha+beta*assayval));
+  var_a_bt= symget('varalpha')+(assayval**2)*symget('varbeta')+2*assayval*symget('coalpbet');
+  lcl= exp(alpha+beta*assayval-1.96*sqrt(var_a_bt))/(1+exp(alpha+beta*assayval-1.96*sqrt(var_a_bt)));
+  ucl= exp(alpha+beta*assayval+1.96*sqrt(var_a_bt))/(1+exp(alpha+beta*assayval+1.96*sqrt(var_a_bt)));
+  output; end;
+  label probprot= 'Prob. Protected' assayval= 'Assay Value';
+run;
+ 
+title4 Parameter Estimates, Scores and Likelihood at each Iteration; 
+proc print data= paramest; var lambda alpha beta dl_dl dl_da dl_db likelihd; run;
+title4 Estimated Variance-Covariance Matrix of Parameter Estimates;
+title5 (Inverse of Observed Information Matrix); 
+proc print data= covarmat noobs; var param lambda alpha beta; run;
+title4 Estimated Probability of Protection and 95% Confidence Interval; title5;
+proc plot data= probprot; plot  probprot*assayval='*' lcl*assayval='L' ucl*assayval='U' /overlay; run; quit;
+title4;
+ 
+proc datasets nolist; delete firstges paramest params crrprt lh_score infomat newvalus 
+delta covrmt covarmat; run; quit;
+ 
+%mend maxlike;
+ 
+ 
