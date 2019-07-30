@@ -1,6 +1,6 @@
 Package: dunmle
 Title: MLE Estimation of the Dunning Model
-Version: 0.0.0.9000
+Version: 0.0.0.9100
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
@@ -8,7 +8,7 @@ Authors@R:
            email = "khvorov45@gmail.com")
 Description: Estimates the parameters of the protection correlate model 
     proposed in Dunning (2006).
-License: GPL-3
+License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
