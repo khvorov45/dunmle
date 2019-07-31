@@ -1,16 +1,11 @@
-devtools::install_github("khvorov45/dunmle")
+# Package testing script for use during development
+# Arseniy Khvorov
+# Created 2019/07/29
+# Last edit 2019/07/31
 
-devtools::install("G:/Nexus/dunmle")
-
-library(dunmle)
-
-testing_documentation("test")
-
-dat <- read.csv("data/simulated_data_1.csv")
+# Model fit
+dat <- read.csv("data/H3onlyInd-1.csv")
 
 fit <- sclr(status ~ HI, dat, tol = 10^(-7))
 
-mf <- model.frame(status ~ HI, dat)
-
-y <- model.response(mf)
-x <- model.matrix(attr(mf, "terms"), mf)
+summary(fit)

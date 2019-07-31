@@ -1,6 +1,6 @@
-Package: dunmle
-Title: MLE Estimation of the Dunning Model
-Version: 0.0.0.9100
+Package: sclr
+Title: MLE Estimation of the scaled logit
+Version: 0.0.0.9101
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
