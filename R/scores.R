@@ -14,7 +14,7 @@ get_scores <- function(y, x, pars) {
 get_dl <- function(y, x, pars) {
   lambda <- pars["lambda", ]
   beta_0 <- pars["beta_0", ]
-  beta_titre <- pars["beta_titre", ]
+  beta_titre <- pars[3, ]
   dl <- y / lambda - (1 - y) / (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
   dl <- sum(dl)
   return(dl)
@@ -31,7 +31,7 @@ get_db0 <- function(y, x, pars) {
 get_db0_f1 <- function(y, x, pars) {
   lambda <- pars["lambda", ]
   beta_0 <- pars["beta_0", ]
-  beta_titre <- pars["beta_titre", ]
+  beta_titre <- pars[3, ]
   f1 <- exp(beta_0 + beta_titre * x[, 2]) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
   return(f1)
@@ -40,7 +40,7 @@ get_db0_f1 <- function(y, x, pars) {
 # Computes the second fraction term of db0
 get_db0_f2 <- function(y, x, pars) {
   beta_0 <- pars["beta_0", ]
-  beta_titre <- pars["beta_titre", ]
+  beta_titre <- pars[3, ]
   f2 <- exp(beta_0 + beta_titre * x[, 2]) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]))
   return(f2)
@@ -57,7 +57,7 @@ get_dbt <- function(y, x, pars) {
 get_dbt_f1 <- function(y, x, pars) {
   lambda <- pars["lambda", ]
   beta_0 <- pars["beta_0", ]
-  beta_titre <- pars["beta_titre", ]
+  beta_titre <- pars[3, ]
   f1 <- x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
   return(f1)
@@ -66,7 +66,7 @@ get_dbt_f1 <- function(y, x, pars) {
 # Computes the second fraction term of dbt
 get_dbt_f2 <- function(y, x, pars) {
   beta_0 <- pars["beta_0", ]
-  beta_titre <- pars["beta_titre", ]
+  beta_titre <- pars[3, ]
   f2 <- x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]))
   return(f2)

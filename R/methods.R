@@ -19,5 +19,12 @@ coef.sclr <- function(fit) {
 
 # Summary
 summary.sclr <- function(fit) {
-  cat("Need to implement\n")
+  cat("Call: ")
+  print(fit$call[["formula"]])
+  
+  cat("\nParameter estimates\n")
+  print(fit$parameters)
+  
+  cat("\n95% confidence intervals\n")
+  print(fit$confint)
 }

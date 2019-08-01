@@ -59,9 +59,10 @@ sclr <- function(formula, data, tol = 10^(-7), n_iter = NULL) {
 sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
   
   # Parameter vector with initial values
-  pars <- c("lambda" = mean(y), "beta_0" = 0, "beta_titre" = 0)
-  pars_mat <- matrix(pars)
-  rownames(pars_mat) <- names(pars)
+  n_par <- ncol(x) + 1
+  pars_mat <- matrix(rep(0, n_par))
+  rownames(pars_mat) <- c("lambda", get_par_names(x))
+  pars_mat["lambda", ] <- mean(y)
   
   # Work out the MLEs
   n_iter_cur <- 1
@@ -92,4 +93,10 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
     n_converge = n_iter_cur - 1
   )
   return(fit)
+}
+
+# Returns parameter names based on the model matrix
+get_par_names <- function(x) {
+  par_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))
+  return(par_names)
 }

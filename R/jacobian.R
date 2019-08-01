@@ -36,7 +36,7 @@ get_d2l_dbt2 <- function(y, x, pars_mat) {
 get_d2l_dbt2_f1 <- function(y, x, pars_mat) {
   lambda <- pars_mat["lambda", ]
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f1 <- (x[, 2]^2 * (1 - lambda) * exp(beta_0 + beta_titre * x[, 2])) / 
     get_denom(y, x, pars_mat)^2
   return(f1)
@@ -45,7 +45,7 @@ get_d2l_dbt2_f1 <- function(y, x, pars_mat) {
 # Computes the second fraction term of d2l_dbt2
 get_d2l_dbt2_f2 <- function(y, x, pars_mat) {
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f2 <- (x[, 2]^2 * exp(beta_0 + beta_titre * x[, 2])) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]))^2
   return(f2)
@@ -64,7 +64,7 @@ get_d2l_db0bt <- function(y, x, pars_mat) {
 get_d2l_db0bt_f1 <- function(y, x, pars_mat) {
   lambda <- pars_mat["lambda", ]
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f1 <- (x[, 2] * (1 - lambda) * exp(beta_0 + beta_titre * x[, 2])) / 
     get_denom(y, x, pars_mat)^2
   return(f1)
@@ -73,7 +73,7 @@ get_d2l_db0bt_f1 <- function(y, x, pars_mat) {
 # Computes the second fraction term of d2l_db0bt
 get_d2l_db0bt_f2 <- function(y, x, pars_mat) {
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f2 <- (x[, 2] * exp(beta_0 + beta_titre * x[, 2])) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]))^2
   return(f2)
@@ -91,7 +91,7 @@ get_d2l_db02 <- function(y, x, pars_mat) {
 get_d2l_db02_f1 <- function(y, x, pars_mat) {
   lambda <- pars_mat["lambda", ]
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f1 <- (1 - lambda) * exp(beta_0 + beta_titre * x[, 2]) / 
     get_denom(y, x, pars_mat)^2
   return(f1)
@@ -100,7 +100,7 @@ get_d2l_db02_f1 <- function(y, x, pars_mat) {
 # Computes the second fraction term of d2l_db02
 get_d2l_db02_f2 <- function(y, x, pars_mat) {
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   f2 <- exp(beta_0 + beta_titre * x[, 2]) / 
     (1 + exp(beta_0 + beta_titre * x[, 2]))^2
   return(f2)
@@ -110,7 +110,7 @@ get_d2l_db02_f2 <- function(y, x, pars_mat) {
 # beta_titre
 get_d2l_dldbt <- function(y, x, pars_mat) {
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   d2l_dldbt <- (1 - y) * x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
     get_denom(y, x, pars_mat)^2
   d2l_dldbt <- sum(d2l_dldbt)
@@ -121,7 +121,7 @@ get_d2l_dldbt <- function(y, x, pars_mat) {
 # beta_0
 get_d2l_dldb0 <- function(y, x, pars_mat) {
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   d2l_dldb0 <- (1 - y) * exp(beta_0 + beta_titre * x[, 2]) / 
     get_denom(y, x, pars_mat)^2
   d2l_dldb0 <- sum(d2l_dldb0)
@@ -140,7 +140,7 @@ get_d2l_dl2 <- function(y, x, pars_mat) {
 get_denom <- function(y, x, pars_mat) {
   lambda <- pars_mat["lambda", ]
   beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat["beta_titre", ]
+  beta_titre <- pars_mat[3, ]
   denom <- 1 + exp(beta_0 + beta_titre * x[, 2]) - lambda
   return(denom)
 }
