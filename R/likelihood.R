@@ -13,7 +13,7 @@
 sclr_log_likelihood <- function(y, x, pars) {
   lambda <- pars["lambda"]
   beta_0 <- pars["beta_0"]
-  beta_titre <- pars["beta_titre"]
+  beta_titre <- pars[3]
   l <- y * log(lambda) + 
     (1 - y) * log(1 + exp(beta_0 + beta_titre * x[, 2]) - lambda) -
     log(1 + exp(beta_0 + beta_titre * x[, 2]))

@@ -4,7 +4,7 @@
 # Last edit 2019/08/01
 
 # Model fit
-dat <- read.csv("data/H3onlyIndTime-1.csv")
+dat <- read.csv("data/H3onlyInd/data-2.csv")
 
 fit <- sclr(status ~ HI, dat)
 

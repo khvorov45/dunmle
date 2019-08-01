@@ -69,7 +69,8 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
   while (TRUE) {
     pars_mat_prev <- pars_mat
     jacobian_mat <- get_jacobian(y, x, pars_mat_prev)
-    inv_jacobian_mat <- matlib::inv(jacobian_mat)
+    inv_jacobian_mat <- base::solve(jacobian_mat)
+    print(inv_jacobian_mat)
     scores_mat <- get_scores(y, x, pars_mat_prev)
     pars_mat <- pars_mat_prev - inv_jacobian_mat %*% scores_mat
     n_iter_cur <- n_iter_cur + 1
