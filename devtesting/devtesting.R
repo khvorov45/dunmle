@@ -9,3 +9,5 @@ dat <- read.csv("data/H3onlyIndTime-1.csv")
 fit <- sclr(status ~ HI, dat)
 
 summary(fit)
+
+vcov(fit)
