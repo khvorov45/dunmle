@@ -41,6 +41,10 @@ sclr <- function(formula, data, tol = 10^(-7), n_iter = NULL) {
   fit[["call"]] <- cl
   
   fit[["confint"]] <- confint(fit)
+  
+  fit$model_matrix <- x
+  fit$model_response <- y
+  fit$log_likelihood <- sclr_log_likelihood(fit)
 
   return(fit)
 }
@@ -64,21 +68,37 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
   rownames(pars_mat) <- c("lambda", get_par_names(x))
   pars_mat["lambda", ] <- mean(y)
   
+  pars_mat_init <- pars_mat
+  
   # Work out the MLEs
   n_iter_cur <- 1
   while (TRUE) {
+    cat("top loop\n")
+    print(pars_mat)
+    if (is_bad(pars_mat)) pars_mat <- guess_again(pars_mat_init)
+    cat("after guess again\n")
+    print(pars_mat)
     pars_mat_prev <- pars_mat
     jacobian_mat <- get_jacobian(y, x, pars_mat_prev)
+    print(jacobian_mat)
+    if (is_bad_jac(jacobian_mat)) {
+      pars_mat <- guess_again(pars_mat_init)
+      next
+    }
+    cat("=======\n")
+    if (any(is.na(jacobian_mat))) stop("can't calculate second derivatives")
     inv_jacobian_mat <- base::solve(jacobian_mat)
-    print(inv_jacobian_mat)
     scores_mat <- get_scores(y, x, pars_mat_prev)
     pars_mat <- pars_mat_prev - inv_jacobian_mat %*% scores_mat
+    print(pars_mat)
     n_iter_cur <- n_iter_cur + 1
     if (!is.null(n_iter)) {
       if (n_iter_cur > n_iter) break
     } else {
-      deltas <- pars_mat - pars_mat_prev
-      if (all(deltas <= tol)) break
+      deltas <- abs(pars_mat - pars_mat_prev)
+      if (all(deltas <= tol)) {
+        break
+      } 
     }
   }
 
@@ -90,14 +110,30 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
   fit <- list(
     parameters = parameters,
     covariance_mat = covariance_mat,
-    log_likelihood = sclr_log_likelihood(y, x, parameters),
     n_converge = n_iter_cur - 1
   )
   return(fit)
 }
 
-# Returns parameter names based on the model matrix
-get_par_names <- function(x) {
-  par_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))
-  return(par_names)
+# Checks if the current parameter guesses are OK for derivative calculations
+is_bad <- function(pars_mat) {
+  pars_betas <- get_betas_only(pars_mat)
+  if (any(abs(pars_betas) > 100)) return(TRUE)
+  if (any(pars_betas[-1] < 0)) return(TRUE)
+  lambda <- pars_mat["lambda", ]
+  if ((lambda < 0) | (lambda > 1)) return(TRUE)
+  return(FALSE)
+}
+
+# Comes up with a new initial guess
+guess_again <- function(pars_mat) {
+  delta <- matrix(c(0, abs(rnorm(nrow(pars_mat) - 1))), ncol = 1) # abs(rnorm)?
+  pars_mat <- pars_mat + delta
+  return(pars_mat)
+}
+
+# Checks if the jacobian is bad (positive diagonal)
+is_bad_jac <- function(jac) {
+  if (any(diag(jac) > 0)) return(TRUE)
+  return(FALSE)
 }

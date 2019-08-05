@@ -4,14 +4,13 @@
 \alias{sclr_log_likelihood}
 \title{Log-likelihood}
 \usage{
-sclr_log_likelihood(y, x, pars)
+sclr_log_likelihood(fit, pars = NULL)
 }
 \arguments{
-\item{y}{A vector of observations.}
+\item{fit}{An object returned by \code{\link{sclr}}.}
 
-\item{x}{A design matrix.}
-
-\item{pars}{A named vector of parameter values.}
+\item{pars}{A named vector of parameter values. If \code{NULL}
+then the MLE estimates from fit will be used}
 }
 \description{
 Computes the log-likelihood of the scaled logit model
