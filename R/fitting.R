@@ -10,9 +10,13 @@
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
 #' when this is not \code{NULL}.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge 
+#' within this number of iterations, will return with an error.
 #' 
 #' @export
-sclr <- function(formula, data, tol = 10^(-7), n_iter = NULL) {
+sclr <- function(
+  formula, data, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
+) {
   
   cl <- match.call()
   
@@ -34,7 +38,7 @@ sclr <- function(formula, data, tol = 10^(-7), n_iter = NULL) {
   
   # Actual model fit
 
-  fit <- sclr_fit(y, x, tol, n_iter)
+  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it)
   
   class(fit) <- "sclr"
   
@@ -58,9 +62,11 @@ sclr <- function(formula, data, tol = 10^(-7), n_iter = NULL) {
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
 #' when this is not \code{NULL}.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge 
+#' within this number of iterations, will return with an error.
 #' 
 #' @export
-sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
+sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
   
   # Parameter vector with initial values
   n_par <- ncol(x) + 1
@@ -73,24 +79,24 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
   # Work out the MLEs
   n_iter_cur <- 1
   while (TRUE) {
-    cat("top loop\n")
-    print(pars_mat)
+    #cat("top loop\n")
+    #print(pars_mat)
     if (is_bad(pars_mat)) pars_mat <- guess_again(pars_mat_init)
-    cat("after guess again\n")
-    print(pars_mat)
+    #cat("after guess again\n")
+    #print(pars_mat)
     pars_mat_prev <- pars_mat
     jacobian_mat <- get_jacobian(y, x, pars_mat_prev)
-    print(jacobian_mat)
+    #print(jacobian_mat)
     if (is_bad_jac(jacobian_mat)) {
       pars_mat <- guess_again(pars_mat_init)
       next
     }
-    cat("=======\n")
+    #cat("=======\n")
     if (any(is.na(jacobian_mat))) stop("can't calculate second derivatives")
     inv_jacobian_mat <- base::solve(jacobian_mat)
     scores_mat <- get_scores(y, x, pars_mat_prev)
     pars_mat <- pars_mat_prev - inv_jacobian_mat %*% scores_mat
-    print(pars_mat)
+    #print(pars_mat)
     n_iter_cur <- n_iter_cur + 1
     if (!is.null(n_iter)) {
       if (n_iter_cur > n_iter) break
@@ -100,6 +106,8 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL) {
         break
       } 
     }
+    if (n_iter_cur > max_tol_it) 
+      stop("did not converge in ", max_tol_it, " iterations\n")
   }
 
   # Build the return list

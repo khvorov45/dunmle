@@ -8,7 +8,7 @@ options(scipen = 999)
 library(dplyr)
 
 # Data
-dat <- read.csv("data/ExOneLSInd/data-2.csv")
+dat <- read.csv("data/ExOneLSInd/data-1.csv")
 
 # Model fit
 fit <- sclr(status ~ HI, dat)
@@ -17,7 +17,7 @@ summary(fit)
 dat$HIcens_mid <- (dat$HI_lb + dat$HI_ub) / 2
 dat$HIcens_mid[near(dat$HIcens, log(5))] <- log(5)
 dat$HIcens_mid[near(dat$HIcens, log(1280))] <- log(2560)
-fit <- sclr(status ~ HIcens_mid, sample_n(dat, 100))
+fit <- sclr(status ~ HIcens_mid, dat)
 summary(fit)
 
 
