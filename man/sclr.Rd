@@ -4,7 +4,7 @@
 \alias{sclr}
 \title{Fits the scaled logit model}
 \usage{
-sclr(formula, data, tol = 10^(-7), n_iter = NULL)
+sclr(formula, data, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
 }
 \arguments{
 \item{formula}{an object of class "formula":
@@ -16,6 +16,9 @@ a symbolic description of the model to be fitted.}
 
 \item{n_iter}{Number of Newton-Raphson iterations. \code{tol} is ignored
 when this is not \code{NULL}.}
+
+\item{max_tol_it}{Maximum tolerated iterations. If it fails to coverge 
+within this number of iterations, will return with an error.}
 }
 \description{
 Used to fit the scaled logit model from Dunning (2006).

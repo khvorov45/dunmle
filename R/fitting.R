@@ -17,11 +17,11 @@
 sclr <- function(
   formula, data, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
 ) {
-  cat("very beginning\n")
+
   cl <- match.call()
-  
+
   # Manipulations to get to response vector and design matrix
-  
+
   ## The call is passed to model.frame
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
@@ -29,11 +29,11 @@ sclr <- function(
   mf$drop.unused.levels <- TRUE
   mf[[1L]] <- quote(stats::model.frame)
   mf <- eval(mf, parent.frame())
-  cat("just evaluated\n")
+  
   ## Design matirix
   mt <- attr(mf, "terms")
   x <- model.matrix(mt, mf)
-  
+
   ## Response vector
   y <- model.response(mf)
   

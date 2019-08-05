@@ -4,7 +4,7 @@
 \alias{sclr_fit}
 \title{Fitter function for the scaled logit model}
 \usage{
-sclr_fit(y, x, tol = 10^(-7), n_iter = NULL)
+sclr_fit(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
 }
 \arguments{
 \item{y}{A vector of observations.}
@@ -15,6 +15,9 @@ sclr_fit(y, x, tol = 10^(-7), n_iter = NULL)
 
 \item{n_iter}{Number of Newton-Raphson iterations. \code{tol} is ignored
 when this is not \code{NULL}.}
+
+\item{max_tol_it}{Maximum tolerated iterations. If it fails to coverge 
+within this number of iterations, will return with an error.}
 }
 \description{
 Computing engine behind \code{\link{sclr}}.
