@@ -1,6 +1,6 @@
 Package: sclr
 Title: MLE Estimation of the scaled logit
-Version: 0.0.0.9200
+Version: 0.0.0.9300
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",

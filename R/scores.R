@@ -1,73 +1,46 @@
 # Functions to compute the score matrix
 
 # Computes the score matrix
-get_scores <- function(y, x, pars) {
-  dl <- get_dl(y, x, pars)
-  db0 <- get_db0(y, x, pars)
-  dbt <- get_dbt(y, x, pars)
-  scores <- matrix(c(dl, db0, dbt))
-  rownames(scores) <- c("dl", "db0", "dbt")
+get_scores <- function(y, x, pars, exp_Xb) {
+  dl <- get_dl(y, x, pars, exp_Xb)
+  beta_part <- get_score_beta_part(y, x, pars, exp_Xb)
+  scores <- matrix(c(dl, beta_part), ncol = 1)
+  rownames(scores) <- c("d_lambda", paste0("d_", get_par_names(x)))
   return(scores)
 }
 
 # Computes the first derivative of log-likelihood with respect to lambda
-get_dl <- function(y, x, pars) {
+get_dl <- function(y, x, pars, exp_Xb) {
   lambda <- pars["lambda", ]
-  beta_0 <- pars["beta_0", ]
-  beta_titre <- pars[3, ]
-  dl <- y / lambda - (1 - y) / (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
+  dl <- y / lambda - (1 - y) / (1 + exp_Xb - lambda)
   dl <- sum(dl)
   return(dl)
 }
 
-# Computes the first derivative of log-likelihood with respect to beta_0
-get_db0 <- function(y, x, pars) {
-  db0 <- (1 - y) * get_db0_f1(y, x, pars) - get_db0_f2(y, x, pars)
-  db0 <- sum(db0)
-  return(db0)
+# Computes the first derivatives of log-likelihood with respect to the betas
+get_score_beta_part <- function(y, x, pars, exp_Xb) {
+  common <- get_score_beta_common(y, x, pars, exp_Xb) # A matrix with 1 col
+  beta_score_contr <- x * common[, 1] # Non-matrix multiplication
+  beta_score <- colSums(beta_score_contr)
+  return(beta_score)
 }
 
-# Computes the first fraction term of db0
-get_db0_f1 <- function(y, x, pars) {
+# Computes common part of the beta derivatives
+get_score_beta_common <- function(y, x, pars, exp_Xb) {
+  bc <- (1 - y) * get_dbc_f1(y, x, pars, exp_Xb) - 
+    get_dbc_f2(y, x, pars, exp_Xb)
+  return(bc)
+}
+
+# Computes the first fraction term of common
+get_dbc_f1 <- function(y, x, pars, exp_Xb) {
   lambda <- pars["lambda", ]
-  beta_0 <- pars["beta_0", ]
-  beta_titre <- pars[3, ]
-  f1 <- exp(beta_0 + beta_titre * x[, 2]) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
+  f1 <- exp_Xb / (1 + exp_Xb - lambda)
   return(f1)
 }
 
-# Computes the second fraction term of db0
-get_db0_f2 <- function(y, x, pars) {
-  beta_0 <- pars["beta_0", ]
-  beta_titre <- pars[3, ]
-  f2 <- exp(beta_0 + beta_titre * x[, 2]) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]))
-  return(f2)
-}
-
-# Computes the first derivative of log-likelihood with respect to beta_titre
-get_dbt <- function(y, x, pars) {
-  dbt <- (1 - y) * get_dbt_f1(y, x, pars) - get_dbt_f2(y, x, pars)
-  dbt <- sum(dbt)
-  return(dbt)
-}
-
-# Computes the first fraction term of dbt
-get_dbt_f1 <- function(y, x, pars) {
-  lambda <- pars["lambda", ]
-  beta_0 <- pars["beta_0", ]
-  beta_titre <- pars[3, ]
-  f1 <- x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]) - lambda)
-  return(f1)
-}
-
-# Computes the second fraction term of dbt
-get_dbt_f2 <- function(y, x, pars) {
-  beta_0 <- pars["beta_0", ]
-  beta_titre <- pars[3, ]
-  f2 <- x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]))
+# Computes the second fraction term of common
+get_dbc_f2 <- function(y, x, pars, exp_Xb) {
+  f2 <- exp_Xb / (1 + exp_Xb)
   return(f2)
 }

@@ -11,6 +11,6 @@ get_exp_Xb <- function(y, x, pars) {
 # Result of Xb matrix multiplication
 get_Xb <- function(y, x, pars) {
   pars_betas <- get_betas_only(pars)
-  xb <- base::t(x) * pars_betas
+  xb <- x %*% pars_betas
   return(xb)
 }

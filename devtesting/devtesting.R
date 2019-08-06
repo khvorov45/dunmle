@@ -1,17 +1,17 @@
 # Package testing script for use during development
 # Arseniy Khvorov
 # Created 2019/07/29
-# Last edit 2019/08/05
+# Last edit 2019/08/06
 
 options(scipen = 999)
 
 library(dplyr)
 
 # Data
-dat <- read.csv("data/ExOneLSInd/data-1.csv")
+dat <- read.csv("data/ExTwoLSInd/data-2.csv")
 
 # Model fit
-fit <- sclr(status ~ HI, dat)
+fit <- sclr(status ~ HI + NI, dat)
 summary(fit)
 
 dat$HIcens_mid <- (dat$HI_lb + dat$HI_ub) / 2

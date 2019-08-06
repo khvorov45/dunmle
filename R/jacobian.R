@@ -1,146 +1,110 @@
-# Functions to caclulate the jacobian matrix
+# Functions to caclulate the log-likelihood second derivative matrix
 
-# Computes the jacobian matrix
-get_jacobian <- function(y, x, pars_mat) {
+# Computes the log-likelihood second derivative matrix
+get_jacobian <- function(y, x, pars_mat, exp_Xb) {
   
-  d2l_dl2 <- get_d2l_dl2(y, x, pars_mat)
-  d2l_dldb0 <- get_d2l_dldb0(y, x, pars_mat)
-  d2l_dldbt <- get_d2l_dldbt(y, x, pars_mat)
-  d2l_db02 <- get_d2l_db02(y, x, pars_mat)
-  d2l_db0bt <- get_d2l_db0bt(y, x, pars_mat)
-  d2l_dbt2 <- get_d2l_dbt2(y, x, pars_mat)
+  lambda_entries <- get_lambda_array(y, x, pars_mat, exp_Xb)
+  beta_part <- get_jac_beta_part(y, x, pars_mat, exp_Xb)
+  
+  n_x <- ncol(x)
+  
+  # Convert the beta part to a matrix
+  beta_part_mat <- matrix(0, nrow = n_x, ncol = n_x)
+  beta_part_mat[lower.tri(beta_part_mat, diag = TRUE)] <- beta_part
+  beta_part_mat <- t(beta_part_mat)
+  beta_part_mat[lower.tri(beta_part_mat, diag = TRUE)] <- beta_part
 
-  ord <- c(
-    d2l_dl2, d2l_dldb0, d2l_dldbt, 
-    d2l_dldb0, d2l_db02, d2l_db0bt, 
-    d2l_dldbt, d2l_db0bt, d2l_dbt2
+  # Combine into full matrix
+  n_par <- n_x + 1
+  nms <- c("d_lambda", paste0("d_", get_par_names(x)))
+  sec_dev_mat <- matrix(
+    0, nrow = n_par, ncol = n_par, dimnames = list(nms, nms)
   )
+  sec_dev_mat[1, ] <- lambda_entries
+  sec_dev_mat[, 1] <- lambda_entries
+  sec_dev_mat[2:n_par, 2:n_par] <- beta_part_mat
 
-  jacobian_mat <- matrix(
-    ord, nrow = 3,
-    dimnames = list(c("dl", "db0", "dbt"), c("dl", "db0", "dbt"))
-  )
-
-  return(jacobian_mat)
+  return(sec_dev_mat)
 }
 
-# Computes the second derivative of log-likelihood with respect to beta_titre
-get_d2l_dbt2 <- function(y, x, pars_mat) {
-  d2l_dbt2 <- (1 - y) * get_d2l_dbt2_f1(y, x, pars_mat) - 
-    get_d2l_dbt2_f2(y, x, pars_mat)
-  d2l_dbt2 <- sum(d2l_dbt2)
-  return(d2l_dbt2)
-}
-
-# Computes the first fraction term of d2l_dbt2
-get_d2l_dbt2_f1 <- function(y, x, pars_mat) {
-  lambda <- pars_mat["lambda", ]
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f1 <- (x[, 2]^2 * (1 - lambda) * exp(beta_0 + beta_titre * x[, 2])) / 
-    get_denom(y, x, pars_mat)^2
-  return(f1)
-}
-
-# Computes the second fraction term of d2l_dbt2
-get_d2l_dbt2_f2 <- function(y, x, pars_mat) {
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f2 <- (x[, 2]^2 * exp(beta_0 + beta_titre * x[, 2])) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]))^2
-  return(f2)
-}
-
-# Computes the second derivative of log-likelihood with respect to beta_0 and
-# beta_titre
-get_d2l_db0bt <- function(y, x, pars_mat) {
-  d2l_db0bt <- (1 - y) * get_d2l_db0bt_f1(y, x, pars_mat) - 
-    get_d2l_db0bt_f2(y, x, pars_mat)
-  d2l_db0bt <- sum(d2l_db0bt)
-  return(d2l_db0bt)
-}
-
-# Computes the first fraction term of d2l_db0bt
-get_d2l_db0bt_f1 <- function(y, x, pars_mat) {
-  lambda <- pars_mat["lambda", ]
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f1 <- (x[, 2] * (1 - lambda) * exp(beta_0 + beta_titre * x[, 2])) / 
-    get_denom(y, x, pars_mat)^2
-  return(f1)
-}
-
-# Computes the second fraction term of d2l_db0bt
-get_d2l_db0bt_f2 <- function(y, x, pars_mat) {
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f2 <- (x[, 2] * exp(beta_0 + beta_titre * x[, 2])) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]))^2
-  return(f2)
-}
-
-# Computes the second derivative of log-likelihood with respect to beta_0
-get_d2l_db02 <- function(y, x, pars_mat) {
-  d2l_db02 <- (1 - y) * get_d2l_db02_f1(y, x, pars_mat) - 
-    get_d2l_db02_f2(y, x, pars_mat)
-  d2l_db02 <- sum(d2l_db02)
-  return(d2l_db02)
-}
-
-# Computes the first fraction term of d2l_db02
-get_d2l_db02_f1 <- function(y, x, pars_mat) {
-  lambda <- pars_mat["lambda", ]
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f1 <- (1 - lambda) * exp(beta_0 + beta_titre * x[, 2]) / 
-    get_denom(y, x, pars_mat)^2
-  return(f1)
-}
-
-# Computes the second fraction term of d2l_db02
-get_d2l_db02_f2 <- function(y, x, pars_mat) {
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  f2 <- exp(beta_0 + beta_titre * x[, 2]) / 
-    (1 + exp(beta_0 + beta_titre * x[, 2]))^2
-  return(f2)
-}
-
-# Computes the second derivative of log-likelihood with respect to lambda and
-# beta_titre
-get_d2l_dldbt <- function(y, x, pars_mat) {
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  d2l_dldbt <- (1 - y) * x[, 2] * exp(beta_0 + beta_titre * x[, 2]) / 
-    get_denom(y, x, pars_mat)^2
-  d2l_dldbt <- sum(d2l_dldbt)
-  return(d2l_dldbt)
-}
-
-# Computes the second derivative of log-likelihood with respect to lambda and
-# beta_0
-get_d2l_dldb0 <- function(y, x, pars_mat) {
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  d2l_dldb0 <- (1 - y) * exp(beta_0 + beta_titre * x[, 2]) / 
-    get_denom(y, x, pars_mat)^2
-  d2l_dldb0 <- sum(d2l_dldb0)
-  return(d2l_dldb0)
+# Computes the lambda row and column entries
+get_lambda_array <- function(y, x, pars_mat, exp_Xb) {
+  dl2 <- get_dl2(y, x, pars_mat, exp_Xb)
+  dldbs <- get_dldbs(y, x, pars_mat, exp_Xb)
+  lambda_entries <- c(dl2, dldbs)
+  return(lambda_entries)
 }
 
 # Computes the second derivative of log-likelihood with respect to lambda
-get_d2l_dl2 <- function(y, x, pars_mat) {
+get_dl2 <- function(y, x, pars_mat, exp_Xb) {
   lambda <- pars_mat["lambda", ]
-  d2l_dl2 <- -y / lambda^2 - (1 - y) * (1 / get_denom(y, x, pars_mat)^2)
-  d2l_dl2 <- sum(d2l_dl2)
-  return(d2l_dl2)
+  dl2 <- -y / lambda^2 - (1 - y) / (1 + exp_Xb - lambda)^2
+  dl2 <- sum(dl2)
+  return(dl2)
 }
 
-# Computes the commonly occuring denominator term
-get_denom <- function(y, x, pars_mat) {
+# Computes the second derivatives of log-likelihood with respect to lambda and
+# betas
+get_dldbs <- function(y, x, pars_mat, exp_Xb) {
+  common <- get_dldbs_common(y, x, pars_mat, exp_Xb)
+  dldbs_contr <- x * common[, 1]
+  dldbs <- colSums(dldbs_contr)
+  return(dldbs)
+}
+
+# Computes the common part of the
+# second derivatives of log-likelihood with respect to lambda and betas
+get_dldbs_common <- function(y, x, pars_mat, exp_Xb) {
   lambda <- pars_mat["lambda", ]
-  beta_0 <- pars_mat["beta_0", ]
-  beta_titre <- pars_mat[3, ]
-  denom <- 1 + exp(beta_0 + beta_titre * x[, 2]) - lambda
-  return(denom)
+  common <- (1 - y) * exp_Xb / (1 + exp_Xb - lambda)^2
+  return(common)
+}
+
+# Computes the second derivatives of log likelihood with respect to the betas
+get_jac_beta_part <- function(y, x, pars_mat, exp_Xb) {
+  
+  common <- get_jac_beta_common(y, x, pars_mat, exp_Xb)
+  
+  # Create the x coefficients
+  n_x <- ncol(x)
+  n_coefs <- choose(n_x, 2) + n_x
+  x_coeffs <- matrix(0, ncol = n_coefs, nrow = nrow(x))
+  cur_coeff <- 1
+  for (i in 1:n_x) {
+    for (j in 1:n_x) {
+      if (j < i) next
+      x_coeffs[, cur_coeff] <- x[, i] * x[, j]
+      cur_coeff <- cur_coeff + 1
+    }
+  }
+  
+  # Get the unique triangle of the beta part
+  beta_contr <- x_coeffs * common[, 1]
+  beta_part <- colSums(beta_contr)
+  
+  return(beta_part)
+}
+
+# Computes the common part of the second derivatives
+# of log likelihood with respect to the betas
+get_jac_beta_common <- function(y, x, pars_mat, exp_Xb) {
+  cf1 <- get_jac_beta_common_f1(y, x, pars_mat, exp_Xb)
+  cf2 <- get_jac_beta_common_f2(y, x, pars_mat, exp_Xb)
+  common <- cf1 - cf2
+  return(common)
+}
+
+# Computes the first fraction of the common part of the second derivatives
+# of log likelihood with respect to the betas
+get_jac_beta_common_f1 <- function(y, x, pars_mat, exp_Xb) {
+  lambda <- pars_mat["lambda", ]
+  common_f1 <- (1 - y) * (1 - lambda) * exp_Xb / (1 + exp_Xb - lambda)^2
+  return(common_f1)
+}
+
+# Computes the second fraction of the common part of the second derivatives
+# of log likelihood with respect to the betas
+get_jac_beta_common_f2 <- function(y, x, pars_mat, exp_Xb) {
+  common_f2 <- exp_Xb / (1 + exp_Xb)^2
+  return(common_f2)
 }

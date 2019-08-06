@@ -8,5 +8,7 @@ get_par_names <- function(x) {
 
 get_betas_only <- function(pars_mat) {
   pars_betas <- pars_mat[grepl("beta", rownames(pars_mat)), ]
-  return(pars_betas)
+  pars_betas_mat <- matrix(pars_betas, ncol = 1)
+  rownames(pars_betas_mat) <- names(pars_betas)
+  return(pars_betas_mat)
 }
