@@ -43,13 +43,14 @@ sclr <- function(
   
   class(fit) <- "sclr"
   
-  fit$call <- cl
-  
   fit$confint <- confint(fit)
-  
-  fit$model_matrix <- x
-  fit$model_response <- y
   fit$log_likelihood <- sclr_log_likelihood(fit)
+  
+  fit$call <- cl
+  fit$model <- mf
+  fit$terms <- mt
+  fit$x <- x
+  fit$y <- y
 
   return(fit)
 }

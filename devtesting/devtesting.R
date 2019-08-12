@@ -8,11 +8,25 @@ options(scipen = 999)
 library(dplyr)
 
 # Data
-dat <- read.csv("data/ExTwoLSInd/data-2.csv")
+dat <- read.csv("data/ExOneLSInd/data-2.csv")
 
 # Model fit
 fit <- sclr(status ~ HI + NI, dat)
 summary(fit)
+
+# Prediction
+preddata <- data.frame(HI = seq(0, 8, length.out = 101), NI = 0)
+seq(0, 8, length.out = 101)[44]
+predict(fit, preddata)[44, ]
+
+xcoef <- get_x_coeffs(fit$x)
+
+lapply(split(xcoef, seq(nrow(xcoef))), function(x) sum(x))
+
+tempmat <- matrix(c(2, 3, 4, 5), nrow = 2)
+tempmat2 <- matrix(c(2, 3, 4, 5), nrow = 2)
+tempmat * tempmat2
+
 
 dat$HIcens_mid <- (dat$HI_lb + dat$HI_ub) / 2
 dat$HIcens_mid[near(dat$HIcens, log(5))] <- log(5)

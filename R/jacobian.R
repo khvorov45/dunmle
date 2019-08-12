@@ -9,10 +9,7 @@ get_jacobian <- function(y, x, pars_mat, exp_Xb) {
   n_x <- ncol(x)
   
   # Convert the beta part to a matrix
-  beta_part_mat <- matrix(0, nrow = n_x, ncol = n_x)
-  beta_part_mat[lower.tri(beta_part_mat, diag = TRUE)] <- beta_part
-  beta_part_mat <- t(beta_part_mat)
-  beta_part_mat[lower.tri(beta_part_mat, diag = TRUE)] <- beta_part
+  beta_part_mat <- build_symm_mat(beta_part)
 
   # Combine into full matrix
   n_par <- n_x + 1
@@ -66,17 +63,7 @@ get_jac_beta_part <- function(y, x, pars_mat, exp_Xb) {
   common <- get_jac_beta_common(y, x, pars_mat, exp_Xb)
   
   # Create the x coefficients
-  n_x <- ncol(x)
-  n_coefs <- choose(n_x, 2) + n_x
-  x_coeffs <- matrix(0, ncol = n_coefs, nrow = nrow(x))
-  cur_coeff <- 1
-  for (i in 1:n_x) {
-    for (j in 1:n_x) {
-      if (j < i) next
-      x_coeffs[, cur_coeff] <- x[, i] * x[, j]
-      cur_coeff <- cur_coeff + 1
-    }
-  }
+  x_coeffs <- get_x_coeffs(x)
   
   # Get the unique triangle of the beta part
   beta_contr <- x_coeffs * common[, 1]
