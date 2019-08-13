@@ -2,7 +2,7 @@
 % Please edit documentation in R/methods.R
 \name{predict.sclr}
 \alias{predict.sclr}
-\title{Predict method for scaled logit model fit}
+\title{Predict method for scaled logit model fit.}
 \usage{
 \method{predict}{sclr}(fit, newdata, ci_lvl = 0.95)
 }
@@ -14,5 +14,5 @@
 \item{ci_lvl}{}
 }
 \description{
-Predict method for scaled logit model fit
+Returns only the protection estimates.
 }

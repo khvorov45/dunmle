@@ -35,12 +35,14 @@ summary.sclr <- function(fit) {
 
 #' Predict method for scaled logit model fit.
 #' 
-#' Returns only the protection estimates.
+#' Returns only the protection estimates. The only supported interval is
+#' a confidence interval (i.e. the interval for the expected value)
 #' 
-#' @param fit 
-#'
-#' @param newdata 
-#' @param ci_lvl 
+#' @param fit Object returned by \code{\link{sclr}}.
+#' @param newdata A dataframe with all covariates. Names should be as they
+#' appear in the formula in the call to \code{\link{sclr}}.
+#' @param ci_lvl Confidence level for the calculated interval. 
+#' Default is 0.95.
 #'
 #' @export
 predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
@@ -83,9 +85,3 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
   )
   return(predret)
 }
-
-
-
-
-
-

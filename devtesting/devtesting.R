@@ -1,7 +1,7 @@
 # Package testing script for use during development
 # Arseniy Khvorov
 # Created 2019/07/29
-# Last edit 2019/08/06
+# Last edit 2019/08/13
 
 options(scipen = 999)
 
@@ -13,6 +13,11 @@ dat <- read.csv("data/ExOneLSInd/data-2.csv")
 # Model fit
 fit <- sclr(status ~ HI + NI, dat)
 summary(fit)
+
+# Protection
+prot_lvls <- data.frame(NI = log(c(0.1, 10, 40)))
+
+get_protection_level(fit, prot_lvls, "HI")
 
 # Prediction
 preddata <- data.frame(HI = seq(0, 8, length.out = 101), NI = 0)
