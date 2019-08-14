@@ -1,28 +1,71 @@
 # Package testing script for use during development
 # Arseniy Khvorov
 # Created 2019/07/29
-# Last edit 2019/08/13
+# Last edit 2019/08/14
 
 options(scipen = 999)
 
 library(dplyr)
 
 # Data
-dat <- read.csv("data/ExOneLSInd/data-2.csv")
+sclronetitre <- read.csv(file.path(readClipboard(), "data-1.csv"))
+sclrtwotitre <- read.csv(file.path(readClipboard(), "data-1.csv"))
+
+sclronetitre <- sclronetitre %>%
+  select(HI, HIcens, status)
+
+sclrtwotitre <- sclrtwotitre %>%
+  select(HI, HIcens, NI, NIcens, status)
+
+usethis::use_data(sclronetitre, sclrtwotitre, overwrite = TRUE)
+
+fit <- sclr(status ~ HI, sclronetitre)
+summary(fit)
+
+fit <- sclr(status ~ HI + NI, sclrtwotitre)
+summary(fit)
+
+load("data/sclr_two_titre.Rdata")
+sclrtwotitre <- dat
+dat <- dat %>%
+  select(HI, HIcens, NI, NIcens, status) %>%
+  as.data.frame()
+
+save(dat, file = "data/sclr_two_titre.Rdata")
+
+
+fit1 <- sclr(status ~ HI, sclronetitre)
+fit2 <- sclr(status ~ HI + NI, sclrtwotitre)
+
+summary(fit1)
+summary(fit2)
+
+preddata1 <- data.frame(HI = seq(0, 8, length.out = 101))
+pred1 <- predict(fit1, preddata1)
+head(pred1[, c("HI", "prot_l", "prot_point", "prot_u")])
+
+preddata2 <- data.frame(HI = seq(0, 8, length.out = 101), NI = 1)
+predict(fit2, preddata2)
 
 # Model fit
 fit <- sclr(status ~ HI + NI, dat)
 summary(fit)
 
 # Protection
-prot_lvls <- data.frame(NI = log(c(0.1, 10, 40)))
+var_name <- "HI"
+prot_lvls1 <- data.frame(1)
 
-get_protection_level(fit, prot_lvls, "HI")
+get_protection_level(fit1, prot_lvls1, "HI")
+
+prot_lvls2 <- data.frame(NI = log(c(0.1, 10, 40)))
+
+get_protection_level(fit2, prot_lvls, "HI")
+
 
 # Prediction
 preddata <- data.frame(HI = seq(0, 8, length.out = 101), NI = 0)
 seq(0, 8, length.out = 101)[44]
-predict(fit, preddata)[44, ]
+predict(fit2, preddata)[44, ]
 
 xcoef <- get_x_coeffs(fit$x)
 

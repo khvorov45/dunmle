@@ -83,5 +83,6 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
     prot_l = invlogit(prot_l_lin),
     prot_u = invlogit(prot_u_lin)
   )
+  predret <- cbind(predret, newdata)
   return(predret)
 }

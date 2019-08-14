@@ -7,12 +7,15 @@
 \method{predict}{sclr}(fit, newdata, ci_lvl = 0.95)
 }
 \arguments{
-\item{fit}{}
+\item{fit}{Object returned by \code{\link{sclr}}.}
 
-\item{newdata}{}
+\item{newdata}{A dataframe with all covariates. Names should be as they
+appear in the formula in the call to \code{\link{sclr}}.}
 
-\item{ci_lvl}{}
+\item{ci_lvl}{Confidence level for the calculated interval. 
+Default is 0.95.}
 }
 \description{
-Returns only the protection estimates.
+Returns only the protection estimates. The only supported interval is
+a confidence interval (i.e. the interval for the expected value)
 }

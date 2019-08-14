@@ -9,10 +9,8 @@
 #' @param fit Object returned by \code{\link{sclr}}.
 #' @param newdata A dataframe with all covariates except the one for which
 #' protection values should be calculated.
-#' @param var_name Name of the covariate for which the protection values should
-#' be calculated. This name should appear in the formula of the call to
-#' \code{\link{sclr}} which was used to generate \code{fit}.
-#' @param lvl Protection level to find titre values for. Default is 0.5 (50%) 
+
+#' @param lvl Protection level to find titre values for. Default is 0.5 (50\%) 
 #' @param ci_level Confidence level for the calculated interval. 
 #' Default is 0.95.
 #' @param tol Tolerance. The values will be found numerically,
@@ -24,7 +22,8 @@
 #' 
 #' @export
 get_protection_level <- function(
-  fit, newdata, var_name, lvl = 0.5, ci_level = 0.95, tol = 10^(-7)
+  fit, var_name, newdata = NULL, 
+  lvl = 0.5, ci_level = 0.95, tol = 10^(-7)
 ) {
   titre_low <- find_prot_titre_val(
     fit, newdata, var_name, "prot_u", lvl, ci_level
@@ -44,7 +43,7 @@ get_protection_level <- function(
   return(titre)
 }
 
-#' Search function for scaled logit protection covariate levels.
+#' Search function for scaled logit protection covariate levels
 #' 
 #' The search engine behind \code{\link{get_protection_level}}. Should not
 #' usually be necessary to call this directly.
@@ -58,7 +57,7 @@ get_protection_level <- function(
 #' @param prot_var_name A variable name amoung those returned by
 #' \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
 #' \code{var_name} that is supposed to be found.
-#' @param lvl Protection level to find titre values for. Default is 0.5 (50%).
+#' @param lvl Protection level to find titre values for. Default is 0.5 (50\%).
 #' @param ci_level Confidence level for the calculated interval. 
 #' Default is 0.95.
 #' @param tol Tolerance. The values will be found numerically,

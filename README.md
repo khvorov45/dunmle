@@ -1,3 +1,3 @@
-# dunmle
+# sclr
 
-MLE estimation of the scled logit model parameters.
+MLE estimation of the scaled logit model parameters.

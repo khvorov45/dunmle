@@ -17,7 +17,7 @@ protection values should be calculated.}
 be calculated. This name should appear in the formula of the call to
 \code{\link{sclr}} which was used to generate \code{fit}.}
 
-\item{lvl}{Protection level to find titre values for. Default is 0.5 (50%)}
+\item{lvl}{Protection level to find titre values for. Default is 0.5 (50\%)}
 
 \item{ci_level}{Confidence level for the calculated interval. 
 Default is 0.95.}

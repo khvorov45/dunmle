@@ -1,0 +1,68 @@
+---
+title: "Usage"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(sclr)
+```
+
+## Model fitting
+
+Model fitting is used in the same way as fittng functions like `lm`.
+
+```{r}
+# One-titre fit to included simulated data
+fit1 <- sclr(status ~ HI, sclronetitre)
+summary(fit1)
+
+# Two-titre fit to included simulated data
+fit2 <- sclr(status ~ HI + NI, sclrtwotitre)
+summary(fit2)
+```
+
+## Expected protection
+
+The `predict` method will return the point estimate and a confidence 
+interval of 
+$\beta_0 + \beta_1X_1 + ... + \beta_kX_k$ 
+where $k$ is the number of covariates.
+It will also apply the inverse logit 
+transformation to these estimates and 
+interval bounds to get the point estimate and the interval for
+the probability of protection on the original scale.
+
+```{r}
+# One-titre fit
+preddata1 <- data.frame(HI = seq(0, 8, length.out = 101))
+pred1 <- predict(fit1, preddata1)
+head(pred1[, c("HI", "prot_l", "prot_point", "prot_u")])
+
+# Two-titre fit
+preddata2 <- data.frame(HI = seq(0, 8, length.out = 101), NI = 1)
+pred2 <- predict(fit2, preddata2)
+head(pred2[, c("HI", "NI", "prot_l", "prot_point", "prot_u")])
+
+```
+
+## Protective titres
+
+To get the estimated titre (and the confidence interval) that corresponds to a
+particular protection level (eg. 50%), use the `get_protection_level` function.
+Its interface is similar to that of `predict`.
+
+```{r}
+
+```
+

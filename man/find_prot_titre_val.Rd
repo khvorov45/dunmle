@@ -2,7 +2,7 @@
 % Please edit documentation in R/protection.R
 \name{find_prot_titre_val}
 \alias{find_prot_titre_val}
-\title{Search function for scaled logit protection covariate levels.}
+\title{Search function for scaled logit protection covariate levels}
 \usage{
 find_prot_titre_val(fit, newdata, var_name, prot_var_name, lvl = 0.5,
   ci_level = 0.95, tol = 10^(-7))
@@ -21,7 +21,7 @@ be calculated. This name should appear in the formula of the call to
 \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
 \code{var_name} that is supposed to be found.}
 
-\item{lvl}{Protection level to find titre values for. Default is 0.5 (50%).}
+\item{lvl}{Protection level to find titre values for. Default is 0.5 (50\%).}
 
 \item{ci_level}{Confidence level for the calculated interval. 
 Default is 0.95.}
