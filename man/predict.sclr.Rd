@@ -17,5 +17,5 @@ Default is 0.95.}
 }
 \description{
 Returns only the protection estimates. The only supported interval is
-a confidence interval (i.e. the interval for the expected value)
+a confidence interval (i.e. the interval for the estimated expected value).
 }

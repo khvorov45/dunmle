@@ -1,5 +1,7 @@
 # General utility functions
 
+#' @importFrom Rdpack reprompt
+
 # Returns parameter names based on the model matrix
 get_par_names <- function(x) {
   par_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))
@@ -30,7 +32,7 @@ get_x_coeffs <- function(x) {
   return(x_coeffs)
 }
 
-# Creates a symmaterical matrix from vectors of unique triangles
+# Creates a symmeterical matrix from vectors of unique triangles
 build_symm_mat <- function(obj) {
   if (is.vector(obj)) return(build_symm_mat_one(obj))
   if (!is.data.frame(obj) & !is.matrix(obj)) 
@@ -40,7 +42,7 @@ build_symm_mat <- function(obj) {
   return(mats)
 }
 
-# Creates a symmaterical matrix from a vector of the unique triangle
+# Creates a symmeterical matrix from a vector of the unique triangle
 build_symm_mat_one <- function(triang_vec) {
   matdim <- get_symm_dims(length(triang_vec))
   mat <- matrix(0, nrow = matdim, ncol = matdim)
@@ -55,6 +57,6 @@ build_symm_mat_one <- function(triang_vec) {
 get_symm_dims <- function(len) {
   rtexp <- 1 + 8 * len
   rt <- as.integer(sqrt(rtexp))
-  if (rt^2 - rtexp > 10^(-7)) stop(len, " is not a valid length of triangle")
+  if ((rt^2 - rtexp) > 10^(-7)) stop(len, " is not a valid length of triangle")
   return((-1 + rt) / 2)
 }

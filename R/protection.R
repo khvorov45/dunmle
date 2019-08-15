@@ -7,15 +7,19 @@
 #' values of all the others should be provided.
 #'
 #' @param fit Object returned by \code{\link{sclr}}.
+#' @param var_name Name of the covariate for which to find values
+#' corresponding to a protection level. This name should appear in the formula
+#' in the call to \code{\link{sclr}} which was used to generate \code{fit}.
 #' @param newdata A dataframe with all covariates except the one for which
-#' protection values should be calculated.
-
-#' @param lvl Protection level to find titre values for. Default is 0.5 (50\%) 
+#' protection values should be calculated. If there is only one covariate, can 
+#' be left as \code{NULL} (the default)
+#' @param lvl Protection level to find covariate values for. 
+#' Default is 0.5 (50\%) 
 #' @param ci_level Confidence level for the calculated interval. 
 #' Default is 0.95.
 #' @param tol Tolerance. The values will be found numerically,
 #' once the algorithm converges within \code{tol} of \code{lvl} 
-#' it stops looking.
+#' it stops looking. Default is \eqn{10^(-7)}.
 #'
 #' @return A dataframe. Will have the same variables as \code{newdata} with
 #' the addition of the \code{var_name} variable.
@@ -25,14 +29,21 @@ get_protection_level <- function(
   fit, var_name, newdata = NULL, 
   lvl = 0.5, ci_level = 0.95, tol = 10^(-7)
 ) {
+  
+  # Need to somehow initialise the return dataframe
+  if (is.null(newdata)) {
+    newdata <- data.frame(x = 0)
+    names(newdata) <- var_name
+  }
+  
   titre_low <- find_prot_titre_val(
-    fit, newdata, var_name, "prot_u", lvl, ci_level
+    fit, var_name, newdata, "prot_u", lvl, ci_level
   )
   titre_point <- find_prot_titre_val(
-    fit, newdata, var_name, "prot_point", lvl, ci_level
+    fit, var_name, newdata, "prot_point", lvl, ci_level
   )
   titre_high <- find_prot_titre_val(
-    fit, newdata, var_name, "prot_l", lvl, ci_level
+    fit, var_name, newdata, "prot_l", lvl, ci_level
   )
   titre <- rbind(titre_low, titre_point, titre_high)
   titre$prot_prob <- lvl
@@ -49,11 +60,11 @@ get_protection_level <- function(
 #' usually be necessary to call this directly.
 #'
 #' @param fit Object returned by \code{\link{sclr}}.
-#' @param newdata A dataframe with all covariates except the one for which
-#' protection values should be calculated.
 #' @param var_name Name of the covariate for which the protection values should
 #' be calculated. This name should appear in the formula of the call to
 #' \code{\link{sclr}} which was used to generate \code{fit}.
+#' @param newdata A dataframe with all covariates except the one for which
+#' protection values should be calculated.
 #' @param prot_var_name A variable name amoung those returned by
 #' \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
 #' \code{var_name} that is supposed to be found.
@@ -62,20 +73,26 @@ get_protection_level <- function(
 #' Default is 0.95.
 #' @param tol Tolerance. The values will be found numerically,
 #' once the algorithm converges within \code{tol} of \code{lvl} 
-#' it stops looking.
+#' it stops looking. Default is \eqn{10^(-7)}.
 #'
 #' @return A dataframe. Will have the same variables as \code{newdata} with
 #' the addition of the \code{var_name} variable.
 #' 
 #' @export
 find_prot_titre_val <- function(
-  fit, newdata, var_name, prot_var_name, lvl = 0.5, 
+  fit, var_name, newdata = NULL, prot_var_name = "prot_point", lvl = 0.5, 
   ci_level = 0.95, tol = 10^(-7)
 ) {
   
+  # Need to somehow initialise the return dataframe
+  if (is.null(newdata)) {
+    newdata <- data.frame(x = 0)
+    names(newdata) <- var_name
+  }
+  
   # Initial guess interval
-  newdata$guess_low <- -100
-  newdata$guess_high <- 100
+  newdata[ , "guess_low"] <- -100
+  newdata[, "guess_high"] <- 100
   
   # Check if the variable is protective
   is_protective <- coef(fit)[grepl(var_name, names(coef(fit)))] > 0

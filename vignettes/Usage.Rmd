@@ -20,7 +20,8 @@ library(sclr)
 
 ## Model fitting
 
-Model fitting is used in the same way as fittng functions like `lm`.
+Model fitting is done with a function called `sclr`. It is used in 
+the same way as other fittng functions like `lm`.
 
 ```{r}
 # One-titre fit to included simulated data
@@ -53,7 +54,6 @@ head(pred1[, c("HI", "prot_l", "prot_point", "prot_u")])
 preddata2 <- data.frame(HI = seq(0, 8, length.out = 101), NI = 1)
 pred2 <- predict(fit2, preddata2)
 head(pred2[, c("HI", "NI", "prot_l", "prot_point", "prot_u")])
-
 ```
 
 ## Protective titres
@@ -63,6 +63,10 @@ particular protection level (eg. 50%), use the `get_protection_level` function.
 Its interface is similar to that of `predict`.
 
 ```{r}
+protHI1 <- get_protection_level(fit1, "HI", lvl = 0.5)
+print(protHI1)
 
+prot_lvls2 <- data.frame(NI = log(c(0.1, 10, 40)))
+protHI2 <- get_protection_level(fit2, "HI", prot_lvls2)
+print(protHI2)
 ```
-

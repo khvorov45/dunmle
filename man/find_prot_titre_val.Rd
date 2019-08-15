@@ -4,18 +4,19 @@
 \alias{find_prot_titre_val}
 \title{Search function for scaled logit protection covariate levels}
 \usage{
-find_prot_titre_val(fit, newdata, var_name, prot_var_name, lvl = 0.5,
-  ci_level = 0.95, tol = 10^(-7))
+find_prot_titre_val(fit, var_name, newdata = NULL,
+  prot_var_name = "prot_point", lvl = 0.5, ci_level = 0.95,
+  tol = 10^(-7))
 }
 \arguments{
 \item{fit}{Object returned by \code{\link{sclr}}.}
 
-\item{newdata}{A dataframe with all covariates except the one for which
-protection values should be calculated.}
-
 \item{var_name}{Name of the covariate for which the protection values should
 be calculated. This name should appear in the formula of the call to
 \code{\link{sclr}} which was used to generate \code{fit}.}
+
+\item{newdata}{A dataframe with all covariates except the one for which
+protection values should be calculated.}
 
 \item{prot_var_name}{A variable name amoung those returned by
 \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
@@ -28,7 +29,7 @@ Default is 0.95.}
 
 \item{tol}{Tolerance. The values will be found numerically,
 once the algorithm converges within \code{tol} of \code{lvl} 
-it stops looking.}
+it stops looking. Default is \eqn{10^(-7)}.}
 }
 \value{
 A dataframe. Will have the same variables as \code{newdata} with

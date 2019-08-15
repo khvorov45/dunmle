@@ -4,27 +4,29 @@
 \alias{get_protection_level}
 \title{Protection level calculations}
 \usage{
-get_protection_level(fit, newdata, var_name, lvl = 0.5,
+get_protection_level(fit, var_name, newdata = NULL, lvl = 0.5,
   ci_level = 0.95, tol = 10^(-7))
 }
 \arguments{
 \item{fit}{Object returned by \code{\link{sclr}}.}
 
+\item{var_name}{Name of the covariate for which to find values
+corresponding to a protection level. This name should appear in the formula
+in the call to \code{\link{sclr}} which was used to generate \code{fit}.}
+
 \item{newdata}{A dataframe with all covariates except the one for which
-protection values should be calculated.}
+protection values should be calculated. If there is only one covariate, can 
+be left as \code{NULL} (the default)}
 
-\item{var_name}{Name of the covariate for which the protection values should
-be calculated. This name should appear in the formula of the call to
-\code{\link{sclr}} which was used to generate \code{fit}.}
-
-\item{lvl}{Protection level to find titre values for. Default is 0.5 (50\%)}
+\item{lvl}{Protection level to find covariate values for. 
+Default is 0.5 (50\%)}
 
 \item{ci_level}{Confidence level for the calculated interval. 
 Default is 0.95.}
 
 \item{tol}{Tolerance. The values will be found numerically,
 once the algorithm converges within \code{tol} of \code{lvl} 
-it stops looking.}
+it stops looking. Default is \eqn{10^(-7)}.}
 }
 \value{
 A dataframe. Will have the same variables as \code{newdata} with

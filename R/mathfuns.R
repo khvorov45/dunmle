@@ -4,9 +4,7 @@
 invlogit <- function(x) exp(x) / (1 + exp(x))
 
 # Commonly occuring exp(Xb) expression
-get_exp_Xb <- function(y, x, pars) {
-  exp(get_Xb(y, x, pars))
-}
+get_exp_Xb <- function(y, x, pars) exp(get_Xb(y, x, pars))
 
 # Result of Xb matrix multiplication
 get_Xb <- function(y, x, pars) {

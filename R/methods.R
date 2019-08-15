@@ -1,12 +1,8 @@
 # Methods for the sclr class
 
-# Prints as a list
+# Prints the summary
 #' @export
-print.sclr <- function(fit) {
-  class(fit) <- "list"
-  print(fit)
-  invisible(NULL)
-}
+print.sclr <- function(fit) summary(fit)
 
 # Variance-covariance matrix
 #' @export
@@ -31,12 +27,14 @@ summary.sclr <- function(fit) {
   
   cat("\n95% confidence intervals\n")
   print(fit$confint)
+  
+  invisible(NULL)
 }
 
 #' Predict method for scaled logit model fit.
 #' 
 #' Returns only the protection estimates. The only supported interval is
-#' a confidence interval (i.e. the interval for the expected value)
+#' a confidence interval (i.e. the interval for the estimated expected value).
 #' 
 #' @param fit Object returned by \code{\link{sclr}}.
 #' @param newdata A dataframe with all covariates. Names should be as they

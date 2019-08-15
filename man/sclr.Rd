@@ -4,13 +4,16 @@
 \alias{sclr}
 \title{Fits the scaled logit model}
 \usage{
-sclr(formula, data, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
+sclr(formula, data, ci_lvl = 0.95, tol = 10^(-7), n_iter = NULL,
+  max_tol_it = 10^4)
 }
 \arguments{
 \item{formula}{an object of class "formula":
 a symbolic description of the model to be fitted.}
 
 \item{data}{a data frame.}
+
+\item{ci_lvl}{Confidence interval level for the parameter estimates.}
 
 \item{tol}{Tolerance. Used when \code{n_iter} is \code{NULL}.}
 
@@ -20,6 +23,40 @@ when this is not \code{NULL}.}
 \item{max_tol_it}{Maximum tolerated iterations. If it fails to coverge 
 within this number of iterations, will return with an error.}
 }
+\value{
+An object of class \code{sclr}. This is a list with the following
+elements:
+\describe{
+  \item{paramters}{Maximum likelihood estimates of the parameter values.}
+  \item{covariance_mat}{The variance-convariance matrix of the parameter
+    estimates.}
+  \item{n_converge}{The number of Newton-Raphson iterations 
+    (including resets) that were required for convergence.}
+  \item{confint}{Confidence intervals of the parameter estimates.}
+  \item{x}{Model matrix derived from \code{formula} and \code{data}.}
+  \item{y}{Response matrix derived from \code{formula} and \code{data}.}
+  \item{log_likelihood}{Value of log-likelihood calculated at the ML 
+    estimates of parameters.}
+  \item{call}{The original call to \code{sclr}.}
+  \item{model}{Model frame object derived from 
+    \code{formula} and \code{data}.}
+  \item{terms}{Terms object derived from model frame.}
+}
+}
 \description{
 Used to fit the scaled logit model from Dunning (2006).
+}
+\details{
+The likelihood maximisation uses the Newton-Raphson algorithm. 
+Initial values are always 1 for the covariate coefficients 
+(and the associated itercept) and the proportion of infected for the 
+baseline risk. If an algorithm's iteration produces values that cannot 
+be used, a different set of initial values is chosen randomly and the 
+algorithm starts over. Unusable parameter values are: baseline risk outside
+of (0, 1) (likelihood undefined) and covariate coefficients (or the 
+associated intercept) greater than 100 in magnitude (these terms 
+appear in the exponent, if they are too big then calculations will fail).
+}
+\references{
+\insertRef{Dunning2006}{sclr}
 }

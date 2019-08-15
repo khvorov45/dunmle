@@ -3,19 +3,52 @@
 #' Fits the scaled logit model
 #' 
 #' Used to fit the scaled logit model from Dunning (2006).
+#' 
+#' The likelihood maximisation uses the Newton-Raphson algorithm. 
+#' Initial values are always 1 for the covariate coefficients 
+#' (and the associated itercept) and the proportion of infected for the 
+#' baseline risk. If an algorithm's iteration produces values that cannot 
+#' be used, a different set of initial values is chosen randomly and the 
+#' algorithm starts over. Unusable parameter values are: baseline risk outside
+#' of (0, 1) (likelihood undefined) and covariate coefficients (or the 
+#' associated intercept) greater than 100 in magnitude (these terms 
+#' appear in the exponent, if they are too big then calculations will fail).
 #'
 #' @param formula an object of class "formula":
 #' a symbolic description of the model to be fitted.
 #' @param data a data frame.
+#' @param ci_lvl Confidence interval level for the parameter estimates.
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
 #' when this is not \code{NULL}.
 #' @param max_tol_it Maximum tolerated iterations. If it fails to coverge 
 #' within this number of iterations, will return with an error.
 #' 
+#' @return An object of class \code{sclr}. This is a list with the following
+#' elements:
+#' \describe{
+#'   \item{paramters}{Maximum likelihood estimates of the parameter values.}
+#'   \item{covariance_mat}{The variance-convariance matrix of the parameter
+#'     estimates.}
+#'   \item{n_converge}{The number of Newton-Raphson iterations 
+#'     (including resets) that were required for convergence.}
+#'   \item{confint}{Confidence intervals of the parameter estimates.}
+#'   \item{x}{Model matrix derived from \code{formula} and \code{data}.}
+#'   \item{y}{Response matrix derived from \code{formula} and \code{data}.}
+#'   \item{log_likelihood}{Value of log-likelihood calculated at the ML 
+#'     estimates of parameters.}
+#'   \item{call}{The original call to \code{sclr}.}
+#'   \item{model}{Model frame object derived from 
+#'     \code{formula} and \code{data}.}
+#'   \item{terms}{Terms object derived from model frame.}
+#' }
+#' 
+#' @references 
+#' \insertRef{Dunning2006}{sclr}
+#' 
 #' @export
 sclr <- function(
-  formula, data, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
+  formula, data, ci_lvl = 0.95, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
 ) {
 
   cl <- match.call()
@@ -43,14 +76,16 @@ sclr <- function(
   
   class(fit) <- "sclr"
   
-  fit$confint <- confint(fit)
+  fit$confint <- confint(fit, level = ci_lvl)
+  
+  fit$x <- x
+  fit$y <- y
+  
   fit$log_likelihood <- sclr_log_likelihood(fit)
   
   fit$call <- cl
   fit$model <- mf
   fit$terms <- mt
-  fit$x <- x
-  fit$y <- y
 
   return(fit)
 }

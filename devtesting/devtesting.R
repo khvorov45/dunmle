@@ -3,36 +3,9 @@
 # Created 2019/07/29
 # Last edit 2019/08/14
 
+devtools::install()
+
 options(scipen = 999)
-
-library(dplyr)
-
-# Data
-sclronetitre <- read.csv(file.path(readClipboard(), "data-1.csv"))
-sclrtwotitre <- read.csv(file.path(readClipboard(), "data-1.csv"))
-
-sclronetitre <- sclronetitre %>%
-  select(HI, HIcens, status)
-
-sclrtwotitre <- sclrtwotitre %>%
-  select(HI, HIcens, NI, NIcens, status)
-
-usethis::use_data(sclronetitre, sclrtwotitre, overwrite = TRUE)
-
-fit <- sclr(status ~ HI, sclronetitre)
-summary(fit)
-
-fit <- sclr(status ~ HI + NI, sclrtwotitre)
-summary(fit)
-
-load("data/sclr_two_titre.Rdata")
-sclrtwotitre <- dat
-dat <- dat %>%
-  select(HI, HIcens, NI, NIcens, status) %>%
-  as.data.frame()
-
-save(dat, file = "data/sclr_two_titre.Rdata")
-
 
 fit1 <- sclr(status ~ HI, sclronetitre)
 fit2 <- sclr(status ~ HI + NI, sclrtwotitre)
@@ -54,12 +27,11 @@ summary(fit)
 # Protection
 var_name <- "HI"
 prot_lvls1 <- data.frame(1)
-
-get_protection_level(fit1, prot_lvls1, "HI")
+class(prot_lvls1)
+get_protection_level(fit1, "HI")
 
 prot_lvls2 <- data.frame(NI = log(c(0.1, 10, 40)))
-
-get_protection_level(fit2, prot_lvls, "HI")
+get_protection_level(fit2, "HI", prot_lvls2)
 
 
 # Prediction
@@ -82,10 +54,9 @@ dat$HIcens_mid[near(dat$HIcens, log(1280))] <- log(2560)
 fit <- sclr(status ~ HIcens_mid, dat)
 summary(fit)
 
-
 # Likelihood
 par_vec <- c("lambda" = 0.225, "beta_0" = -10, "beta_HI" = 3)
-sclr_log_likelihood(fit, par_vec)
+sclr_log_likelihood(fit1)
 
 # Experimentation
 f_dl <- function(par_vec) {

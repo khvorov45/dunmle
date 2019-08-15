@@ -1,17 +1,18 @@
 Package: sclr
 Title: MLE Estimation of the scaled logit
-Version: 0.0.0.9301
+Version: 0.0.0.9400
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
            role = c("aut", "cre"),
            email = "khvorov45@gmail.com")
-Description: Estimates the parameters of the protection correlate model 
-    proposed in Dunning (2006).
+Description: Estimates the parameters of the protection correlate model proposed in Dunning (2006).
 License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
+Imports: Rdpack
+RdMacros: Rdpack
 Suggests: 
     knitr,
     rmarkdown
