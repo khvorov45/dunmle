@@ -1,6 +1,6 @@
 # sclr
 
-MLE estimation of the scaled logit model parameters.
+Miximum likelihood estimation of the scaled logit model (Dunning, 2006) parameters.
 
 ## Installation
 
@@ -22,11 +22,9 @@ vignette("Usage", "sclr")
 See documetation of `sclr`, the main fitting function
 
 ```
-?sclr::sclr
+?sclr
 ```
 
 ## References
-
-The model was proposed in
 
 Dunning AJ (2006). “A model for immunological correlates of protection.” Statistics in Medicine, 25(9), 1485-1497. doi: 10.1002/sim.2282.
