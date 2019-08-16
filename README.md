@@ -1,6 +1,6 @@
 # sclr
 
-Miximum likelihood estimation of the scaled logit model (Dunning, 2006) parameters.
+Maximum likelihood estimation of the scaled logit model (Dunning, 2006) parameters.
 
 ## Installation
 
