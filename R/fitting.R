@@ -12,7 +12,7 @@
 #' \eqn{k} - number of covariates.
 #' The likelihood maximisation uses the Newton-Raphson algorithm. 
 #' Initial values are always 1 for the covariate coefficients 
-#' (and the associated itercept) and the proportion of infected for the 
+#' (and the associated intercept) and the proportion of infected for the 
 #' baseline risk. If an algorithm's iteration produces values that cannot 
 #' be used, a different set of initial values is chosen randomly and the 
 #' algorithm starts over. Unusable parameter values are: baseline risk outside
