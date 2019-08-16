@@ -10,6 +10,8 @@ options(scipen = 999)
 fit1 <- sclr(status ~ HI, sclronetitre)
 fit2 <- sclr(status ~ HI + NI, sclrtwotitre)
 
+fit1cn <- sclr(status ~ HIcens, sclronetitre)
+
 summary(fit1)
 summary(fit2)
 

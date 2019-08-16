@@ -1,6 +1,6 @@
 Package: sclr
 Title: MLE Estimation of the scaled logit
-Version: 0.0.0.9400
+Version: 0.0.0.9401
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
@@ -11,8 +11,6 @@ License: MIT
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.1
-Imports: Rdpack
-RdMacros: Rdpack
 Suggests: 
     knitr,
     rmarkdown

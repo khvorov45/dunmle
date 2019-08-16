@@ -47,6 +47,12 @@ elements:
 Used to fit the scaled logit model from Dunning (2006).
 }
 \details{
+The model is of the form 
+\deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 + \beta_1X_1 + 
+  \beta_2X_2 + ... + \beta_kX_k))}
+Where \eqn{Y} is the binary outcome idicator, 
+(eg. 1 - infected, 0 - not infected). \eqn{X} - covariate. 
+\eqn{k} - number of covariates.
 The likelihood maximisation uses the Newton-Raphson algorithm. 
 Initial values are always 1 for the covariate coefficients 
 (and the associated itercept) and the proportion of infected for the 
@@ -58,5 +64,7 @@ associated intercept) greater than 100 in magnitude (these terms
 appear in the exponent, if they are too big then calculations will fail).
 }
 \references{
-\insertRef{Dunning2006}{sclr}
+Dunning AJ (2006). 
+"A model for immunological correlates of protection." 
+Statistics in Medicine, 25(9), 1485-1497. doi: 10.1002/sim.2282.
 }

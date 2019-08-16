@@ -1,7 +1,5 @@
 # General utility functions
 
-#' @importFrom Rdpack reprompt
-
 # Returns parameter names based on the model matrix
 get_par_names <- function(x) {
   par_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))

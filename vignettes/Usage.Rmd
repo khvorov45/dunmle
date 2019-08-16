@@ -18,6 +18,19 @@ knitr::opts_chunk$set(
 library(sclr)
 ```
 
+## Model
+
+The model is of the form
+
+$$
+P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k)) 
+$$
+Where
+
+$Y$ - binary outcome idicator, (eg. 1 - infected, 0 - not infected). \
+$X$ - covariate. \
+$k$ - number of covariates.
+
 ## Model fitting
 
 Model fitting is done with a function called `sclr`. It is used in 
