@@ -17,6 +17,8 @@ summary(fit2)
 
 broom::tidy(fit1)
 
+baddat <- read.csv("misc/bad_data.csv")
+sclr(status ~ HIcens, baddat)
 
 confint(fit1)[, "2.5 %"]
 
