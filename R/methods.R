@@ -91,6 +91,9 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
 #' @param ci_level Confidence level for the intervals
 #'
 #' @return A tibble.
+#' 
+#' @importFrom broom tidy
+#' 
 #' @export
 tidy.sclr <- function(fit, ci_level = 0.95) {
   pars <- data.frame(

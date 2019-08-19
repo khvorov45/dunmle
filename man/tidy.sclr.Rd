@@ -4,7 +4,7 @@
 \alias{tidy.sclr}
 \title{Summarise \code{sclr} fit in a tibble}
 \usage{
-tidy.sclr(fit, ci_level = 0.95)
+\method{tidy}{sclr}(fit, ci_level = 0.95)
 }
 \arguments{
 \item{fit}{An object returned by \code{sclr}.}
