@@ -97,7 +97,7 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
 #' @export
 tidy.sclr <- function(fit, ci_level = 0.95) {
   pars <- data.frame(
-    term = names(fit$parameters), 
+    term = as.character(names(fit$parameters)), 
     est = fit$parameters,
     se = sqrt(diag(vcov(fit)))
   )
