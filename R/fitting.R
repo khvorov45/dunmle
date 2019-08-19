@@ -48,6 +48,8 @@
 #'     \code{formula} and \code{data}.}
 #'   \item{terms}{Terms object derived from model frame.}
 #' }
+#' Methods supported: \code{print}, \code{vcov}, \code{coef}, 
+#' \code{summary}, \code{predict}, \code{tidy} (\code{broom} package)
 #' 
 #' @references 
 #' Dunning AJ (2006). 

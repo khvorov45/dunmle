@@ -15,6 +15,12 @@ fit1cn <- sclr(status ~ HIcens, sclronetitre)
 summary(fit1)
 summary(fit2)
 
+broom::tidy(fit1)
+
+
+confint(fit1)[, "2.5 %"]
+
+
 preddata1 <- data.frame(HI = seq(0, 8, length.out = 101))
 pred1 <- predict(fit1, preddata1)
 head(pred1[, c("HI", "prot_l", "prot_point", "prot_u")])

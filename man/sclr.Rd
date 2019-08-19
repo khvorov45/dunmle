@@ -42,6 +42,8 @@ elements:
     \code{formula} and \code{data}.}
   \item{terms}{Terms object derived from model frame.}
 }
+Methods supported: \code{print}, \code{vcov}, \code{coef}, 
+\code{summary}, \code{predict}, \code{tidy} (\code{broom} package)
 }
 \description{
 Used to fit the scaled logit model from Dunning (2006).
