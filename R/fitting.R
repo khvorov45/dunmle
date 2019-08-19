@@ -23,7 +23,11 @@
 #' @param formula an object of class "formula":
 #' a symbolic description of the model to be fitted.
 #' @param data a data frame.
+#' @param calc_ci Whether to calculate confindence intervals. 
+#'   \code{TRUE} by default.
 #' @param ci_lvl Confidence interval level for the parameter estimates.
+#' @param calc_ll Whether to calculate log likelihood at MLEs. 
+#'   \code{TRUE} by default.
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
 #' when this is not \code{NULL}.
@@ -58,7 +62,8 @@
 #' 
 #' @export
 sclr <- function(
-  formula, data, ci_lvl = 0.95, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
+  formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
 ) {
 
   cl <- match.call()
@@ -86,12 +91,12 @@ sclr <- function(
   
   class(fit) <- "sclr"
   
-  fit$confint <- confint(fit, level = ci_lvl)
+  if (calc_ci) fit$confint <- confint(fit, level = ci_lvl)
   
   fit$x <- x
   fit$y <- y
   
-  fit$log_likelihood <- sclr_log_likelihood(fit)
+  if (calc_ll) fit$log_likelihood <- sclr_log_likelihood(fit)
   
   fit$call <- cl
   fit$model <- mf

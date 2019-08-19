@@ -4,8 +4,8 @@
 \alias{sclr}
 \title{Fits the scaled logit model}
 \usage{
-sclr(formula, data, ci_lvl = 0.95, tol = 10^(-7), n_iter = NULL,
-  max_tol_it = 10^4)
+sclr(formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
 }
 \arguments{
 \item{formula}{an object of class "formula":
@@ -13,7 +13,13 @@ a symbolic description of the model to be fitted.}
 
 \item{data}{a data frame.}
 
+\item{calc_ci}{Whether to calculate confindence intervals. 
+\code{TRUE} by default.}
+
 \item{ci_lvl}{Confidence interval level for the parameter estimates.}
+
+\item{calc_ll}{Whether to calculate log likelihood at MLEs. 
+\code{TRUE} by default.}
 
 \item{tol}{Tolerance. Used when \code{n_iter} is \code{NULL}.}
 
