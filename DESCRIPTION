@@ -1,6 +1,6 @@
 Package: sclr
 Title: Scaled logistic regression
-Version: 0.0.0.9404
+Version: 0.0.0.9405
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",

@@ -97,12 +97,16 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
 #' @export
 tidy.sclr <- function(fit, ci_level = 0.95) {
   pars <- data.frame(
-    term = as.character(names(fit$parameters)), 
+    term = names(fit$parameters), 
     est = fit$parameters,
-    se = sqrt(diag(vcov(fit)))
+    se = sqrt(diag(vcov(fit))),
+    stringsAsFactors = FALSE
   )
   cis <- confint(fit, level = ci_level)
-  cisdf <- data.frame(term = rownames(cis), lb = cis[, 1], ub = cis[, 2])
+  cisdf <- data.frame(
+    term = rownames(cis), lb = cis[, 1], ub = cis[, 2],
+    stringsAsFactors = FALSE
+  )
   fitsum <- merge(pars, cisdf, by = "term")
   class(fitsum) <- c("tbl_df", "tbl", "data.frame")
   return(fitsum)
