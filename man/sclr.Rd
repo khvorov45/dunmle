@@ -71,6 +71,10 @@ of (0, 1) (likelihood undefined) and covariate coefficients (or the
 associated intercept) greater than 100 in magnitude (these terms 
 appear in the exponent, if they are too big then calculations will fail).
 }
+\examples{
+fit1 <- sclr(status ~ HI, sclronetitre)
+summary(fit1)
+}
 \references{
 Dunning AJ (2006). 
 "A model for immunological correlates of protection." 

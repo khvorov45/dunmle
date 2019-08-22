@@ -61,6 +61,10 @@
 #' Statistics in Medicine, 25(9), 1485-1497. doi: 10.1002/sim.2282.
 #' 
 #' @export
+#' 
+#' @examples
+#' fit1 <- sclr(status ~ HI, sclronetitre)
+#' summary(fit1)
 sclr <- function(
   formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
   tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
