@@ -88,6 +88,7 @@ sclr <- function(
 
   ## Response vector
   y <- model.response(mf)
+  if (!all(y %in% c(0, 1))) stop("response should be a vector with 0 and 1")
   
   # Actual model fit
 
