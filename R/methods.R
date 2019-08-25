@@ -108,6 +108,6 @@ tidy.sclr <- function(fit, ci_level = 0.95) {
     stringsAsFactors = FALSE
   )
   fitsum <- merge(pars, cisdf, by = "term")
-  class(fitsum) <- c("tbl_df", "tbl", "data.frame")
+  fitsum <- tibble::as_tibble(fitsum)
   return(fitsum)
 }
