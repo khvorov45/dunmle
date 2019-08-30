@@ -19,7 +19,7 @@ vignette("Usage", "sclr")
 
 ## Details
 
-See documetation of `sclr`, the main fitting function
+See documentation of `sclr`, the main fitting function
 
 ```
 ?sclr

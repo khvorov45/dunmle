@@ -1,70 +1,64 @@
 # Fitting functions
 
 #' Fits the scaled logit model
-#' 
-#' Used to fit the scaled logit model from Dunning (2006).
-#' 
-#' The model is of the form 
-#' \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 + \beta_1X_1 + 
-#'   \beta_2X_2 + ... + \beta_kX_k))}
-#' Where \eqn{Y} is the binary outcome idicator, 
-#' (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate. 
-#' \eqn{k} - number of covariates.
-#' The likelihood maximisation uses the Newton-Raphson algorithm. 
-#' Initial values are always 1 for the covariate coefficients 
-#' (and the associated intercept) and the proportion of infected for the 
-#' baseline risk. If an algorithm's iteration produces values that cannot 
-#' be used, a different set of initial values is chosen randomly and the 
-#' algorithm starts over. Unusable parameter values are: baseline risk outside
-#' of (0, 1) (likelihood undefined) and covariate coefficients (or the 
-#' associated intercept) greater than 100 in magnitude (these terms 
-#' appear in the exponent, if they are too big then calculations will fail).
 #'
-#' @param formula an object of class "formula":
-#' a symbolic description of the model to be fitted.
+#' Used to fit the scaled logit model from Dunning (2006).
+#'
+#' The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
+#' \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
+#' outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
+#' \eqn{k} - number of covariates. The likelihood maximisation uses the
+#' Newton-Raphson algorithm. Initial values are always 1 for the covariate
+#' coefficients (and the associated intercept) and the proportion of infected
+#' for the baseline risk. If an algorithm's iteration produces values that
+#' cannot be used, a different set of initial values is chosen randomly and the
+#' algorithm starts over. Unusable parameter values are: baseline risk outside
+#' of (0, 1) (likelihood undefined) and covariate coefficients (or the
+#' associated intercept) greater than 100 in magnitude (these terms appear in
+#' the exponent, if they are too big then calculations will fail).
+#'
+#' @param formula an object of class "formula": a symbolic description of the
+#'   model to be fitted.
 #' @param data a data frame.
-#' @param calc_ci Whether to calculate confindence intervals. 
-#'   \code{TRUE} by default.
+#' @param calc_ci Whether to calculate confindence intervals.
 #' @param ci_lvl Confidence interval level for the parameter estimates.
-#' @param calc_ll Whether to calculate log likelihood at MLEs. 
-#'   \code{TRUE} by default.
+#' @param calc_ll Whether to calculate log likelihood at MLEs.
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
-#' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
-#' when this is not \code{NULL}.
-#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge 
-#' within this number of iterations, will return with an error.
-#' 
+#' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored when
+#'   this is not \code{NULL}.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge within
+#'   this number of iterations, will return with an error.
+#'
 #' @return An object of class \code{sclr}. This is a list with the following
-#' elements:
-#' \describe{
-#'   \item{paramters}{Maximum likelihood estimates of the parameter values.}
-#'   \item{covariance_mat}{The variance-convariance matrix of the parameter
-#'     estimates.}
-#'   \item{n_converge}{The number of Newton-Raphson iterations 
-#'     (including resets) that were required for convergence.}
+#'   elements: \item{parameters}{Maximum likelihood estimates of the parameter
+#'   values.} \item{covariance_mat}{The variance-convariance matrix of the
+#'   parameter estimates.} \item{n_converge}{The number of Newton-Raphson
+#'   iterations (including resets) that were required for convergence.}
 #'   \item{confint}{Confidence intervals of the parameter estimates.}
 #'   \item{x}{Model matrix derived from \code{formula} and \code{data}.}
 #'   \item{y}{Response matrix derived from \code{formula} and \code{data}.}
-#'   \item{log_likelihood}{Value of log-likelihood calculated at the ML 
-#'     estimates of parameters.}
-#'   \item{call}{The original call to \code{sclr}.}
-#'   \item{model}{Model frame object derived from 
-#'     \code{formula} and \code{data}.}
-#'   \item{terms}{Terms object derived from model frame.}
-#' }
-#' Methods supported: \code{print}, \code{vcov}, \code{coef}, 
-#' \code{summary}, \code{predict}, \code{tidy} (\code{broom} package)
-#' 
-#' @references 
-#' Dunning AJ (2006). 
-#' "A model for immunological correlates of protection." 
-#' Statistics in Medicine, 25(9), 1485-1497. doi: 10.1002/sim.2282.
-#' 
-#' @export
-#' 
+#'   \item{log_likelihood}{Value of log-likelihood calculated at the ML
+#'   estimates of parameters.} \item{call}{The original call to \code{sclr}.}
+#'   \item{model}{Model frame object derived from \code{formula} and
+#'   \code{data}.} \item{terms}{Terms object derived from model frame.} Methods
+#'   supported: 
+#'   \code{\link[=print.sclr]{print}}, 
+#'   \code{\link[=vcov.sclr]{vcov}}, 
+#'   \code{\link[=coef.sclr]{coef}},
+#'   \code{\link[=summary.sclr]{summary}}, 
+#'   \code{\link[=predict.sclr]{predict}}, 
+#'   \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package).
+#'
+#' @references Dunning AJ (2006). "A model for immunological correlates of
+#'   protection." Statistics in Medicine, 25(9), 1485-1497.
+#'   \url{https://doi.org/10.1002/sim.2282}.
+#'
 #' @examples
+#' library(sclr)
 #' fit1 <- sclr(status ~ HI, sclronetitre)
 #' summary(fit1)
+#'
+#' @export
 sclr <- function(
   formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
   tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
@@ -111,17 +105,17 @@ sclr <- function(
 }
 
 #' Fitter function for the scaled logit model
-#' 
+#'
 #' Computing engine behind \code{\link{sclr}}.
 #'
 #' @param y A vector of observations.
 #' @param x A design matrix.
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
-#' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored
-#' when this is not \code{NULL}.
-#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge 
-#' within this number of iterations, will return with an error.
-#' 
+#' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored when
+#'   this is not \code{NULL}.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge within
+#'   this number of iterations, will return with an error.
+#'
 #' @export
 sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
   

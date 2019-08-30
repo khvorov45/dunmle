@@ -1,6 +1,6 @@
 Package: sclr
 Title: Scaled logistic regression
-Version: 0.0.0.9408
+Version: 0.0.0.9418
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
@@ -13,8 +13,10 @@ LazyData: true
 RoxygenNote: 6.1.1
 Imports:
     broom,
-    tibble
+    tibble,
+    dplyr
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

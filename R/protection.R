@@ -1,40 +1,37 @@
 # Functions related to protection estimates
+# Arseniy Khvorov
+# Created 2019/07/31
+# Last edit 2019/08/30
 
 #' Protection level calculations
-#' 
+#'
 #' Calculates covariate values corresponding to a particular protection level.
-#' Only accepts one covariate at a time, fixed 
-#' values of all the others should be provided.
+#' Only accepts one covariate at a time, fixed values of all the others should
+#' be provided.
 #'
 #' @param fit Object returned by \code{\link{sclr}}.
-#' @param var_name Name of the covariate for which to find values
-#' corresponding to a protection level. This name should appear in the formula
-#' in the call to \code{\link{sclr}} which was used to generate \code{fit}.
+#' @param var_name Name of the covariate for which to find values corresponding
+#'   to a protection level. This name should appear in the formula in the call
+#'   to \code{\link{sclr}} which was used to generate \code{fit}.
 #' @param newdata A dataframe with all covariates except the one for which
-#' protection values should be calculated. If there is only one covariate, can 
-#' be left as \code{NULL} (the default)
-#' @param lvl Protection level to find covariate values for. 
-#' Default is 0.5 (50\%) 
-#' @param ci_level Confidence level for the calculated interval. 
-#' Default is 0.95.
-#' @param tol Tolerance. The values will be found numerically,
-#' once the algorithm converges within \code{tol} of \code{lvl} 
-#' it stops looking. Default is \eqn{10^(-7)}.
+#'   protection values should be calculated. If there is only one covariate, can
+#'   be left as \code{NULL} (the default)
+#' @param lvl Protection level to find covariate values for. Default is 0.5
+#'   (50\%)
+#' @param ci_level Confidence level for the calculated interval. Default is
+#'   0.95.
+#' @param tol Tolerance. The values will be found numerically, once the
+#'   algorithm converges within \code{tol} of \code{lvl} it stops looking.
+#'   Default is \eqn{10^(-7)}.
 #'
-#' @return A dataframe. Will have the same variables as \code{newdata} with
-#' the addition of the \code{var_name} variable.
-#' 
+#' @return A \code{\link[tibble]{tibble}}. Will have the same variables as
+#'   \code{newdata} with the addition of the \code{var_name} variable.
+#'
 #' @export
 get_protection_level <- function(
   fit, var_name, newdata = NULL, 
   lvl = 0.5, ci_level = 0.95, tol = 10^(-7)
 ) {
-  
-  # Need to somehow initialise the return dataframe
-  if (is.null(newdata)) {
-    newdata <- data.frame(x = 0)
-    names(newdata) <- var_name
-  }
   
   titre_low <- find_prot_titre_val(
     fit, var_name, newdata, "prot_u", lvl, ci_level
@@ -45,7 +42,7 @@ get_protection_level <- function(
   titre_high <- find_prot_titre_val(
     fit, var_name, newdata, "prot_l", lvl, ci_level
   )
-  titre <- rbind(titre_low, titre_point, titre_high)
+  titre <- dplyr::bind_rows(titre_low, titre_point, titre_high)
   titre$prot_prob <- lvl
   titre$est <- "point"
   titre$est[titre$protvar == "prot_u"] <- "low bound"
@@ -78,6 +75,8 @@ get_protection_level <- function(
 #' @return A dataframe. Will have the same variables as \code{newdata} with
 #' the addition of the \code{var_name} variable.
 #' 
+#' @importFrom rlang sym :=
+#' 
 #' @export
 find_prot_titre_val <- function(
   fit, var_name, newdata = NULL, prot_var_name = "prot_point", lvl = 0.5, 
@@ -85,14 +84,10 @@ find_prot_titre_val <- function(
 ) {
   
   # Need to somehow initialise the return dataframe
-  if (is.null(newdata)) {
-    newdata <- data.frame(x = 0)
-    names(newdata) <- var_name
-  }
+  if (is.null(newdata)) newdata <- tibble::tibble(!!sym(var_name) := 0)
   
   # Initial guess interval
-  newdata[ , "guess_low"] <- -100
-  newdata[, "guess_high"] <- 100
+  newdata <- dplyr::mutate(newdata, guess_low = -100, guess_high = 100)
   
   # Check if the variable is protective
   is_protective <- coef(fit)[grepl(var_name, names(coef(fit)))] > 0
@@ -100,27 +95,32 @@ find_prot_titre_val <- function(
   # Binary search
   while (TRUE) {
     
-    newdata[, var_name] <- (newdata$guess_low + newdata$guess_high) / 2
+    newdata <- dplyr::mutate(
+      newdata, !!sym(var_name) := (guess_low + guess_high) / 2
+    )
     prot_sample <- predict(fit, newdata, ci_level)
     
-    curvals <- prot_sample[, prot_var_name]
+    curvals <- dplyr::pull(prot_sample, !!sym(prot_var_name))
     notfound <- abs(curvals - lvl) > tol
     
     if (sum(notfound) == 0) {
-      newdata[, c("guess_low", "guess_high")] <- NULL
+      newdata <- dplyr::select(newdata, -guess_low, -guess_high)
       newdata$protvar <- prot_var_name
       return(newdata)
     }
     
-    newdata[notfound, "guess_low"] <- ifelse(
-      (curvals[notfound] < lvl) & is_protective,
-      newdata[notfound, var_name],
-      newdata[notfound, "guess_low"]
-    )
-    newdata[notfound, "guess_high"] <- ifelse(
-      (curvals[notfound] > lvl) & is_protective,
-      newdata[notfound, var_name],
-      newdata[notfound, "guess_high"]
+    newdata <- dplyr::mutate(
+      newdata,
+      guess_low = dplyr::if_else(
+        xor(curvals < lvl, is_protective),
+        guess_low,
+        !!sym(var_name)
+      ),
+      guess_high = dplyr::if_else(
+        xor(curvals > lvl, is_protective),
+        guess_high,
+        !!sym(var_name)
+      )
     )
   }
 }

@@ -2,18 +2,25 @@
 % Please edit documentation in R/methods.R
 \name{tidy.sclr}
 \alias{tidy.sclr}
-\title{Summarise \code{sclr} fit in a tibble}
+\title{Tidy a \code{sclr} object.}
 \usage{
 \method{tidy}{sclr}(fit, ci_level = 0.95)
 }
 \arguments{
-\item{fit}{An object returned by \code{sclr}.}
+\item{fit}{An object returned by \code{\link{sclr}}.}
 
-\item{ci_level}{Confidence level for the intervals}
+\item{ci_level}{Confidence level for the intervals.}
 }
 \value{
-A tibble.
+A \code{\link[tibble]{tibble}} with one row per model parameter. 
+Columns:
+\item{term}{Name of model parameter.}
+\item{estimate}{Point estimate.}
+\item{std_error}{Standard error.}
+\item{conf_low}{Lower bound of the confidence interval.}
+\item{conf_high}{Upper bound of the confidence interval.}
 }
 \description{
-Summarise \code{sclr} fit in a tibble
+Summarises the objects returned by \code{\link{sclr}} 
+into a \code{\link[tibble]{tibble}}.
 }
