@@ -8,9 +8,11 @@
 parvals_one <- jsonlite::fromJSON(system.file(
   "parameter_sets", "one_titre.json", package = "rhanamkhv", mustWork = TRUE
 ))
+parvals_one$seed <- 20190830
 parvals_two <- jsonlite::fromJSON(system.file(
   "parameter_sets", "two_titre.json", package = "rhanamkhv", mustWork = TRUE
 ))
+parvals_two$seed <- 20190830
 
 clean_data <- function(dat) {
   dat_clean <- dat %>%
