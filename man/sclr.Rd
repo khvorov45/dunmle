@@ -39,8 +39,8 @@ An object of class \code{sclr}. This is a list with the following
   \item{log_likelihood}{Value of log-likelihood calculated at the ML
   estimates of parameters.} \item{call}{The original call to \code{sclr}.}
   \item{model}{Model frame object derived from \code{formula} and
-  \code{data}.} \item{terms}{Terms object derived from model frame.} Methods
-  supported: 
+  \code{data}.} \item{terms}{Terms object derived from model frame.} 
+  Methods supported: 
   \code{\link[=print.sclr]{print}}, 
   \code{\link[=vcov.sclr]{vcov}}, 
   \code{\link[=coef.sclr]{coef}},
@@ -55,19 +55,12 @@ Used to fit the scaled logit model from Dunning (2006).
 The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
 \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
 outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
-\eqn{k} - number of covariates. The likelihood maximisation uses the
-Newton-Raphson algorithm. Initial values are always 1 for the covariate
-coefficients (and the associated intercept) and the proportion of infected
-for the baseline risk. If an algorithm's iteration produces values that
-cannot be used, a different set of initial values is chosen randomly and the
-algorithm starts over. Unusable parameter values are: baseline risk outside
-of (0, 1) (likelihood undefined) and covariate coefficients (or the
-associated intercept) greater than 100 in magnitude (these terms appear in
-the exponent, if they are too big then calculations will fail).
+\eqn{k} - number of covariates. Computing engine behind the fitting is
+\code{\link{sclr_fit}}.
 }
 \examples{
 library(sclr)
-fit1 <- sclr(status ~ HI, sclronetitre)
+fit1 <- sclr(status ~ logHI, sclr_one_titre_data)
 summary(fit1)
 
 }

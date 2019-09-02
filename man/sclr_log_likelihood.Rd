@@ -10,9 +10,10 @@ sclr_log_likelihood(fit, pars = NULL)
 \item{fit}{An object returned by \code{\link{sclr}}.}
 
 \item{pars}{A named vector of parameter values. If \code{NULL}
-then the estimates from \code{fit} will be used}
+then the estimates from \code{fit} will be used.}
 }
 \description{
 Computes the log-likelihood of the scaled logit model
-at a given set of parameter values.
+at a given set of parameter estimates 
+(or the MLE if \code{pars} is not supplied).
 }

@@ -5,12 +5,14 @@
 \alias{summary.sclr}
 \title{Print a \code{sclr} object.}
 \usage{
-\method{print}{sclr}(fit)
+\method{print}{sclr}(x, ...)
 
-\method{summary}{sclr}(fit)
+\method{summary}{sclr}(object, ...)
 }
 \arguments{
-\item{fit}{An object returned by \code{\link{sclr}}.}
+\item{x, object}{An object returned by \code{\link{sclr}}.}
+
+\item{...}{Not used. Needed to match generic signature.}
 }
 \description{
 Summarises a \code{sclr} object for printing. For a dataframe summary, see

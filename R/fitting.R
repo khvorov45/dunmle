@@ -1,4 +1,7 @@
 # Fitting functions
+# Arseniy Khvorov
+# Created 2019/07/31
+# Last edit 2019/09/02
 
 #' Fits the scaled logit model
 #'
@@ -7,15 +10,8 @@
 #' The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
 #' \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
 #' outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
-#' \eqn{k} - number of covariates. The likelihood maximisation uses the
-#' Newton-Raphson algorithm. Initial values are always 1 for the covariate
-#' coefficients (and the associated intercept) and the proportion of infected
-#' for the baseline risk. If an algorithm's iteration produces values that
-#' cannot be used, a different set of initial values is chosen randomly and the
-#' algorithm starts over. Unusable parameter values are: baseline risk outside
-#' of (0, 1) (likelihood undefined) and covariate coefficients (or the
-#' associated intercept) greater than 100 in magnitude (these terms appear in
-#' the exponent, if they are too big then calculations will fail).
+#' \eqn{k} - number of covariates. Computing engine behind the fitting is
+#' \code{\link{sclr_fit}}.
 #'
 #' @param formula an object of class "formula": a symbolic description of the
 #'   model to be fitted.
@@ -40,8 +36,8 @@
 #'   \item{log_likelihood}{Value of log-likelihood calculated at the ML
 #'   estimates of parameters.} \item{call}{The original call to \code{sclr}.}
 #'   \item{model}{Model frame object derived from \code{formula} and
-#'   \code{data}.} \item{terms}{Terms object derived from model frame.} Methods
-#'   supported: 
+#'   \code{data}.} \item{terms}{Terms object derived from model frame.} 
+#'   Methods supported: 
 #'   \code{\link[=print.sclr]{print}}, 
 #'   \code{\link[=vcov.sclr]{vcov}}, 
 #'   \code{\link[=coef.sclr]{coef}},
@@ -55,8 +51,10 @@
 #'
 #' @examples
 #' library(sclr)
-#' fit1 <- sclr(status ~ HI, sclronetitre)
+#' fit1 <- sclr(status ~ logHI, sclr_one_titre_data)
 #' summary(fit1)
+#' 
+#' @importFrom stats confint
 #'
 #' @export
 sclr <- function(
@@ -64,25 +62,27 @@ sclr <- function(
   tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
 ) {
 
+  if (missing(formula)) stop("must supply a formula")
+  if (missing(data)) stop("must supply data")
+  
   cl <- match.call()
 
-  # Manipulations to get to response vector and design matrix
-
-  ## The call is passed to model.frame
+  # The call is passed to model.frame
   mf <- match.call(expand.dots = FALSE)
   m <- match(c("formula", "data"), names(mf), 0L)
   mf <- mf[c(1L, m)]
   mf$drop.unused.levels <- TRUE
   mf[[1L]] <- quote(stats::model.frame)
   mf <- eval(mf, parent.frame())
-  
-  ## Design matirix
-  mt <- attr(mf, "terms")
-  x <- model.matrix(mt, mf)
 
-  ## Response vector
-  y <- model.response(mf)
+  # Design matirix
+  mt <- attr(mf, "terms")
+  x <- stats::model.matrix(mt, mf)
+
+  # Response vector
+  y <- stats::model.response(mf)
   if (!all(y %in% c(0, 1))) stop("response should be a vector with 0 and 1")
+  if (!is.numeric(y)) stop("response should be numeric")
   
   # Actual model fit
 
@@ -107,6 +107,17 @@ sclr <- function(
 #' Fitter function for the scaled logit model
 #'
 #' Computing engine behind \code{\link{sclr}}.
+#' 
+#' The likelihood maximisation uses the
+#' Newton-Raphson algorithm. Initial values are always 1 for the covariate
+#' coefficients (and the associated intercept) and the proportion of infected
+#' for the baseline risk. The algorithm will pick a new guess and restart 
+#' under a set of conditions.
+#' 1) Algorithm's iteration produces estimate guesses that
+#' cannot be used - baseline risk outside of (0, 1) (likelihood undefined). 
+#' 2) The second derivative matrix produced by the current estimates 
+#' is "bad" - positive diagonal or missing values due to failing large 
+#' number calculations
 #'
 #' @param y A vector of observations.
 #' @param x A design matrix.
@@ -188,31 +199,50 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
   return(fit)
 }
 
-# Checks if the current parameter guesses are OK for derivative calculations
+#' Check the parameter matrix.
+#' 
+#' Checks if the current parameter guesses are OK for derivative calculations.
+#' Returns \code{TRUE} if they are and \code{FALSE} otherwise.
+#' 
+#' @param pars_mat The current matrix of parameter guesses.
+#' 
+#' @noRd
 is_bad <- function(pars_mat) {
-  pars_betas <- get_betas_only(pars_mat)
-  if (any(abs(pars_betas) > 100)) return(TRUE) # Too big for exp(...)
   lambda <- pars_mat["lambda", ]
   if ((lambda < 0) | (lambda > 1)) return(TRUE) # Outside of the defined region
   return(FALSE)
 }
 
-# Comes up with a new initial guess
+#' Check the second derivative matrix
+#' 
+#' Checks if the current parameter guesses are OK for derivative calculations.
+#' Returns \code{TRUE} if they are and \code{FALSE} otherwise.
+#' 
+#' @param jac The current second derivative matrix.
+#' 
+#' @noRd
+is_bad_jac <- function(jac) {
+  if (any(is.na(jac))) return(TRUE)
+  if (any(diag(jac) > 0)) return(TRUE)
+  return(FALSE)
+}
+
+#' Create a new guess
+#' 
+#' Creates a matrix with new parameter guesses. 
+#' The matrix has the same structure as the matrix with previous guesses.
+#' 
+#' @param pars_mat The current matrix of parameter guesses.
+#' 
+#' @noRd
 guess_again <- function(pars_mat) {
   delta <- matrix(
     c(
-      runif(1, min = 0, max = 1), 
-      rnorm(nrow(pars_mat) - 1, mean = 0, sd = 2)
+      stats::runif(1, min = 0, max = 1), 
+      stats::rnorm(nrow(pars_mat) - 1, mean = 0, sd = 2)
     ),
     ncol = 1
   )
   rownames(delta) <- rownames(pars_mat)
   return(delta)
-}
-
-# Checks if the jacobian is bad (positive diagonal or missing values)
-is_bad_jac <- function(jac) {
-  if (any(is.na(jac))) return(TRUE)
-  if (any(diag(jac) > 0)) return(TRUE)
-  return(FALSE)
 }

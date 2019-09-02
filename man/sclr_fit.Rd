@@ -22,3 +22,15 @@ this number of iterations, will return with an error.}
 \description{
 Computing engine behind \code{\link{sclr}}.
 }
+\details{
+The likelihood maximisation uses the
+Newton-Raphson algorithm. Initial values are always 1 for the covariate
+coefficients (and the associated intercept) and the proportion of infected
+for the baseline risk. The algorithm will pick a new guess and restart 
+under a set of conditions.
+1) Algorithm's iteration produces estimate guesses that
+cannot be used - baseline risk outside of (0, 1) (likelihood undefined). 
+2) The second derivative matrix produced by the current estimates 
+is "bad" - positive diagonal or missing values due to failing large 
+number calculations
+}

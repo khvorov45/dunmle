@@ -2,17 +2,19 @@
 % Please edit documentation in R/methods.R
 \name{predict.sclr}
 \alias{predict.sclr}
-\title{Predict method for scaled logit model fit.}
+\title{Predict method for scaled logit model x.}
 \usage{
-\method{predict}{sclr}(fit, newdata, ci_lvl = 0.95)
+\method{predict}{sclr}(object, newdata, ci_lvl = 0.95, ...)
 }
 \arguments{
-\item{fit}{Object returned by \code{\link{sclr}}.}
+\item{object}{Object returned by \code{\link{sclr}}.}
 
 \item{newdata}{A dataframe with all covariates. Names should be as they
 appear in the formula in the call to \code{\link{sclr}}.}
 
 \item{ci_lvl}{Confidence level for the calculated interval.}
+
+\item{...}{Not used. Needed to match generic signature.}
 }
 \value{
 A \code{\link[tibble]{tibble}} obtained by adding the following

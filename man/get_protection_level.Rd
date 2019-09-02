@@ -35,5 +35,5 @@ A \code{\link[tibble]{tibble}}. Will have the same variables as
 \description{
 Calculates covariate values corresponding to a particular protection level.
 Only accepts one covariate at a time, fixed values of all the others should
-be provided.
+be provided. The search engine is \code{\link{find_prot_titre_val}}.
 }

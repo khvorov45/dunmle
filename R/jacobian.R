@@ -1,4 +1,7 @@
-# Functions to caclulate the log-likelihood second derivative matrix
+# Functions to caclulate the log-likelihood second derivative matrix.
+# Arseniy Khvorov
+# Created 2019/07/31
+# Last edit 2019/09/02
 
 # Computes the log-likelihood second derivative matrix
 get_jacobian <- function(y, x, pars_mat, exp_Xb) {

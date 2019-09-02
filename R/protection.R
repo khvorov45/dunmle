@@ -7,7 +7,7 @@
 #'
 #' Calculates covariate values corresponding to a particular protection level.
 #' Only accepts one covariate at a time, fixed values of all the others should
-#' be provided.
+#' be provided. The search engine is \code{\link{find_prot_titre_val}}.
 #'
 #' @param fit Object returned by \code{\link{sclr}}.
 #' @param var_name Name of the covariate for which to find values corresponding
@@ -32,6 +32,8 @@ get_protection_level <- function(
   fit, var_name, newdata = NULL, 
   lvl = 0.5, ci_level = 0.95, tol = 10^(-7)
 ) {
+  
+  # Note: not checking newdata. Leaving it to the predict method.
   
   titre_low <- find_prot_titre_val(
     fit, var_name, newdata, "prot_u", lvl, ci_level
@@ -75,7 +77,7 @@ get_protection_level <- function(
 #' @return A dataframe. Will have the same variables as \code{newdata} with
 #' the addition of the \code{var_name} variable.
 #' 
-#' @importFrom rlang sym :=
+#' @importFrom rlang sym := .data
 #' 
 #' @export
 find_prot_titre_val <- function(
@@ -90,13 +92,14 @@ find_prot_titre_val <- function(
   newdata <- dplyr::mutate(newdata, guess_low = -100, guess_high = 100)
   
   # Check if the variable is protective
-  is_protective <- coef(fit)[grepl(var_name, names(coef(fit)))] > 0
+  ests <- stats::coef(fit)
+  is_protective <- ests[grepl(var_name, names(ests))] > 0
   
   # Binary search
   while (TRUE) {
     
     newdata <- dplyr::mutate(
-      newdata, !!sym(var_name) := (guess_low + guess_high) / 2
+      newdata, !!sym(var_name) := (.data$guess_low + .data$guess_high) / 2
     )
     prot_sample <- predict(fit, newdata, ci_level)
     
@@ -104,7 +107,7 @@ find_prot_titre_val <- function(
     notfound <- abs(curvals - lvl) > tol
     
     if (sum(notfound) == 0) {
-      newdata <- dplyr::select(newdata, -guess_low, -guess_high)
+      newdata <- dplyr::select(newdata, -.data$guess_low, -.data$guess_high)
       newdata$protvar <- prot_var_name
       return(newdata)
     }
@@ -113,12 +116,12 @@ find_prot_titre_val <- function(
       newdata,
       guess_low = dplyr::if_else(
         xor(curvals < lvl, is_protective),
-        guess_low,
+        .data$guess_low,
         !!sym(var_name)
       ),
       guess_high = dplyr::if_else(
         xor(curvals > lvl, is_protective),
-        guess_high,
+        .data$guess_high,
         !!sym(var_name)
       )
     )

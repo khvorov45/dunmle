@@ -1,13 +1,17 @@
 # Likelihood-related functions
+# Arseniy Khvorov
+# Created 2019/07/31
+# Last edit 2019/09/02
 
 #' Log-likelihood
 #' 
 #' Computes the log-likelihood of the scaled logit model
-#' at a given set of parameter values.
+#' at a given set of parameter estimates 
+#' (or the MLE if \code{pars} is not supplied).
 #'
 #' @param fit An object returned by \code{\link{sclr}}.
 #' @param pars A named vector of parameter values. If \code{NULL}
-#' then the estimates from \code{fit} will be used
+#' then the estimates from \code{fit} will be used.
 #' 
 #' @export
 sclr_log_likelihood <- function(fit, pars = NULL) {

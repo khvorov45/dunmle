@@ -58,3 +58,8 @@ get_symm_dims <- function(len) {
   if ((rt^2 - rtexp) > 10^(-7)) stop(len, " is not a valid length of triangle")
   return((-1 + rt) / 2)
 }
+
+# Returns the message to indicate mismatch of expected and provided variables
+nvar_mismatch_msg <- function(name, nvar_exp, nvar_got) {
+  paste("in", name, "expected", nvar_exp, "variables", "got", nvar_got)
+}

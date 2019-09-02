@@ -8,49 +8,49 @@
 #' Summarises a \code{sclr} object for printing. For a dataframe summary, see
 #' \code{\link[=tidy.sclr]{tidy}}.
 #' 
-#' @param fit An object returned by \code{\link{sclr}}.
+#' @param x,object An object returned by \code{\link{sclr}}.
+#' @param ... Not used. Needed to match generic signature.
 #' 
 #' @export
-print.sclr <- function(fit) summary(fit)
+print.sclr <- function(x, ...) summary(x)
 
 #' @rdname print.sclr
 #' @export
-summary.sclr <- function(fit) {
+summary.sclr <- function(object, ...) {
   cat("Call: ")
-  print(fit$call[["formula"]])
+  print(object$call[["formula"]])
   
   cat("\nParameter estimates\n")
-  print(fit$parameters)
+  print(object$parameters)
   
   cat("\n95% confidence intervals\n")
-  print(fit$confint)
+  print(object$confint)
   
   invisible(NULL)
 }
 
-#' Variance-covariance matrix
+#' ML estimate components
 #' 
-#' Returns the estimated variance-covariance matrix.
+#' \code{coef} returns MLE's.
+#' \code{vcov} returns the estimated variance-covariance matrix at MLE's. 
 #' 
-#' @inheritParams print.sclr
+#' @param object An object returned by \code{\link{sclr}}.
+#' @param ... Not used. Needed to match generic signature.
+#' 
+#' @importFrom stats coef vcov
 #'
 #' @export
-vcov.sclr <- function(fit) {
-  return(fit$covariance_mat)
+coef.sclr <- function(object, ...) {
+  return(object$parameters)
 }
 
-#' Coefficients
-#' 
-#' Returns the estimated model coefficients.
-#' 
-#' @inheritParams print.sclr
-#'
+#' @rdname coef.sclr
 #' @export
-coef.sclr <- function(fit) {
-  return(fit$parameters)
+vcov.sclr <- function(object, ...) {
+  return(object$covariance_mat)
 }
 
-#' Predict method for scaled logit model fit.
+#' Predict method for scaled logit model x.
 #' 
 #' Returns only the protection estimates. The only supported interval is
 #' a confidence interval (i.e. the interval for the estimated expected value).
@@ -66,10 +66,11 @@ coef.sclr <- function(fit) {
 #' given parameter values. The inverse logit transformation is then applied
 #' to point estimates and interval bounds.
 #' 
-#' @param fit Object returned by \code{\link{sclr}}.
+#' @param object Object returned by \code{\link{sclr}}.
 #' @param newdata A dataframe with all covariates. Names should be as they
 #'   appear in the formula in the call to \code{\link{sclr}}.
 #' @param ci_lvl Confidence level for the calculated interval.
+#' @param ... Not used. Needed to match generic signature.
 #'
 #' @return A \code{\link[tibble]{tibble}} obtained by adding the following
 #' columns to \code{newdata}:
@@ -80,23 +81,29 @@ coef.sclr <- function(fit) {
 #' \item{prot_point prot_l prot_u}{Inverse logit-transformed 
 #' point estimate, low and high bounds of the linear transformation.}
 #' 
+#' @importFrom stats predict
+#' 
 #' @export
-predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
+predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
   
   # Covariates
-  model_mat <- model.matrix(delete.response(fit$terms), newdata)
+  # Relying on this to throw an error when newdata does not contain
+  # the variables that it needs to contain.
+  terms_noy <- stats::delete.response(object$terms)
+  mf <- stats::model.frame(terms_noy, newdata)
+  model_mat <- stats::model.matrix(terms_noy, mf)
   
   # Estimated parameters
-  ests <- coef(fit)
-  ests_beta_mat <- matrix(ests[-1], ncol = 1) # Estmated betas
+  ests <- coef(object)
+  ests_beta_mat <- matrix(ests[-1], ncol = 1) # Estimated betas
   
   # Point estimates
   prot_point_lin <- apply(model_mat, 1, function(x) x %*% ests_beta_mat)
 
   # Modified beta covariance matrices
-  ests_beta_cov <- vcov(fit)[-1, -1] # Beta covariances
-  x_coefs <- get_x_coeffs(model_mat) # x modifiers
-  cov_mod_mats <- build_symm_mat(x_coefs) # In a list of matrices
+  ests_beta_cov <- vcov(object)[-1, -1] # Beta covariances
+  object_coefs <- get_x_coeffs(model_mat) # object modifiers
+  cov_mod_mats <- build_symm_mat(object_coefs) # In a list of matrices
   cov_modified <- lapply(cov_mod_mats, function(x) x * ests_beta_cov)
   
   # Standard deviations associated with each of the point estimates
@@ -105,7 +112,7 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
   sds <- sqrt(sds)
   
   # Ranges
-  lvl <- qnorm((1 + ci_lvl) / 2)
+  lvl <- stats::qnorm((1 + ci_lvl) / 2)
   prot_l_lin <- prot_point_lin - lvl * sds
   prot_u_lin <- prot_point_lin + lvl * sds
   
@@ -128,8 +135,9 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
 #' Summarises the objects returned by \code{\link{sclr}} 
 #' into a \code{\link[tibble]{tibble}}.
 #'
-#' @param fit An object returned by \code{\link{sclr}}.
+#' @param x An object returned by \code{\link{sclr}}.
 #' @param ci_level Confidence level for the intervals.
+#' @param ... Not used. Needed to match generic signature.
 #'
 #' @return A \code{\link[tibble]{tibble}} with one row per model parameter. 
 #' Columns:
@@ -142,16 +150,16 @@ predict.sclr <- function(fit, newdata, ci_lvl = 0.95) {
 #' @importFrom broom tidy
 #' 
 #' @export
-tidy.sclr <- function(fit, ci_level = 0.95) {
+tidy.sclr <- function(x, ci_level = 0.95, ...) {
   pars <- tibble::tibble(
-    term = names(fit$parameters),
-    estimate = fit$parameters,
-    std_error = sqrt(diag(vcov(fit)))
+    term = names(x$parameters),
+    estimate = x$parameters,
+    std_error = sqrt(diag(vcov(x)))
   )
-  cis <- confint(fit, level = ci_level)
+  cis <- confint(x, level = ci_level)
   cisdf <- tibble::tibble(
     term = rownames(cis), conf_low = cis[, 1], conf_high = cis[, 2]
   )
-  fitsum <- dplyr::inner_join(pars, cisdf, by = "term")
-  return(fitsum)
+  xsum <- dplyr::inner_join(pars, cisdf, by = "term")
+  return(xsum)
 }

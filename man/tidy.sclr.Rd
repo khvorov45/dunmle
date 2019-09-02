@@ -4,12 +4,14 @@
 \alias{tidy.sclr}
 \title{Tidy a \code{sclr} object.}
 \usage{
-\method{tidy}{sclr}(fit, ci_level = 0.95)
+\method{tidy}{sclr}(x, ci_level = 0.95, ...)
 }
 \arguments{
-\item{fit}{An object returned by \code{\link{sclr}}.}
+\item{x}{An object returned by \code{\link{sclr}}.}
 
 \item{ci_level}{Confidence level for the intervals.}
+
+\item{...}{Not used. Needed to match generic signature.}
 }
 \value{
 A \code{\link[tibble]{tibble}} with one row per model parameter. 

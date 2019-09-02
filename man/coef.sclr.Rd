@@ -2,13 +2,19 @@
 % Please edit documentation in R/methods.R
 \name{coef.sclr}
 \alias{coef.sclr}
-\title{Coefficients}
+\alias{vcov.sclr}
+\title{ML estimate components}
 \usage{
-\method{coef}{sclr}(fit)
+\method{coef}{sclr}(object, ...)
+
+\method{vcov}{sclr}(object, ...)
 }
 \arguments{
-\item{fit}{An object returned by \code{\link{sclr}}.}
+\item{object}{An object returned by \code{\link{sclr}}.}
+
+\item{...}{Not used. Needed to match generic signature.}
 }
 \description{
-Returns the estimated model coefficients.
+\code{coef} returns MLE's.
+\code{vcov} returns the estimated variance-covariance matrix at MLE's.
 }
