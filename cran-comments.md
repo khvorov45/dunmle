@@ -1,3 +1,6 @@
+## Resumbission
+Changed the MIT license to CRAN template.
+
 ## Test environments
 - Windows 10 (local install), R 3.6.1
 - Windows Server 2008 (on rhub), R-devel
