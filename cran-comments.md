@@ -1,4 +1,4 @@
-## Resumbission
+## Resubmission
 Changed the MIT license to CRAN template.
 
 ## Test environments
