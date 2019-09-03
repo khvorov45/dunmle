@@ -1,12 +1,14 @@
 Package: sclr
 Title: Scaled logistic regression
-Version: 0.0.0.9419
+Version: 0.1.0
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
            role = c("aut", "cre"),
            email = "khvorov45@gmail.com")
-Description: Maximum likelihood estimation of the scaled logit model parameters.
+Description: 
+    Maximum likelihood estimation of the scaled logit model parameters
+    proposed in Dunning (2006) <https://doi.org/10.1002/sim.2282>.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

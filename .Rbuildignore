@@ -4,3 +4,5 @@
 ^misc$
 ^data-raw$
 ^\.travis\.yml$
+^README\.Rmd$
+^cran-comments\.md$
