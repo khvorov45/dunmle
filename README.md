@@ -26,7 +26,7 @@ devtools::install_github("khvorov45/sclr")
 ## Model
 
 For log likelihood, scores and second derivatives see `vignette("Math",
-"sclr")`. Documentation of the main fitting funciton `?sclr` has details
+"sclr")`. Documentation of the main fitting function `?sclr` has details
 on how the model is fit.
 
 ## Example

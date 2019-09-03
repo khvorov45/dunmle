@@ -33,7 +33,8 @@ a confidence interval (i.e. the interval for the estimated expected value).
 \details{
 The model is \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
 \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
-outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
+outcome indicator, (e.g. 1 - infected, 0 - not infected). \eqn{X} - 
+covariate.
 \eqn{k} - number of covariates.
 This function calculates \deqn{\beta_0 + \beta_1X_1 + \beta_2X_2 + ..
 . + \beta_kX_k} transformations at the covariate values found in 

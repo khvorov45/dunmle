@@ -64,7 +64,7 @@ get_protection_level <- function(
 #' \code{\link{sclr}} which was used to generate \code{fit}.
 #' @param newdata A dataframe with all covariates except the one for which
 #' protection values should be calculated.
-#' @param prot_var_name A variable name amoung those returned by
+#' @param prot_var_name A variable name among those returned by
 #' \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
 #' \code{var_name} that is supposed to be found.
 #' @param lvl Protection level to find titre values for. Default is 0.5 (50\%).

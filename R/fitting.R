@@ -9,25 +9,25 @@
 #'
 #' The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
 #' \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
-#' outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
+#' outcome indicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
 #' \eqn{k} - number of covariates. Computing engine behind the fitting is
 #' \code{\link{sclr_fit}}.
 #'
 #' @param formula an object of class "formula": a symbolic description of the
 #'   model to be fitted.
 #' @param data a data frame.
-#' @param calc_ci Whether to calculate confindence intervals.
+#' @param calc_ci Whether to calculate confidence intervals.
 #' @param ci_lvl Confidence interval level for the parameter estimates.
 #' @param calc_ll Whether to calculate log likelihood at MLEs.
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored when
 #'   this is not \code{NULL}.
-#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge within
-#'   this number of iterations, will return with an error.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to converge 
+#'   within this number of iterations, will return with an error.
 #'
 #' @return An object of class \code{sclr}. This is a list with the following
 #'   elements: \item{parameters}{Maximum likelihood estimates of the parameter
-#'   values.} \item{covariance_mat}{The variance-convariance matrix of the
+#'   values.} \item{covariance_mat}{The variance-covariance matrix of the
 #'   parameter estimates.} \item{n_converge}{The number of Newton-Raphson
 #'   iterations (including resets) that were required for convergence.}
 #'   \item{confint}{Confidence intervals of the parameter estimates.}
@@ -124,8 +124,8 @@ sclr <- function(
 #' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
 #' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored when
 #'   this is not \code{NULL}.
-#' @param max_tol_it Maximum tolerated iterations. If it fails to coverge within
-#'   this number of iterations, will return with an error.
+#' @param max_tol_it Maximum tolerated iterations. If it fails to converge 
+#'   within this number of iterations, will return with an error.
 #'
 #' @export
 sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {

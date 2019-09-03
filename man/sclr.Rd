@@ -13,7 +13,7 @@ model to be fitted.}
 
 \item{data}{a data frame.}
 
-\item{calc_ci}{Whether to calculate confindence intervals.}
+\item{calc_ci}{Whether to calculate confidence intervals.}
 
 \item{ci_lvl}{Confidence interval level for the parameter estimates.}
 
@@ -24,13 +24,13 @@ model to be fitted.}
 \item{n_iter}{Number of Newton-Raphson iterations. \code{tol} is ignored when
 this is not \code{NULL}.}
 
-\item{max_tol_it}{Maximum tolerated iterations. If it fails to coverge within
-this number of iterations, will return with an error.}
+\item{max_tol_it}{Maximum tolerated iterations. If it fails to converge 
+within this number of iterations, will return with an error.}
 }
 \value{
 An object of class \code{sclr}. This is a list with the following
   elements: \item{parameters}{Maximum likelihood estimates of the parameter
-  values.} \item{covariance_mat}{The variance-convariance matrix of the
+  values.} \item{covariance_mat}{The variance-covariance matrix of the
   parameter estimates.} \item{n_converge}{The number of Newton-Raphson
   iterations (including resets) that were required for convergence.}
   \item{confint}{Confidence intervals of the parameter estimates.}
@@ -54,7 +54,7 @@ Used to fit the scaled logit model from Dunning (2006).
 \details{
 The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
 \beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
-outcome idicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
+outcome indicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
 \eqn{k} - number of covariates. Computing engine behind the fitting is
 \code{\link{sclr_fit}}.
 }

@@ -27,14 +27,14 @@ P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 + \beta_1X_1 + \beta_2X_2 + ... + \bet
 $$
 Where
 
-$Y$ - binary outcome idicator, (eg. 1 - infected, 0 - not infected). \
+$Y$ - binary outcome indicator, (eg. 1 - infected, 0 - not infected). \
 $X$ - covariate. \
 $k$ - number of covariates.
 
 ## Model fitting
 
 Model fitting is done with a function called `sclr`. It is used in 
-the same way as other fittng functions like `lm`.
+the same way as other fitting functions like `lm`.
 
 ```{r}
 # One-titre fit to included simulated data

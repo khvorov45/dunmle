@@ -4,11 +4,11 @@
 #'
 #' A simulated dataset containing 6000 independent observations on antibody
 #' titres and the corresponding infection status. The data was simulated to
-#' resemble real influenza infection and haemagluttinin titre data.
+#' resemble real influenza infection and haemagglutinin titre data.
 #'
 #' @format A data frame with 6000 observations and 4 variables: 
 #' \describe{
-#'   \item{logHI}{haemogluttinin-inhibiting (HI) titre. 
+#'   \item{logHI}{haemagglutinin-inhibiting (HI) titre. 
 #'   True simulated titre on a log scale.} 
 #'   \item{logHIcens}{HI censored (observed) titre.
 #'   The titre value on a log scale that would be observed in a real dataset
@@ -16,7 +16,7 @@
 #'   \item{logHImid}{Midpoint of the interval (on a log scale)
 #'   to which observed HI values are censored.}
 #'   \item{status}{influenza infection status. 1 -
-#'   infected. 0 - not infected} 
+#'   infected. 0 - not infected}
 #'  }
 #'
 #' @section Model:
@@ -36,12 +36,12 @@
 #'
 #' A simulated dataset containing 6000 independent observations on antibody
 #' titres and the corresponding infection status. The data was simulated to
-#' resemble real influenza infection and haemagluttinin + neuraminidase titre
+#' resemble real influenza infection and haemagglutinin + neuraminidase titre
 #' data.
 #'
 #' @format A data frame with 6000 observations and 6 variables: 
 #' \describe{
-#'   \item{logHI}{haemogluttinin-inhibiting (HI) titre. 
+#'   \item{logHI}{haemagglutinin-inhibiting (HI) titre. 
 #'   True simulated titre on a log scale.} 
 #'   \item{logHIcens}{HI censored (observed) titre.
 #'   The titre value on a log scale that would be observed in a real dataset
@@ -50,7 +50,7 @@
 #'   to which observed HI values are censored.}
 #'   \item{logNI}{neuraminidase-inhibiting titre. True simulated titre on a
 #'   log scale.} 
-#'   \item{logNIcens}{haemogluttinin-inhibiting censored (observed)
+#'   \item{logNIcens}{haemagglutinin-inhibiting censored (observed)
 #'   titre. The titre value that would be observed in a real dataset with a
 #'   typical NI assay.} 
 #'   \item{status}{influenza infection status. 1 - infected.

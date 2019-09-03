@@ -18,7 +18,7 @@ be calculated. This name should appear in the formula of the call to
 \item{newdata}{A dataframe with all covariates except the one for which
 protection values should be calculated.}
 
-\item{prot_var_name}{A variable name amoung those returned by
+\item{prot_var_name}{A variable name among those returned by
 \code{\link{predict.sclr}} which needs to equal \code{lvl} at the value of
 \code{var_name} that is supposed to be found.}
 

@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## Notation
 
-$\boldsymbol{\beta}$ --- vertical coefficiant vector. \
+$\boldsymbol{\beta}$ --- vertical coefficient vector. \
 $\boldsymbol{X}$ --- Covariate matrix with one row per observation. \
 $\boldsymbol{X_i}$ --- i'th row from $\boldsymbol{X}$ \
 $\boldsymbol{Y}$ --- Vertical binary outcome vector. \
