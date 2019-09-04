@@ -1,3 +1,9 @@
+# sclr 0.1.0-dev
+
+- Moved the parameter values from rhanamkhv to data-raw folder.
+
+- Added jsonlite to Suggests list.
+
 # sclr 0.1.0
 
 First release.

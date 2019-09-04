@@ -1,19 +1,15 @@
-# Data is simulated using functions from rhanahkhv package. 
+# Data is simulated using functions from rhanamkhv package. 
 #   github.com/khvorov45/rhanamkhv
 # 
 # Arseniy Khvorov
 # Created 2019/08/30
-# Last edit 2019/09/02
+# Last edit 2019/09/04
 
 library(dplyr)
 
-parvals_one <- jsonlite::fromJSON(system.file(
-  "parameter_sets", "one_titre.json", package = "rhanamkhv", mustWork = TRUE
-))
+parvals_one <- jsonlite::fromJSON("one_titre.json")
 parvals_one$seed <- 20190830
-parvals_two <- jsonlite::fromJSON(system.file(
-  "parameter_sets", "two_titre.json", package = "rhanamkhv", mustWork = TRUE
-))
+parvals_two <- jsonlite::fromJSON("two_titre.json")
 parvals_two$seed <- 20190830
 
 clean_data <- function(dat, n_titre) {

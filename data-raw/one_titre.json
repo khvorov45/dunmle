@@ -1,0 +1,22 @@
+{
+	"n_hhold": 500,
+	"n_ind": 4,
+	"n_obs": 3,
+	"lambda": 0.5,
+	"beta_0": -7.5,
+	"beta_logHI": 2,
+	"beta_logNI": 0,
+	"sd_hhold": 0,
+	"sd_ind": 0,
+	"logHI_mn": 3,
+	"logHI_sd": 2,
+	"logNI_mn": 3,
+	"logNI_sd": 1.5,
+	"constant_exposure": true,
+	"NIflip": 0.5,
+	"all_NI": true,
+	"hhold_exposure_prob": 0.5,
+	"virus_name": "SimVirus",
+	"record_pars": false
+}
+
