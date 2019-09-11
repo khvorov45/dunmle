@@ -55,7 +55,8 @@
 #' @export
 sclr <- function(
   formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
-  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4, conventional_names = FALSE
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4, n_conv = 3,
+  conventional_names = FALSE
 ) {
 
   if (missing(formula)) stop("must supply a formula")
@@ -82,7 +83,7 @@ sclr <- function(
   
   # Actual model fit
 
-  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it, conventional_names)
+  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it, n_conv, conventional_names)
   
   class(fit) <- "sclr"
   
@@ -122,6 +123,8 @@ sclr <- function(
 #'   this is not \code{NULL}.
 #' @param max_tol_it Maximum tolerated iterations. If it fails to converge 
 #'   within this number of iterations, will return with an error.
+#' @param n_conv Number of times the algorithm has to converge (to work around
+#'   local maxima).
 #' @param conventional_names If \code{TRUE}, estimated 
 #'   parameter names will be (Baseline), (Intercept) and the column names in the
 #'   model matrix. Otherwise - lambda, beta_0 and beta_ prefix in front of
@@ -130,7 +133,7 @@ sclr <- function(
 #' @export
 sclr_fit <- function(
   y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
-  conventional_names = FALSE
+  n_conv = 3, conventional_names = FALSE
 ) {
   
   # Parameter vector with initial values
@@ -144,6 +147,9 @@ sclr_fit <- function(
 
   # Work out the MLEs
   n_iter_cur <- 1
+  conv_count <- 0
+  lls <- c()
+  rets <- list()
   while (TRUE) {
     
     # Check that the current set is workable
@@ -181,14 +187,25 @@ sclr_fit <- function(
     } else {
       deltas <- abs(pars_mat - pars_mat_prev)
       if (all(deltas <= tol)) {
-        break
+        ll_cur <- sclr_log_likelihood(list(x = x, y = y), pars_mat)
+        conv_count <- conv_count + 1
+        lls[[conv_count]] <- ll_cur
+        rets[[conv_count]] <- list(
+          "invjac" = inv_jacobian_mat, "pars" = pars_mat
+        )
+        if (conv_count == n_conv) break
+        pars_mat <- guess_again(pars_mat_init)
+        next
       }
     }
     if (n_iter_cur > max_tol_it) 
       stop("did not converge in ", max_tol_it, " iterations\n")
-    
     n_iter_cur <- n_iter_cur + 1
   }
+
+  i_best <- which.max(lls)
+  pars_mat <- rets[[i_best]][["pars"]]
+  inv_jacobian_mat <- rets[[i_best]][["invjac"]]
 
   # Build the return list
   parameters <- as.vector(pars_mat)
@@ -250,4 +267,15 @@ guess_again <- function(pars_mat) {
   )
   rownames(delta) <- rownames(pars_mat)
   return(delta)
+}
+
+#' Check for local minimum
+#'
+#' @param jac Second derivative matrix
+#'
+#' @noRd
+is_minimum <- function(jac) {
+  eigenvals <- eigen(jac, only.values = TRUE)$values
+  eigenvals[dplyr::near(eigenvals, 0)] <- 0
+  if (any(eigenvals > 0)) cat("MINIMUM\n")
 }

@@ -54,5 +54,15 @@ test_that("Returns the expected parameter names", {
       est_conv_names$parameters, 
       c("(Baseline)", "(Intercept)", "logHI")
     )
+})
+
+test_that("Return is stable", {
+  for (ind_data in 1:length(unstable_data)) {
+    pars <- do.call(c, lapply(1:10, function(ind) {
+      fit <- sclr(status ~ logTitre, unstable_data[[ind_data]])
+      par <- fit$parameters[["beta_logTitre"]]
+      return(par)
+    }))
+    expect_equal(length(unique(round(pars, 4))), 1)
   }
-)
+})

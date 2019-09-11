@@ -8,6 +8,11 @@
 (e.g. "(Intercept)" instead of "beta_0"). See `conventional_names` argument
 in `?sclr`.
 
+- Made convergence stricter. Argument `n_conv` to `sclr` and `sclr_fit` 
+sets the number of times the algorithm has to converge. Best set (the one 
+with maximum likelihood) is chosen out of `n_conv` sets. Previously, the 
+algorithm only converged once before returning the set values.
+
 # sclr 0.1.0
 
 First release.
