@@ -5,7 +5,7 @@
 \title{Fits the scaled logit model}
 \usage{
 sclr(formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
-  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4, n_conv = 3,
   conventional_names = FALSE)
 }
 \arguments{
@@ -27,6 +27,9 @@ this is not \code{NULL}.}
 
 \item{max_tol_it}{Maximum tolerated iterations. If it fails to converge 
 within this number of iterations, will return with an error.}
+
+\item{n_conv}{Number of times the algorithm has to converge (to work around
+local maxima).}
 
 \item{conventional_names}{If \code{TRUE}, estimated 
 parameter names will be (Baseline), (Intercept) and the column names in the

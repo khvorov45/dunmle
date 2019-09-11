@@ -5,7 +5,7 @@
 \title{Fitter function for the scaled logit model}
 \usage{
 sclr_fit(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
-  conventional_names = FALSE)
+  n_conv = 3, conventional_names = FALSE)
 }
 \arguments{
 \item{y}{A vector of observations.}
@@ -19,6 +19,9 @@ this is not \code{NULL}.}
 
 \item{max_tol_it}{Maximum tolerated iterations. If it fails to converge 
 within this number of iterations, will return with an error.}
+
+\item{n_conv}{Number of times the algorithm has to converge (to work around
+local maxima).}
 
 \item{conventional_names}{If \code{TRUE}, estimated 
 parameter names will be (Baseline), (Intercept) and the column names in the
