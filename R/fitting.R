@@ -19,11 +19,7 @@
 #' @param calc_ci Whether to calculate confidence intervals.
 #' @param ci_lvl Confidence interval level for the parameter estimates.
 #' @param calc_ll Whether to calculate log likelihood at MLEs.
-#' @param tol Tolerance. Used when \code{n_iter} is \code{NULL}.
-#' @param n_iter Number of Newton-Raphson iterations. \code{tol} is ignored when
-#'   this is not \code{NULL}.
-#' @param max_tol_it Maximum tolerated iterations. If it fails to converge 
-#'   within this number of iterations, will return with an error.
+#' @inheritParams sclr_fit
 #'
 #' @return An object of class \code{sclr}. This is a list with the following
 #'   elements: \item{parameters}{Maximum likelihood estimates of the parameter
@@ -59,7 +55,7 @@
 #' @export
 sclr <- function(
   formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
-  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4, conventional_names = FALSE
 ) {
 
   if (missing(formula)) stop("must supply a formula")
@@ -86,7 +82,7 @@ sclr <- function(
   
   # Actual model fit
 
-  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it)
+  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it, conventional_names)
   
   class(fit) <- "sclr"
   
@@ -126,15 +122,23 @@ sclr <- function(
 #'   this is not \code{NULL}.
 #' @param max_tol_it Maximum tolerated iterations. If it fails to converge 
 #'   within this number of iterations, will return with an error.
+#' @param conventional_names If \code{TRUE}, estimated 
+#'   parameter names will be (Baseline), (Intercept) and the column names in the
+#'   model matrix. Otherwise - lambda, beta_0 and beta_ prefix in front of
+#'   column names in the model matrix.
 #'
 #' @export
-sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
+sclr_fit <- function(
+  y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
+  conventional_names = FALSE
+) {
   
   # Parameter vector with initial values
   n_par <- ncol(x) + 1
   pars_mat <- matrix(rep(1, n_par))
-  rownames(pars_mat) <- c("lambda", get_par_names(x))
-  pars_mat["lambda", ] <- mean(y)
+  
+  rownames(pars_mat) <- get_par_names(x, conventional_names)
+  pars_mat[1, ] <- mean(y)
   
   pars_mat_init <- pars_mat # Initial guess of values
 
@@ -189,6 +193,7 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
   # Build the return list
   parameters <- as.vector(pars_mat)
   names(parameters) <- rownames(pars_mat)
+
   covariance_mat <- -inv_jacobian_mat
   dimnames(covariance_mat) <- list(names(parameters), names(parameters))
   fit <- list(
@@ -208,7 +213,7 @@ sclr_fit <- function(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4) {
 #' 
 #' @noRd
 is_bad <- function(pars_mat) {
-  lambda <- pars_mat["lambda", ]
+  lambda <- pars_mat[1, ]
   if ((lambda < 0) | (lambda > 1)) return(TRUE) # Outside of the defined region
   return(FALSE)
 }

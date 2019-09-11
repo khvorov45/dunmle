@@ -16,7 +16,7 @@ get_jacobian <- function(y, x, pars_mat, exp_Xb) {
 
   # Combine into full matrix
   n_par <- n_x + 1
-  nms <- c("d_lambda", paste0("d_", get_par_names(x)))
+  nms <- paste0("d_", get_par_names(x))
   sec_dev_mat <- matrix(
     0, nrow = n_par, ncol = n_par, dimnames = list(nms, nms)
   )
@@ -37,7 +37,7 @@ get_lambda_array <- function(y, x, pars_mat, exp_Xb) {
 
 # Computes the second derivative of log-likelihood with respect to lambda
 get_dl2 <- function(y, x, pars_mat, exp_Xb) {
-  lambda <- pars_mat["lambda", ]
+  lambda <- pars_mat[1, ]
   dl2 <- -y / lambda^2 - (1 - y) / (1 + exp_Xb - lambda)^2
   dl2 <- sum(dl2)
   return(dl2)
@@ -55,7 +55,7 @@ get_dldbs <- function(y, x, pars_mat, exp_Xb) {
 # Computes the common part of the
 # second derivatives of log-likelihood with respect to lambda and betas
 get_dldbs_common <- function(y, x, pars_mat, exp_Xb) {
-  lambda <- pars_mat["lambda", ]
+  lambda <- pars_mat[1, ]
   common <- (1 - y) * exp_Xb / (1 + exp_Xb - lambda)^2
   return(common)
 }
@@ -87,7 +87,7 @@ get_jac_beta_common <- function(y, x, pars_mat, exp_Xb) {
 # Computes the first fraction of the common part of the second derivatives
 # of log likelihood with respect to the betas
 get_jac_beta_common_f1 <- function(y, x, pars_mat, exp_Xb) {
-  lambda <- pars_mat["lambda", ]
+  lambda <- pars_mat[1, ]
   common_f1 <- (1 - y) * (1 - lambda) * exp_Xb / (1 + exp_Xb - lambda)^2
   return(common_f1)
 }

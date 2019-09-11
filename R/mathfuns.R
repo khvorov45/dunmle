@@ -8,7 +8,7 @@ get_exp_Xb <- function(y, x, pars) exp(get_Xb(y, x, pars))
 
 # Result of Xb matrix multiplication
 get_Xb <- function(y, x, pars) {
-  pars_betas <- get_betas_only(pars)
+  pars_betas <- pars[-1, ]
   xb <- x %*% pars_betas
   return(xb)
 }

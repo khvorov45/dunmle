@@ -5,7 +5,8 @@
 \title{Fits the scaled logit model}
 \usage{
 sclr(formula, data, calc_ci = TRUE, ci_lvl = 0.95, calc_ll = TRUE,
-  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
+  tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
+  conventional_names = FALSE)
 }
 \arguments{
 \item{formula}{an object of class "formula": a symbolic description of the
@@ -26,6 +27,11 @@ this is not \code{NULL}.}
 
 \item{max_tol_it}{Maximum tolerated iterations. If it fails to converge 
 within this number of iterations, will return with an error.}
+
+\item{conventional_names}{If \code{TRUE}, estimated 
+parameter names will be (Baseline), (Intercept) and the column names in the
+model matrix. Otherwise - lambda, beta_0 and beta_ prefix in front of
+column names in the model matrix.}
 }
 \value{
 An object of class \code{sclr}. This is a list with the following

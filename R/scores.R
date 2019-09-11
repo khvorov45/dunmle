@@ -5,13 +5,13 @@ get_scores <- function(y, x, pars, exp_Xb) {
   dl <- get_dl(y, x, pars, exp_Xb)
   beta_part <- get_score_beta_part(y, x, pars, exp_Xb)
   scores <- matrix(c(dl, beta_part), ncol = 1)
-  rownames(scores) <- c("d_lambda", paste0("d_", get_par_names(x)))
+  rownames(scores) <- paste0("d_", get_par_names(x))
   return(scores)
 }
 
 # Computes the first derivative of log-likelihood with respect to lambda
 get_dl <- function(y, x, pars, exp_Xb) {
-  lambda <- pars["lambda", ]
+  lambda <- pars[1, ]
   dl <- y / lambda - (1 - y) / (1 + exp_Xb - lambda)
   dl <- sum(dl)
   return(dl)
@@ -34,7 +34,7 @@ get_score_beta_common <- function(y, x, pars, exp_Xb) {
 
 # Computes the first fraction term of common
 get_dbc_f1 <- function(y, x, pars, exp_Xb) {
-  lambda <- pars["lambda", ]
+  lambda <- pars[1, ]
   f1 <- exp_Xb / (1 + exp_Xb - lambda)
   return(f1)
 }

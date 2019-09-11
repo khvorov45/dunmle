@@ -23,9 +23,9 @@ sclr_log_likelihood <- function(fit, pars = NULL) {
     pars <- as.matrix(pars_vec, ncol = 1)
     rownames(pars) <- names(pars_vec)
   }
-  
-  lambda <- pars["lambda", ]
-  
+
+  lambda <- pars[1, ]
+
   y <- fit$y
   x <- fit$x
   

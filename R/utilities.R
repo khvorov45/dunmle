@@ -1,17 +1,16 @@
 # General utility functions
 
 # Returns parameter names based on the model matrix
-get_par_names <- function(x) {
-  par_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))
+get_par_names <- function(x, conventional_names = FALSE) {
+  if (conventional_names) {
+    lambda_name <- "(Baseline)"
+    other_names <- colnames(x)
+  } else {
+    lambda_name <- "lambda"
+    other_names <- c("beta_0", paste0("beta_", colnames(x)[-1]))
+  }
+  par_names <- c(lambda_name, other_names)
   return(par_names)
-}
-
-# Narrows the parameter list to betas
-get_betas_only <- function(pars_mat) {
-  pars_betas <- pars_mat[grepl("beta", rownames(pars_mat)), ]
-  pars_betas_mat <- matrix(pars_betas, ncol = 1)
-  rownames(pars_betas_mat) <- names(pars_betas)
-  return(pars_betas_mat)
 }
 
 # Creates a matrix of all products of pairwise multiplication of elements of x

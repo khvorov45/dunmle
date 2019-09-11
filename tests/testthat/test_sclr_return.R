@@ -43,3 +43,16 @@ test_that(
     expect_equal(est2, expected_est2)
   }
 )
+
+test_that("Returns the expected parameter names", {
+    est_my_names <- sclr(status ~ logHI, sclr_one_titre_data)
+    expect_named(est_my_names$parameters, c("lambda", "beta_0", "beta_logHI"))
+    est_conv_names <- sclr(
+      status ~ logHI, sclr_one_titre_data, conventional_names = TRUE
+    )
+    expect_named(
+      est_conv_names$parameters, 
+      c("(Baseline)", "(Intercept)", "logHI")
+    )
+  }
+)

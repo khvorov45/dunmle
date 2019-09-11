@@ -4,7 +4,8 @@
 \alias{sclr_fit}
 \title{Fitter function for the scaled logit model}
 \usage{
-sclr_fit(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4)
+sclr_fit(y, x, tol = 10^(-7), n_iter = NULL, max_tol_it = 10^4,
+  conventional_names = FALSE)
 }
 \arguments{
 \item{y}{A vector of observations.}
@@ -18,6 +19,11 @@ this is not \code{NULL}.}
 
 \item{max_tol_it}{Maximum tolerated iterations. If it fails to converge 
 within this number of iterations, will return with an error.}
+
+\item{conventional_names}{If \code{TRUE}, estimated 
+parameter names will be (Baseline), (Intercept) and the column names in the
+model matrix. Otherwise - lambda, beta_0 and beta_ prefix in front of
+column names in the model matrix.}
 }
 \description{
 Computing engine behind \code{\link{sclr}}.

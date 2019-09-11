@@ -4,6 +4,10 @@
 
 - Added jsonlite to Suggests list.
 
+- Added the ability to return parameter names that are more conventional 
+(e.g. "(Intercept)" instead of "beta_0"). See `conventional_names` argument
+in `?sclr`.
+
 # sclr 0.1.0
 
 First release.
