@@ -1,8 +1,6 @@
 # sclr 0.1.0-dev
 
-- Moved the parameter values from rhanamkhv to data-raw folder.
-
-- Added jsonlite to Suggests list.
+- Made simulations in data-raw self-contained.
 
 - Added the ability to return parameter names that are more conventional 
 (e.g. "(Intercept)" instead of "beta_0"). See `conventional_names` argument

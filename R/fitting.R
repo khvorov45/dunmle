@@ -47,7 +47,7 @@
 #'
 #' @examples
 #' library(sclr)
-#' fit1 <- sclr(status ~ logHI, sclr_one_titre_data)
+#' fit1 <- sclr(status ~ logHI, one_titre_data)
 #' summary(fit1)
 #' 
 #' @importFrom stats confint

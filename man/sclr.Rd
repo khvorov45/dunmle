@@ -69,7 +69,7 @@ outcome indicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
 }
 \examples{
 library(sclr)
-fit1 <- sclr(status ~ logHI, sclr_one_titre_data)
+fit1 <- sclr(status ~ logHI, one_titre_data)
 summary(fit1)
 
 }
