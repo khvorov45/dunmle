@@ -50,7 +50,7 @@ Usage is similar to other model fitting functions like `lm`.
 
 ```{r example}
 library(sclr)
-fit <- sclr(status ~ logHI, sclr_one_titre_data)
+fit <- sclr(status ~ logHI, one_titre_data)
 summary(fit)
 ```
 

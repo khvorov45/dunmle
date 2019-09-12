@@ -42,19 +42,19 @@ Usage is similar to other model fitting functions like `lm`.
 
 ``` r
 library(sclr)
-fit <- sclr(status ~ logHI, sclr_one_titre_data)
+fit <- sclr(status ~ logHI, one_titre_data)
 summary(fit)
 #> Call: status ~ logHI
 #> 
 #> Parameter estimates
 #>     lambda     beta_0 beta_logHI 
-#>   0.243828  -7.763952   2.088048 
+#>  0.5036743 -5.0798533  2.0467007 
 #> 
 #> 95% confidence intervals
 #>                 2.5 %     97.5 %
-#> lambda      0.2255282  0.2621277
-#> beta_0     -9.6362901 -5.8916139
-#> beta_logHI  1.6458693  2.5302271
+#> lambda      0.4790111  0.5283374
+#> beta_0     -5.9537676 -4.2059390
+#> beta_logHI  1.7561249  2.3372765
 ```
 
 For more details see `vignette("Usage", "sclr")`.
