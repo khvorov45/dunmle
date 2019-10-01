@@ -13,7 +13,13 @@ get_par_names <- function(x, conventional_names = FALSE) {
   return(par_names)
 }
 
-# Creates a matrix of all products of pairwise multiplication of elements of x
+#' Matrix of coefficients
+#'
+#' Creates a matrix of all products of pairwise multiplication of elements of x
+#'
+#' @param x Model matrix
+#'
+#' @noRd
 get_x_coeffs <- function(x) {
   n_x <- ncol(x)
   n_coefs <- choose(n_x, 2) + n_x
