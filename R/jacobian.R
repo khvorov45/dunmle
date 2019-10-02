@@ -4,10 +4,10 @@
 # Last edit 2019/09/02
 
 # Computes the log-likelihood second derivative matrix
-get_jacobian <- function(y, x, pars_mat, exp_Xb) {
+get_jacobian <- function(y, x, pars_mat, exp_Xb, x_coeffs) {
   
   lambda_entries <- get_lambda_array(y, x, pars_mat, exp_Xb)
-  beta_part <- get_jac_beta_part(y, x, pars_mat, exp_Xb)
+  beta_part <- get_jac_beta_part(y, x, pars_mat, exp_Xb, x_coeffs)
   
   n_x <- ncol(x)
   
@@ -61,12 +61,9 @@ get_dldbs_common <- function(y, x, pars_mat, exp_Xb) {
 }
 
 # Computes the second derivatives of log likelihood with respect to the betas
-get_jac_beta_part <- function(y, x, pars_mat, exp_Xb) {
+get_jac_beta_part <- function(y, x, pars_mat, exp_Xb, x_coeffs) {
   
   common <- get_jac_beta_common(y, x, pars_mat, exp_Xb)
-  
-  # Create the x coefficients
-  x_coeffs <- get_x_coeffs(x)
   
   # Get the unique triangle of the beta part
   beta_contr <- x_coeffs * common[, 1]

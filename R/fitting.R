@@ -144,6 +144,8 @@ sclr_fit <- function(
   pars_mat[1, ] <- mean(y)
   
   pars_mat_init <- pars_mat # Initial guess of values
+  
+  x_coeffs <- get_x_coeffs(x) # To avoid recalculations
 
   # Work out the MLEs
   n_iter_cur <- 1
@@ -156,11 +158,11 @@ sclr_fit <- function(
     if (is_bad(pars_mat)) pars_mat <- guess_again(pars_mat_init)
     pars_mat_prev <- pars_mat # Save for later
     
-    # Calculate the commonly occuring expessions
+    # Calculate the commonly occuring expession
     exp_Xb <- get_exp_Xb(y, x, pars_mat)
     
     # Log-likelihood second derivative (negative of information) matrix
-    jacobian_mat <- get_jacobian(y, x, pars_mat, exp_Xb)
+    jacobian_mat <- get_jacobian(y, x, pars_mat, exp_Xb, x_coeffs)
     if (is_bad_jac(jacobian_mat)) {
       pars_mat <- guess_again(pars_mat_init)
       next
