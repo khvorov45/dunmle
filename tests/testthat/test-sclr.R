@@ -1,13 +1,24 @@
-# Tests of sclr returning the expected values.
-# 
-# These 'correct' values are coming from the verion of sclr that was
-# verified to be good through simulations.
-#
+# Tests of sclr function
 # Arseniy Khvorov
 # Created 2019/09/02
-# Last edit 2019/09/13
+# Last edit 2019/10/14
 
 library(sclr)
+
+test_that("Error with missing parameters", {
+    expect_error(sclr(status ~ logHI))
+    expect_error(sclr(one_titre_data))
+})
+
+test_that("Error with unexpected outcome", {
+    # Factor
+    dat <- one_titre_data
+    dat$status <- as.factor(dat$status)
+    expect_error(sclr(status ~ logHI, dat))
+    # 1's and 2's
+    dat$status <- as.numeric(dat$status)
+    expect_error(sclr(status ~ logHI, dat))
+})
 
 test_that("Returns the expected parameter names", {
   fit_my_names <- sclr(status ~ logHI, one_titre_data)
