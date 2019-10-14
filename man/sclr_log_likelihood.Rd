@@ -7,7 +7,9 @@
 sclr_log_likelihood(fit, pars = NULL)
 }
 \arguments{
-\item{fit}{An object returned by \code{\link{sclr}}.}
+\item{fit}{An object returned by \code{\link{sclr}}. Or a list with
+parameters, x and y entries corresponding to the parameter matrix, 
+model matrix and model response.}
 
 \item{pars}{A named vector of parameter values. If \code{NULL} then the
 estimates from \code{fit} will be used.}

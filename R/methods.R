@@ -40,15 +40,11 @@ summary.sclr <- function(object, ...) {
 #' @importFrom stats coef vcov
 #'
 #' @export
-coef.sclr <- function(object, ...) {
-  return(object$parameters)
-}
+coef.sclr <- function(object, ...) object$parameters
 
 #' @rdname coef.sclr
 #' @export
-vcov.sclr <- function(object, ...) {
-  return(object$covariance_mat)
-}
+vcov.sclr <- function(object, ...) object$covariance_mat
 
 #' Predict method for scaled logit model x.
 #' 
@@ -82,7 +78,9 @@ vcov.sclr <- function(object, ...) {
 #' \item{prot_point prot_l prot_u}{Inverse logit-transformed 
 #' point estimate, low and high bounds of the linear transformation.}
 #' 
-#' @importFrom stats predict
+#' @importFrom stats predict delete.response model.frame model.matrix qnorm
+#' @importFrom dplyr bind_cols
+#' @importFrom tibble tibble
 #' 
 #' @export
 predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
@@ -90,9 +88,9 @@ predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
   # Covariates
   # Relying on this to throw an error when newdata does not contain
   # the variables that it needs to contain.
-  terms_noy <- stats::delete.response(object$terms)
-  mf <- stats::model.frame(terms_noy, newdata)
-  model_mat <- stats::model.matrix(terms_noy, mf)
+  terms_noy <- delete.response(object$terms)
+  mf <- model.frame(terms_noy, newdata)
+  model_mat <- model.matrix(terms_noy, mf)
   
   # Estimated parameters
   ests <- coef(object)
@@ -113,12 +111,12 @@ predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
   sds <- sqrt(sds)
   
   # Ranges
-  lvl <- stats::qnorm((1 + ci_lvl) / 2)
+  lvl <- qnorm((1 + ci_lvl) / 2)
   prot_l_lin <- prot_point_lin - lvl * sds
   prot_u_lin <- prot_point_lin + lvl * sds
   
   # Collate
-  predret <- tibble::tibble(
+  predret <- tibble(
     prot_point_lin = prot_point_lin,
     prot_sd_lin = sds,
     prot_l_lin = prot_l_lin,
@@ -127,8 +125,7 @@ predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
     prot_l = invlogit(prot_l_lin),
     prot_u = invlogit(prot_u_lin)
   )
-  predret <- dplyr::bind_cols(predret, newdata)
-  return(predret)
+  bind_cols(predret, newdata)
 }
 
 #' Tidy a \code{sclr} object.
@@ -149,18 +146,18 @@ predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
 #' \item{conf_high}{Upper bound of the confidence interval.}
 #' 
 #' @importFrom broom tidy
+#' @importFrom dplyr inner_join
 #' 
 #' @export
 tidy.sclr <- function(x, ci_level = 0.95, ...) {
-  pars <- tibble::tibble(
+  pars <- tibble(
     term = names(x$parameters),
     estimate = x$parameters,
     std_error = sqrt(diag(vcov(x)))
   )
   cis <- confint(x, level = ci_level)
-  cisdf <- tibble::tibble(
+  cisdf <- tibble(
     term = rownames(cis), conf_low = cis[, 1], conf_high = cis[, 2]
   )
-  xsum <- dplyr::inner_join(pars, cisdf, by = "term")
-  return(xsum)
+  inner_join(pars, cisdf, by = "term")
 }

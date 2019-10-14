@@ -8,14 +8,14 @@
 #' Computes the log-likelihood of the scaled logit model at a given set of
 #' parameter estimates (or the MLE if \code{pars} is not supplied).
 #'
-#' @param fit An object returned by \code{\link{sclr}}.
+#' @param fit An object returned by \code{\link{sclr}}. Or a list with
+#'   parameters, x and y entries corresponding to the parameter matrix, 
+#'   model matrix and model response.
 #' @param pars A named vector of parameter values. If \code{NULL} then the
 #'   estimates from \code{fit} will be used.
 #'
 #' @export
 sclr_log_likelihood <- function(fit, pars = NULL) {
-  
-  stopifnot()
   
   if (is.null(pars)) pars <- fit$parameters
   
@@ -32,7 +32,5 @@ sclr_log_likelihood <- function(fit, pars = NULL) {
   exp_Xb <- get_exp_Xb(y, x, pars)
   
   l <- y * log(lambda) + (1 - y) * log(1 + exp_Xb - lambda) - log(1 + exp_Xb)
-  l <- sum(l)
-  
-  return(l)
+  sum(l)
 }
