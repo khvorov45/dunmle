@@ -42,5 +42,6 @@ The algorithm will pick a new guess and restart under a set of conditions.
 baseline risk outside of (0, 1) since likelihood is undefined.
 
 2) The second derivative matrix produced by the current estimates is "bad" -
-positive diagonal or missing values due to failing large number calculations.
+positive semi-definite or missing values due to failing large 
+number calculations.
 }

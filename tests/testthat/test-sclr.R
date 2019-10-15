@@ -1,9 +1,13 @@
 # Tests of sclr function
 # Arseniy Khvorov
 # Created 2019/09/02
-# Last edit 2019/10/14
+# Last edit 2019/10/16
 
 library(sclr)
+
+test_that("Basic usage", {
+  expect_true(is_sclr(sclr(status ~ logHI, data = one_titre_data)))
+})
 
 test_that("Error with missing parameters", {
     expect_error(sclr(status ~ logHI))

@@ -1,7 +1,7 @@
 # Methods for the sclr class
 # Arseniy Khvorov
 # Created 2019/07/31
-# Last edit 2019/08/30
+# Last edit 2019/10/16
 
 #' Print a \code{sclr} object.
 #' 
@@ -24,7 +24,7 @@ summary.sclr <- function(object, ...) {
   print(object$parameters)
   
   cat("\n95% confidence intervals\n")
-  print(object$confint)
+  print(object$ci)
   
   invisible(NULL)
 }

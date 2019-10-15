@@ -1,5 +1,4 @@
 # Simulating sample data
-# 
 # Arseniy Khvorov
 # Created 2019/08/30
 # Last edit 2019/09/13

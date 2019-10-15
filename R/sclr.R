@@ -127,4 +127,4 @@ new_sclr <- function(fit, x, y, cl, mf, mt) {
 
 #' @rdname new_sclr
 #' @export
-is_sclr <- function(fit) "sclr" %in% class(sclr)
+is_sclr <- function(fit) "sclr" %in% class(fit)

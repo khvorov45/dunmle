@@ -1,7 +1,7 @@
 # Fitting functions
 # Arseniy Khvorov
 # Created 2019/07/31
-# Last edit 2019/10/15
+# Last edit 2019/10/16
 
 #' Fitter function for the scaled logit model
 #'
@@ -17,7 +17,8 @@
 #' baseline risk outside of (0, 1) since likelihood is undefined.
 #'
 #' 2) The second derivative matrix produced by the current estimates is "bad" -
-#' positive diagonal or missing values due to failing large number calculations.
+#' positive semi-definite or missing values due to failing large 
+#' number calculations.
 #'
 #' @param y A vector of observations.
 #' @param x A design matrix.
@@ -67,11 +68,8 @@ sclr_fit <- function(y, x,
     
     # Invert to get the negative of the covariance matrix
     inv_jacobian_mat <- try(solve(jacobian_mat), silent = TRUE)
-    if (inherits(inv_jacobian_mat, "try-error")) {
-      pars_mat <- guess_again(pars_mat)
-      next
-    }
-    if (is_bad_jac(inv_jacobian_mat)) {
+    if (inherits(inv_jacobian_mat, "try-error") || 
+        any(is.na(inv_jacobian_mat))) {
       pars_mat <- guess_again(pars_mat)
       next
     }
@@ -82,15 +80,13 @@ sclr_fit <- function(y, x,
     
     # Check convergence
     if (has_converged(pars_mat, pars_mat_prev, tol)) {
-      if (!is_minimum(jacobian_mat)) {
-        conv_count <- conv_count + 1
-        ll_cur <- sclr_log_likelihood(list(x = x, y = y), pars_mat)
-        lls[[conv_count]] <- ll_cur
-        rets[[conv_count]] <- list(
-          "invjac" = inv_jacobian_mat, "pars" = pars_mat
-        )
-        if (conv_count == n_conv) break
-      }
+      conv_count <- conv_count + 1
+      ll_cur <- sclr_log_likelihood(list(x = x, y = y), pars_mat)
+      lls[[conv_count]] <- ll_cur
+      rets[[conv_count]] <- list(
+        "invjac" = inv_jacobian_mat, "pars" = pars_mat
+      )
+      if (conv_count == n_conv) break
       pars_mat <- guess_again(pars_mat)
       next
     } else {
@@ -156,7 +152,8 @@ is_bad_pars <- function(pars_mat) {
 #'
 #' @noRd
 is_bad_jac <- function(jac) {
-  any(is.na(jac)) || any(diag(jac) > 0)
+  if (any(is.na(jac))) return(TRUE)
+  is_convex(jac)
 }
 
 #' Create a new guess
@@ -181,14 +178,14 @@ guess_again <- function(pars_mat) {
   return(delta)
 }
 
-#' Check for local minimum
+#' Check for convexity
 #'
 #' @param jac Second derivative matrix
 #' 
 #' @importFrom dplyr near
 #'
 #' @noRd
-is_minimum <- function(jac) {
+is_convex <- function(jac) {
   eigenvals <- eigen(jac, only.values = TRUE)$values
   eigenvals[near(eigenvals, 0)] <- 0
   any(eigenvals > 0)
