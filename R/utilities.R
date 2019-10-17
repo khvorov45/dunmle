@@ -54,7 +54,8 @@ get_x_coeffs <- function(x) {
 #' @noRd
 build_symm_mat <- function(obj) {
   if (is.vector(obj)) return(build_symm_mat_one(obj))
-  if (!is.data.frame(obj) & !is.matrix(obj)) 
+  if (is.data.frame(obj)) obj <- as.matrix(obj)
+  if (!is.matrix(obj))
     abort("obj needs to be a vector, a matrix or a dataframe")
   obj <- split(obj, seq(nrow(obj)))
   lapply(obj, build_symm_mat_one)
@@ -81,6 +82,7 @@ build_symm_mat_one <- function(triang_vec) {
 get_symm_dims <- function(len) {
   rtexp <- 1 + 8 * len
   rt <- as.integer(sqrt(rtexp))
-  if ((rt^2 - rtexp) > 10^(-7)) abort(len, " is not a valid length of triangle")
+  if (abs(rt^2 - rtexp) > 10^(-7)) 
+    abort(paste0(len, " is not a valid length of triangle"))
   (-1 + rt) / 2
 }
