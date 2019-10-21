@@ -4,23 +4,17 @@
 \name{two_titre_data}
 \alias{two_titre_data}
 \title{Simulated two-titre antibody data}
-\format{A data frame with 5000 observations and 6 variables: 
-\describe{
-  \item{logHI}{haemagglutinin-inhibiting (HI) titre. 
-  True simulated titre on a log scale.} 
-  \item{logHIcens}{HI censored (observed) titre.
-  The titre value on a log scale that would be observed in a real dataset
-  with a typical HI assay.}
-  \item{logHImid}{Midpoint of the interval (on a log scale)
-  to which observed HI values are censored.}
-  \item{logNI}{neuraminidase-inhibiting titre. True simulated titre on a
-  log scale.} 
-  \item{logNIcens}{haemagglutinin-inhibiting censored (observed)
-  titre. The titre value that would be observed in a real dataset with a
-  typical NI assay.} 
-  \item{status}{influenza infection status. 1 - infected.
-  0 - not infected} 
- }}
+\format{A data frame with 5000 observations and 3 variables:
+
+  \describe{
+
+  \item{logHI}{haemagglutinin-inhibiting (HI) titre. True simulated titre on
+  a log scale.}
+
+  \item{logNI}{neuraminidase-inhibiting titre. True simulated titre on a log
+  scale.}
+
+  \item{status}{influenza infection status. 1 - infected. 0 - not infected} }}
 \usage{
 two_titre_data
 }
@@ -39,9 +33,17 @@ data.
 
   Where
 
-  \itemize{ \item \eqn{f} - Inverse logit function \item \eqn{\lambda} = 0.5
-  \item \eqn{\beta_0} = -7.5 \item \eqn{\beta_1} = 2 \item \eqn{\beta_2} = 2
-  }
+  \itemize{
+
+  \item \eqn{f} - Inverse logit function
+
+  \item \eqn{\lambda} = 0.5
+
+  \item \eqn{\beta_0} = -7.5
+
+  \item \eqn{\beta_1} = 2
+
+  \item \eqn{\beta_2} = 2 }
 }
 
 \keyword{datasets}

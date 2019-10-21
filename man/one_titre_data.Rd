@@ -4,18 +4,16 @@
 \name{one_titre_data}
 \alias{one_titre_data}
 \title{Simulated one-titre antibody data}
-\format{A data frame with 5000 observations and 4 variables: 
-\describe{
-  \item{logHI}{haemagglutinin-inhibiting (HI) titre. 
-  True simulated titre on a log scale.} 
-  \item{logHIcens}{HI censored (observed) titre.
-  The titre value on a log scale that would be observed in a real dataset
-  with a typical HI assay.}
-  \item{logHImid}{Midpoint of the interval (on a log scale)
-  to which observed HI values are censored.}
-  \item{status}{influenza infection status. 1 -
-  infected. 0 - not infected}
- }}
+\format{A data frame with 5000 observations and 2 variables:
+
+  \describe{
+
+  \item{logHI}{haemagglutinin-inhibiting (HI) titre. True simulated titre on
+  a log scale.}
+
+  \item{status}{influenza infection status. 1 - infected. 0 - not infected}
+
+  }}
 \usage{
 one_titre_data
 }
@@ -33,8 +31,13 @@ resemble real influenza infection and haemagglutinin titre data.
 
   Where
 
-  \itemize{ \item \eqn{f} - Inverse logit function \item \eqn{\lambda} = 0.5
-  \item \eqn{\beta_0} = -5 \item \eqn{\beta_1} = 2 }
+  \itemize{
+
+  \item \eqn{f} - Inverse logit function \item \eqn{\lambda} = 0.5
+
+  \item \eqn{\beta_0} = -5 \item \eqn{\beta_1} = 2
+
+  }
 }
 
 \keyword{datasets}

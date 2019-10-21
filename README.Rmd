@@ -50,7 +50,8 @@ Usage is similar to other model fitting functions like `lm`.
 
 ```{r example}
 library(sclr)
-fit <- sclr(status ~ logHI, one_titre_data)
+ideal_data <- sclr_ideal_data(seed = 20191021)
+fit <- sclr(status ~ logHI, ideal_data)
 summary(fit)
 ```
 
@@ -59,4 +60,3 @@ For more details see `vignette("Usage", "sclr")`.
 ## References
 
 Dunning AJ (2006). “A model for immunological correlates of protection.” Statistics in Medicine, 25(9), 1485-1497. doi: 10.1002/sim.2282.
-

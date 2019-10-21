@@ -1,5 +1,7 @@
 # sclr 0.1.0-dev
 
+- Added `sclr_ideal_data` function to simulalte ideal data for the model.
+
 - Made simulations in data-raw self-contained.
 
 - Added the ability to return parameter names that are more conventional (e.g.
