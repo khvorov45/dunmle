@@ -48,6 +48,8 @@
 #'
 #'   Methods supported: \code{\link[=print.sclr]{print}},
 #'   \code{\link[=vcov.sclr]{vcov}}, \code{\link[=coef.sclr]{coef}},
+#'   \code{\link[=model.frame.sclr]{model.frame}},
+#'   \code{\link[=model.matrix.sclr]{model.matrix}},
 #'   \code{\link[=summary.sclr]{summary}}, \code{\link[=predict.sclr]{predict}},
 #'   \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package).
 #'

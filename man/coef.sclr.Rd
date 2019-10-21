@@ -3,18 +3,28 @@
 \name{coef.sclr}
 \alias{coef.sclr}
 \alias{vcov.sclr}
+\alias{confint.sclr}
+\alias{model.matrix.sclr}
+\alias{model.frame.sclr}
 \title{ML estimate components}
 \usage{
 \method{coef}{sclr}(object, ...)
 
 \method{vcov}{sclr}(object, ...)
+
+\method{confint}{sclr}(object, ...)
+
+\method{model.matrix}{sclr}(object, ...)
+
+\method{model.frame}{sclr}(formula, ...)
 }
 \arguments{
-\item{object}{An object returned by \code{\link{sclr}}.}
+\item{object, formula}{An object returned by \code{\link{sclr}}.}
 
 \item{...}{Not used. Needed to match generic signature.}
 }
 \description{
 \code{coef} returns MLE's.
-\code{vcov} returns the estimated variance-covariance matrix at MLE's.
+\code{vcov} returns the estimated variance-covariance matrix at MLE's. 
+\code{confint} returns the confidence interval.
 }

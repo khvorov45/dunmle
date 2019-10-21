@@ -1,6 +1,6 @@
 # sclr 0.1.0-dev
 
-- Added `sclr_ideal_data` function to simulalte ideal data for the model.
+- Added `sclr_ideal_data` function to simulate ideal data for the model.
 
 - Made simulations in data-raw self-contained.
 
@@ -12,6 +12,8 @@
 and `sclr_fit` sets the number of times the algorithm has to converge. Best set
 (the one with maximum likelihood) is chosen out of `n_conv` sets. Previously,
 the algorithm only converged once.
+
+- `sclr_log_likelihood` can now be called with a model matrix and a model reponse.
 
 - Minor performance optimisations.
 

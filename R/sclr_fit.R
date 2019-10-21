@@ -33,6 +33,8 @@
 #'   (Baseline), (Intercept) and the column names in the model matrix. Otherwise
 #'   - lambda, beta_0 and beta_ prefix in front of column names in the model
 #'   matrix.
+#'   
+#' @importFrom rlang abort
 #'
 #' @export
 sclr_fit <- function(y, x, 
@@ -81,7 +83,7 @@ sclr_fit <- function(y, x,
     # Check convergence
     if (has_converged(pars_mat, pars_mat_prev, tol)) {
       conv_count <- conv_count + 1
-      ll_cur <- sclr_log_likelihood(list(x = x, y = y), pars_mat)
+      ll_cur <- sclr_log_likelihood(x = x, y = y, pars = pars_mat)
       lls[[conv_count]] <- ll_cur
       rets[[conv_count]] <- list(
         "invjac" = inv_jacobian_mat, "pars" = pars_mat
@@ -91,8 +93,9 @@ sclr_fit <- function(y, x,
       next
     } else {
       if (!is.null(n_iter) && (n_iter_cur > n_iter)) break
-      if (n_iter_cur > max_tol_it)
-        abort("did not converge in ", max_tol_it, " iterations\n")
+      if (n_iter_cur > max_tol_it) {
+        abort(paste0("did not converge in ", max_tol_it, " iterations"))
+      }
       n_iter_cur <- n_iter_cur + 1
       next
     }

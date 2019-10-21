@@ -33,8 +33,9 @@ summary.sclr <- function(object, ...) {
 #' 
 #' \code{coef} returns MLE's.
 #' \code{vcov} returns the estimated variance-covariance matrix at MLE's. 
+#' \code{confint} returns the confidence interval.
 #' 
-#' @param object An object returned by \code{\link{sclr}}.
+#' @param object,formula An object returned by \code{\link{sclr}}.
 #' @param ... Not used. Needed to match generic signature.
 #' 
 #' @importFrom stats coef vcov
@@ -45,6 +46,21 @@ coef.sclr <- function(object, ...) object$parameters
 #' @rdname coef.sclr
 #' @export
 vcov.sclr <- function(object, ...) object$covariance_mat
+
+#' @rdname coef.sclr
+#' @importFrom stats confint.default
+#' @export
+confint.sclr <- function(object, ...) confint.default(object)
+
+#' @rdname coef.sclr
+#' @importFrom stats model.matrix
+#' @export
+model.matrix.sclr <- function(object, ...) object$x
+
+#' @rdname coef.sclr
+#' @importFrom stats model.frame
+#' @export
+model.frame.sclr <- function(formula, ...) formula$model
 
 #' Predict method for scaled logit model x.
 #' 
