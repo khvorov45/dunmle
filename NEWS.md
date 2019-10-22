@@ -13,7 +13,7 @@ and `sclr_fit` sets the number of times the algorithm has to converge. Best set
 (the one with maximum likelihood) is chosen out of `n_conv` sets. Previously,
 the algorithm only converged once.
 
-- `sclr_log_likelihood` can now be called with a model matrix and a model reponse.
+- `sclr_log_likelihood` can now be called with a model matrix and a model response.
 
 - Minor performance optimisations.
 

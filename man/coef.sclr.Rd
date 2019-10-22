@@ -27,4 +27,6 @@
 \code{coef} returns MLE's.
 \code{vcov} returns the estimated variance-covariance matrix at MLE's. 
 \code{confint} returns the confidence interval.
+\code{model.matrix} returns the model matrix (x).
+\code{model.frame} returns the model frame (x and y in one matrix).
 }

@@ -1,7 +1,7 @@
 # Methods for the sclr class
 # Arseniy Khvorov
 # Created 2019/07/31
-# Last edit 2019/10/16
+# Last edit 2019/10/23
 
 #' Print a \code{sclr} object.
 #' 
@@ -34,6 +34,8 @@ summary.sclr <- function(object, ...) {
 #' \code{coef} returns MLE's.
 #' \code{vcov} returns the estimated variance-covariance matrix at MLE's. 
 #' \code{confint} returns the confidence interval.
+#' \code{model.matrix} returns the model matrix (x).
+#' \code{model.frame} returns the model frame (x and y in one matrix).
 #' 
 #' @param object,formula An object returned by \code{\link{sclr}}.
 #' @param ... Not used. Needed to match generic signature.
@@ -167,8 +169,8 @@ predict.sclr <- function(object, newdata, ci_lvl = 0.95, ...) {
 #' @export
 tidy.sclr <- function(x, ci_level = 0.95, ...) {
   pars <- tibble(
-    term = names(x$parameters),
-    estimate = x$parameters,
+    term = names(coef(x)),
+    estimate = coef(x),
     std_error = sqrt(diag(vcov(x)))
   )
   cis <- confint(x, level = ci_level)
