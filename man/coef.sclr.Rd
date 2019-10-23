@@ -12,7 +12,7 @@
 
 \method{vcov}{sclr}(object, ...)
 
-\method{confint}{sclr}(object, ...)
+\method{confint}{sclr}(object, parm, level = 0.95, ...)
 
 \method{model.matrix}{sclr}(object, ...)
 
@@ -22,6 +22,10 @@
 \item{object, formula}{An object returned by \code{\link{sclr}}.}
 
 \item{...}{Not used. Needed to match generic signature.}
+
+\item{parm}{Parameter name, if missing, all parameters are considered.}
+
+\item{level}{Confidence level.}
 }
 \description{
 \code{coef} returns MLE's.

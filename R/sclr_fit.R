@@ -83,8 +83,7 @@ sclr_fit <- function(y, x,
     # Check convergence
     if (has_converged(pars_mat, pars_mat_prev, tol)) {
       conv_count <- conv_count + 1
-      ll_cur <- sclr_log_likelihood(x = x, y = y, pars = pars_mat)
-      lls[[conv_count]] <- ll_cur
+      lls[[conv_count]] <- sclr_log_likelihood(x = x, y = y, pars = pars_mat)
       rets[[conv_count]] <- list(
         "invjac" = inv_jacobian_mat, "pars" = pars_mat
       )
@@ -92,14 +91,25 @@ sclr_fit <- function(y, x,
       pars_mat <- guess_again(pars_mat)
       next
     } else {
-      if (!is.null(n_iter) && (n_iter_cur > n_iter)) break
-      if (n_iter_cur > max_tol_it) {
+      if (!is.null(n_iter) && (n_iter_cur >= n_iter)) {
+        lls[[conv_count + 1]] <- sclr_log_likelihood(
+          x = x, y = y, pars = pars_mat
+        )
+        rets[[conv_count + 1]] <- list(
+          "invjac" = inv_jacobian_mat, "pars" = pars_mat
+        )
+        break
+      }
+      if (n_iter_cur >= max_tol_it) {
         abort(paste0("did not converge in ", max_tol_it, " iterations"))
       }
       n_iter_cur <- n_iter_cur + 1
       next
     }
   }
+  
+  if (all(is.nan(lls))) 
+    abort(paste0("no reportable results in ", n_iter_cur, " iterations"))
   
   i_best <- which.max(lls)
   pars_mat <- rets[[i_best]][["pars"]]

@@ -9,22 +9,25 @@
 #' \code{\link[=tidy.sclr]{tidy}}.
 #' 
 #' @param x,object An object returned by \code{\link{sclr}}.
+#' @param level Confidence level for the intervals.
 #' @param ... Not used. Needed to match generic signature.
 #' 
 #' @export
-print.sclr <- function(x, ...) summary(x)
+print.sclr <- function(x, level = 0.95, ...) summary(x, level = level, ...)
 
 #' @rdname print.sclr
 #' @export
-summary.sclr <- function(object, ...) {
+summary.sclr <- function(object, level = 0.95, ...) {
   cat("Call: ")
   print(object$call[["formula"]])
   
   cat("\nParameter estimates\n")
-  print(object$parameters)
+  print(coef(object))
   
   cat("\n95% confidence intervals\n")
-  print(object$ci)
+  print(confint(object, level = level))
+  
+  cat("\nLog likelihood:", sclr_log_likelihood(object), "\n")
   
   invisible(NULL)
 }
@@ -38,6 +41,8 @@ summary.sclr <- function(object, ...) {
 #' \code{model.frame} returns the model frame (x and y in one matrix).
 #' 
 #' @param object,formula An object returned by \code{\link{sclr}}.
+#' @param parm Parameter name, if missing, all parameters are considered.
+#' @param level Confidence level.
 #' @param ... Not used. Needed to match generic signature.
 #' 
 #' @importFrom stats coef vcov
@@ -52,7 +57,9 @@ vcov.sclr <- function(object, ...) object$covariance_mat
 #' @rdname coef.sclr
 #' @importFrom stats confint.default
 #' @export
-confint.sclr <- function(object, ...) confint.default(object)
+confint.sclr <- function(object, parm, level = 0.95, ...) {
+  confint.default(object, parm, level, ...)
+}
 
 #' @rdname coef.sclr
 #' @importFrom stats model.matrix

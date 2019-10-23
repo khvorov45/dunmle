@@ -20,3 +20,14 @@ test_that("ideal data is simulated", {
   expect_equal(attr(dat, "true_values")$true_value, c(0.5, -5, 2, 1))
   expect_named(sclr_ideal_data(outcome_name = "outcome"), c("logHI", "outcome"))
 })
+
+test_that("error with incorrect covariate_list", {
+  covl1 <- list(
+    "logHI" = list(gen_function = function(n) rnorm(n, 2, 2), true_par = 2)
+  )
+  covl2 <- list(
+    "logHI" = list(gen_fun = function(n) rnorm(n, 2, 2), true_parameter = 2)
+  )
+  expect_error(sclr_ideal_data(covariate_list = covl1))
+  expect_error(sclr_ideal_data(covariate_list = covl2))
+})

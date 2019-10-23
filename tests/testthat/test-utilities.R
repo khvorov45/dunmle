@@ -41,6 +41,10 @@ test_that("symmetrical matrix is created", {
   expect_equal(build_symm_mat(vecs), expected_out)
 })
 
+test_that("symmetrical matrix throws error with unknown input", {
+  expect_error(build_symm_mat(NULL))
+})
+
 test_that("dimensions of a symmetrical matrix are calculated", {
   expect_error(get_symm_dims(2))
   expect_equal(get_symm_dims(3), 2)
