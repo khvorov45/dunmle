@@ -7,7 +7,7 @@
 - OS X 10.13.3 (on travis-ci), R 3.6.1
 
 ## R CMD check results
-
+No ERRORs, WARNINGs or NOTEs.
 
 ## Downstream dependencies
-
+None.
