@@ -56,6 +56,8 @@ summary(fit)
 #> lambda      0.4078069  0.518962
 #> beta_0     -7.2061683 -3.073681
 #> beta_logHI  1.3758545  2.760087
+#> 
+#> Log likelihood: -480.5614
 ```
 
 For more details see `vignette("Usage", "sclr")`.
