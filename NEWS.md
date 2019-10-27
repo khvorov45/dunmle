@@ -1,4 +1,4 @@
-# sclr 0.1.0-dev
+# sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.
 
