@@ -1,5 +1,7 @@
 # sclr 0.2.0-dev
 
+- Added a warning message when the model is fit with no covariates.
+
 # sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.
