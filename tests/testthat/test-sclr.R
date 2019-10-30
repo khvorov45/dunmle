@@ -14,6 +14,10 @@ test_that("Error with missing parameters", {
     expect_error(sclr(one_titre_data))
 })
 
+test_that("Warning with no covariates", {
+  expect_warning(sclr(status ~ 1, one_titre_data))
+})
+
 test_that("Error with unexpected outcome", {
     # Factor
     dat <- one_titre_data

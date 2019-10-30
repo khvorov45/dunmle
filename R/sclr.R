@@ -62,7 +62,7 @@
 #' fit1 <- sclr(status ~ logHI, one_titre_data)
 #' summary(fit1)
 #' @importFrom stats confint model.frame model.matrix model.response
-#' @importFrom rlang abort
+#' @importFrom rlang abort warn
 #'
 #' @export
 sclr <- function(formula, data = NULL, 
@@ -82,6 +82,7 @@ sclr <- function(formula, data = NULL,
   # Design matirix
   mt <- attr(mf, "terms")
   x <- model.matrix(mt, mf)
+  if (ncol(x) == 1) warn("no unique solution with no covariates")
 
   # Response vector
   y <- model.response(mf)
