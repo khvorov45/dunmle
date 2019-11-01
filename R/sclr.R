@@ -67,11 +67,10 @@
 #' @export
 sclr <- function(formula, data = NULL, 
                  ci_lvl = 0.95, 
-                 tol = 10^(-7), 
-                 n_iter = NULL, 
-                 max_tol_it = 10^4, 
-                 n_conv = 3,
-                 conventional_names = FALSE) {
+                 tol = 10^(-7),
+                 algorithm = c("newton-raphson", "gradient-ascent"),
+                 nr_iter = 2e3, ga_iter = 2e3, n_conv = 3,
+                 conventional_names = FALSE, seed = NULL) {
   
   if (!inherits(formula, "formula") || missing(formula)) 
     abort("must supply a formula")
@@ -90,7 +89,9 @@ sclr <- function(formula, data = NULL,
   if (!is.numeric(y)) abort("response should be numeric")
 
   # Actual model fit
-  fit <- sclr_fit(y, x, tol, n_iter, max_tol_it, n_conv, conventional_names)
+  fit <- sclr_fit(
+    y, x, tol, algorithm, nr_iter, ga_iter, n_conv, conventional_names, seed
+  )
 
   # Build the return list
   fit <- new_sclr(fit, x, y, cl, mf, mt)

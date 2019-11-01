@@ -16,6 +16,11 @@ test_that("access works", {
   expect_equal(coef(fit), fit$parameters)
   expect_equal(vcov(fit), fit$covariance_mat)
   expect_equal(confint(fit), confint.default(fit))
+  empty_fit <- suppressWarnings(sclr(
+    status ~ logHI, one_titre_data, 
+    algorithm = "newton-raphson", nr_iter = 3
+  ))
+  expect_null(confint(empty_fit))
   expect_equal(model.matrix(fit), fit$x)
   expect_equal(model.frame(fit), fit$model)
 })

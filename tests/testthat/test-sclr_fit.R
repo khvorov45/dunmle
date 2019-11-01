@@ -5,40 +5,66 @@
 
 library(sclr)
 
-mf <- model.frame(status ~ logHI, one_titre_data)
-x <- model.matrix(mf, data = one_titre_data)
-y <- model.response(mf)
+mf_one <- model.frame(status ~ logHI, one_titre_data)
+x_one <- model.matrix(mf_one, data = one_titre_data)
+y_one <- model.response(mf_one)
 
 test_that("sclr_fit can be used directly", {
-  expect_named(sclr_fit(y, x), c("parameters", "covariance_mat", "n_converge"))
+  fit_one <- sclr_fit(y_one, x_one)
+  expect_named(fit_one, c("parameters", "covariance_mat", "algorithm"))
+})
+
+test_that("error with unknown algorithm", {
+  expect_error(sclr_fit(y_one, x_one, algorithm = "unknown"))
 })
 
 test_that("Parameter matrix initalisation and resetting works", {
-  init_mat <- get_init_pars_mat(x, y, conventional_names = FALSE)
-  expected <- as.matrix(c(mean(y), 1, 1))
-  rownames(expected) <- c("lambda", "beta_0", "beta_logHI")
-  expect_equal(init_mat, expected)
+  init_mat <- get_init_pars_mat(
+    y_one, x_one, conventional_names = FALSE, seed = 1
+  )
+  init_mat2 <- get_init_pars_mat(
+    y_one, x_one, conventional_names = FALSE, seed = 1
+  )
+  init_mat3 <- get_init_pars_mat(
+    y_one, x_one, conventional_names = FALSE
+  )
+  expect_equal(init_mat, init_mat2)
+  expect_true(all(init_mat2 != init_mat3))
   expect_true(all(guess_again(init_mat) != guess_again(init_mat)))
 })
 
-test_that("Bad guesses are detected", {
-  expect_true(is_bad_pars(as.matrix(c(-1, 0, 0))))
-  expect_true(is_bad_pars(as.matrix(c(2, 0, 0))))
-  expect_true(!is_bad_pars(as.matrix(c(0.5, 0, 0))))
+test_that("Algorithms work", {
+  x_coeffs_one <- get_x_coeffs(x_one)
+  pars_mat_one <- get_init_pars_mat(y_one, x_one, FALSE)
+  nr <- newton_raphson(
+    y_one, x_one, pars_mat_one, x_coeffs_one, 
+    max_iter = 1e4, tol = 10^(-7), seed = 20191101
+  )
+  ga <- gradient_ascent(
+    y_one, x_one, pars_mat_one, x_coeffs_one, 
+    max_iter = 1e4, tol = 10^(-7), seed = 20191101
+  )
+  expect_named(nr, c("found", "cov", "last_iter"))
+  expect_named(ga, c("found", "cov", "last_iter"))
 })
 
-small_sample <- sclr_ideal_data(n = 50, seed = 20191024)
-
-test_that("Does not converge with few allowed iterations", {
-  expect_error(sclr(status ~ logHI, small_sample, max_tol_it = 10))
-})
-
-test_that("Reports last results with few iterations", {
-  set.seed(20191024)
-  expect_true(is_sclr(sclr(status ~ logHI, small_sample, n_iter = 10)))
-})
-
-test_that("Error if no reportable results with few iterations", {
-  set.seed(7)
-  expect_error(sclr(status ~ logHI, small_sample, n_iter = 10))
+test_that("Warning when doesn't converge", {
+  ss <- sclr_ideal_data(n = 50, seed = 20191101)
+  x_ss <- model.matrix(status ~ logHI, ss)
+  y_ss <- model.response(model.frame(status ~ logHI, ss))
+  x_coeffs_ss <- get_x_coeffs(x_ss)
+  expect_warning(
+    sclr_fit(
+      y_ss, x_ss, nr_iter = 15, algorithm = "newton-raphson", n_conv = 3,
+      seed = 20191101
+    ),
+    regexp = "newton-raphson only converged 1 time out of 3"
+  )
+  expect_warning(
+    sclr_fit(
+      y_ss, x_ss, nr_iter = 5, algorithm = "newton-raphson", n_conv = 3,
+      seed = 20191101
+    ),
+    regexp = "newton-raphson did not converge"
+  )
 })

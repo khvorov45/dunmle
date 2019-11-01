@@ -58,6 +58,7 @@ vcov.sclr <- function(object, ...) object$covariance_mat
 #' @importFrom stats confint.default
 #' @export
 confint.sclr <- function(object, parm, level = 0.95, ...) {
+  if (is.null(object$parameters)) return(NULL)
   confint.default(object, parm, level, ...)
 }
 

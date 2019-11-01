@@ -5,8 +5,9 @@
 \title{Fits the scaled logit model}
 \usage{
 sclr(formula, data = NULL, ci_lvl = 0.95, tol = 10^(-7),
-  n_iter = NULL, max_tol_it = 10^4, n_conv = 3,
-  conventional_names = FALSE)
+  algorithm = c("newton-raphson", "gradient-ascent"), nr_iter = 2000,
+  ga_iter = 2000, n_conv = 3, conventional_names = FALSE,
+  seed = NULL)
 }
 \arguments{
 \item{formula}{an object of class "formula": a symbolic description of the
@@ -16,13 +17,15 @@ model to be fitted.}
 
 \item{ci_lvl}{Confidence interval level for the parameter estimates.}
 
-\item{tol}{Tolerance. Used when \code{n_iter} is \code{NULL}.}
+\item{tol}{Tolerance.}
 
-\item{n_iter}{Number of Newton-Raphson iterations. \code{tol} is ignored when
-this is not \code{NULL}.}
+\item{algorithm}{Algorithms to run. "newton-raphson" or "gradient-ascent".
+If a character vector, the algorithms will be applied in the order they
+are present in the vector.}
 
-\item{max_tol_it}{Maximum tolerated iterations. If it fails to converge
-within this number of iterations, will return with an error.}
+\item{nr_iter}{Maximum allowed iterations for Newton-Raphson.}
+
+\item{ga_iter}{Maximum allowed iterations for gradient ascent.}
 
 \item{n_conv}{Number of times the algorithm has to converge (to work around
 local maxima).}
@@ -31,6 +34,8 @@ local maxima).}
 (Baseline), (Intercept) and the column names in the model matrix. Otherwise
 - lambda, beta_0 and beta_ prefix in front of column names in the model
 matrix.}
+
+\item{seed}{Seed for the algorithms.}
 }
 \value{
 An object of class \code{sclr}. This is a list with the following

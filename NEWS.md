@@ -2,6 +2,11 @@
 
 - Added a warning message when the model is fit with no covariates.
 
+- Reparameterised the model so that all of the parameters are unconstrained.
+New baseline is the logit transformation of the old baseline.
+
+- Added the gradient ascent algorithm to handle cases with high baseline.
+
 # sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.

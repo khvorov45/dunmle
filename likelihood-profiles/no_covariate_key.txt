@@ -1,0 +1,2 @@
+Black line marks lambda and beta_0 values which 
+combine to give the proportion infected in the sample

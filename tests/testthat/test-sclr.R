@@ -30,7 +30,7 @@ test_that("Error with unexpected outcome", {
 
 test_that("Returns the expected parameter names", {
   fit_my_names <- sclr(status ~ logHI, one_titre_data)
-  expect_named(fit_my_names$parameters, c("lambda", "beta_0", "beta_logHI"))
+  expect_named(fit_my_names$parameters, c("theta", "beta_0", "beta_logHI"))
   est_conv_names <- sclr(
     status ~ logHI, one_titre_data, conventional_names = TRUE
   )
