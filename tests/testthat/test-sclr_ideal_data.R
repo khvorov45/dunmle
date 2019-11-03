@@ -5,7 +5,7 @@
 
 test_that("ideal data is simulated", {
   dat <- sclr_ideal_data(
-    n = 1000, lambda = 0.5, beta_0 = -5,
+    n = 1000, theta = 0, beta_0 = -5,
     covariate_list = list(
       "logHI" = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 2),
       "logNI" = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 1)

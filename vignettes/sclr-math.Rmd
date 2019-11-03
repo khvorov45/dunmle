@@ -1,8 +1,8 @@
 ---
-title: "Likelihood, scores and second derivatives"
+title: "Model specification, log-likelihood, scores and second derivatives"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Math}
+  %\VignetteIndexEntry{Model specification, log-likelihood, scores and second derivatives}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---

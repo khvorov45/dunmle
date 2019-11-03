@@ -4,7 +4,7 @@
 \alias{sclr_ideal_data}
 \title{Generate ideal data for the scaled logit model}
 \usage{
-sclr_ideal_data(n = 1000, lambda = 0.5, beta_0 = -5,
+sclr_ideal_data(n = 1000, theta = 0, beta_0 = -5,
   covariate_list = list(logHI = list(gen_fun = function(n) rnorm(n, 2,
   2), true_par = 2)), outcome_name = "status", seed = NULL,
   attach_true_vals = FALSE, attach_seed = FALSE)
@@ -12,7 +12,7 @@ sclr_ideal_data(n = 1000, lambda = 0.5, beta_0 = -5,
 \arguments{
 \item{n}{Number of observations.}
 
-\item{lambda}{Baseline risk parameter.}
+\item{theta}{Baseline risk parameter on the logit scale.}
 
 \item{beta_0}{Intercept of the linear part.}
 

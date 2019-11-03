@@ -4,14 +4,14 @@
 # Last edit 2019/10/21
 
 one_titre_data <- sclr_ideal_data(
-  n = 5000, lambda = 0.5, beta_0 = -5,
+  n = 5000, theta = 0, beta_0 = -5,
   covariate_list = list(
     logHI = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 2)
   ),
   seed = 20191021
 )
 two_titre_data <- sclr_ideal_data(
-  n = 5000, lambda = 0.5, beta_0 = -5,
+  n = 5000, theta = 0, beta_0 = -5,
   covariate_list = list(
     logHI = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 2),
     logNI = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 1)
