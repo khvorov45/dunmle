@@ -68,9 +68,17 @@ Y_3
 ## Model
 
 $$
-P(Y_i = 1) = \frac{\text{exp}(\theta)}{(1 + \text{exp}(\theta))(1 +
+P(Y_i = 1) = 
+\frac{\lambda}{1 + \text{exp}(\boldsymbol{X_i}\boldsymbol{\beta})} = 
+\frac{\text{exp}(\theta)}{(1 + \text{exp}(\theta))(1 +
 \text{exp}(\boldsymbol{X_i}\boldsymbol{\beta}))} 
 $$
+
+$\theta$ is the logit transformation of $\lambda$: 
+$\theta = log(\frac{\lambda}{1-\lambda})$
+
+Optimisation is done using the $\theta$ parameterisation because it does not 
+constrain the likelihood.
 
 ## Log likelihood
 

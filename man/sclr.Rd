@@ -52,18 +52,18 @@ An object of class \code{sclr}. This is a list with the following
   \item{x}{Model matrix derived from \code{formula} and \code{data}.}
 
   \item{y}{Response matrix derived from \code{formula} and \code{data}.}
-  
+
   \item{call}{The original call to \code{sclr}.}
 
-  \item{model}{Model frame object derived from \code{formula} and 
+  \item{model}{Model frame object derived from \code{formula} and
   \code{data}.}
 
   \item{terms}{Terms object derived from model frame.}
-  
+
   \item{ci}{Confidence intervals of the parameter estimates.}
-  
+
   \item{log_likelihood}{Value of log-likelihood calculated at the ML
-  estimates of parameters.} 
+  estimates of parameters.}
 
   Methods supported: \code{\link[=print.sclr]{print}},
   \code{\link[=vcov.sclr]{vcov}}, \code{\link[=coef.sclr]{coef}},
@@ -76,11 +76,13 @@ An object of class \code{sclr}. This is a list with the following
 Used to fit the scaled logit model from Dunning (2006).
 }
 \details{
-The model is of the form \deqn{P(Y = 1) = \lambda(1 - logit^{-1}(\beta_0 +
-\beta_1X_1 + \beta_2X_2 + ... + \beta_kX_k))} Where \eqn{Y} is the binary
-outcome indicator, (eg. 1 - infected, 0 - not infected). \eqn{X} - covariate.
-\eqn{k} - number of covariates. Computing engine behind the fitting is
-\code{\link{sclr_fit}}.
+The model is logistic regression with an added parameter for the top
+asymptote. That parameter is reported as \code{theta} (or \code{(Baseline)}
+if \code{conventional_names = TRUE}). Note that it is reported on the logit
+scale. See \code{vignette("sclr-math")} for model specification,
+log-likelihood, scores and second derivatives. The main default optimisation
+algorithm is Newton-Raphson. Gradient ascent is used as a fallback by
+default. Computing engine behind the fitting is \code{\link{sclr_fit}}.
 }
 \examples{
 library(sclr)
