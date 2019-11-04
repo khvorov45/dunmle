@@ -101,3 +101,7 @@ ggsave_dark(
   base1, dark = FALSE,
   width = 10, height = 10, units = "cm"
 )
+
+sclr(status ~ logHI, lambda_1)
+
+

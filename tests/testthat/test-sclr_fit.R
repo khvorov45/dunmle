@@ -68,24 +68,14 @@ test_that("Warning when doesn't converge", {
       y_ss, x_ss, nr_iter = 5, algorithm = "newton-raphson", n_conv = 3,
       seed = 20191101
     ),
-    regexp = "newton-raphson did not converge"
+    regexp = paste0(
+      "newton-raphson did not converge,", 
+      " check for boundary with baseline_boundary"
+    )
   )
 })
 
-test_that("warns of possible baseline boundary", {
-  l1 <- sclr_ideal_data(theta = 1e6, n = 50, seed = 20191102)
-  x_l1 <- model.matrix(status ~ logHI, l1)
-  y_l1 <- model.response(model.frame(status ~ logHI, l1))
-  expect_warning(
-    sclr_fit(
-      y_l1, x_l1, algorithm = c("gradient-ascent"), n_conv = 1,
-      seed = 20191101
-    ),
-    "possible baseline of 1"
-  )
-})
-
-test_that("Fallback works", {
+test_that("fallback works", {
   l1 <- sclr_ideal_data(theta = 1e6, n = 50, seed = 20191102)
   x_l1 <- model.matrix(status ~ logHI, l1)
   y_l1 <- model.response(model.frame(status ~ logHI, l1))

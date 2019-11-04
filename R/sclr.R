@@ -99,6 +99,8 @@ sclr <- function(formula, data = NULL,
   fit <- new_sclr(fit, x, y, cl, mf, mt)
   fit$ci <- confint(fit, level = ci_lvl)
   fit$log_likelihood <- sclr_log_likelihood(fit)
+  fit$formula <- formula
+  fit$data <- data
   fit
 }
 

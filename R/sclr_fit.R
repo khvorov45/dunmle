@@ -26,7 +26,7 @@
 #'   matrix.
 #' @param seed Seed for the algorithms.
 #'
-#' @importFrom rlang abort arg_match
+#' @importFrom rlang abort
 #'
 #' @export
 sclr_fit <- function(y, x, 
@@ -86,7 +86,12 @@ run_algorithm <- function(name, fun, n_conv, y, x,
       sclr_log_likelihood(x = x, y = y, pars = ret$found)
     }
   )
-  if (all(lls == -Inf)) warn(paste0(name, " did not converge"))
+  if (all(lls == -Inf)) 
+    warn(
+      paste0(
+        name, " did not converge, check for boundary with baseline_boundary()"
+      )
+    )
   else if (sum(lls == -Inf) > 0) 
     warn(paste0(
       name, " only converged ", length(lls) - sum(lls == -Inf),
@@ -195,9 +200,7 @@ gradient_ascent <- function(y, x, pars_mat,
     } else low_inc_count <- 0
     
     if (has_converged(pars_mat, pars_mat_prev, tol) ||
-        low_inc_count / cur_iter >= 0.1) {
-      if (low_inc_count / cur_iter >= 0.1)
-        warn("possible baseline of 1")
+        low_inc_count / cur_iter >= 0.2) {
       pars <- pars_mat[, 1]
       names(pars) <- rownames(pars_mat)
       out[["found"]] <- pars

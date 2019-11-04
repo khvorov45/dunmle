@@ -9,6 +9,8 @@ New baseline is the logit transformation of the old baseline.
 
 - Added a warning for a possible baseline of 1.
 
+- Added the ability to check for a possible baseline of 1 with `check_baseline`.
+
 # sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.
