@@ -72,6 +72,17 @@ model.matrix.sclr <- function(object, ...) object$x
 #' @export
 model.frame.sclr <- function(formula, ...) formula$model
 
+#' @rdname coef.sclr
+#' @importFrom stats logLik
+#' @export
+logLik.sclr <- function(object, ...) {
+  ll <- object$log_likelihood
+  attr(ll, "nobs") <- nrow(model.matrix(object))
+  attr(ll, "df") <- length(coef(object))
+  class(ll) <- "logLik"
+  ll
+}
+
 #' Predict method for scaled logit model x.
 #' 
 #' Returns only the protection estimates. The only supported interval is

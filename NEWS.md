@@ -11,6 +11,8 @@ New baseline is the logit transformation of the old baseline.
 
 - Added the ability to check for a possible baseline of 1 with `check_baseline`.
 
+- Added `logLik` method to access likelihood from the fit object.
+
 # sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.

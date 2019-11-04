@@ -64,13 +64,18 @@ An object of class \code{sclr}. This is a list with the following
 
   \item{log_likelihood}{Value of log-likelihood calculated at the ML
   estimates of parameters.}
+  
+  \item{formula}{Passed formula.}
+  
+  \item{data}{Passed data.}
 
   Methods supported: \code{\link[=print.sclr]{print}},
   \code{\link[=vcov.sclr]{vcov}}, \code{\link[=coef.sclr]{coef}},
   \code{\link[=model.frame.sclr]{model.frame}},
   \code{\link[=model.matrix.sclr]{model.matrix}},
   \code{\link[=summary.sclr]{summary}}, \code{\link[=predict.sclr]{predict}},
-  \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package).
+  \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package),
+  \code{\link[=logLik.sclr]{logLik}}.
 }
 \description{
 Used to fit the scaled logit model from Dunning (2006).

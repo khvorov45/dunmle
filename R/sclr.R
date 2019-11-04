@@ -47,13 +47,18 @@
 #'
 #'   \item{log_likelihood}{Value of log-likelihood calculated at the ML
 #'   estimates of parameters.}
+#'   
+#'   \item{formula}{Passed formula.}
+#'   
+#'   \item{data}{Passed data.}
 #'
 #'   Methods supported: \code{\link[=print.sclr]{print}},
 #'   \code{\link[=vcov.sclr]{vcov}}, \code{\link[=coef.sclr]{coef}},
 #'   \code{\link[=model.frame.sclr]{model.frame}},
 #'   \code{\link[=model.matrix.sclr]{model.matrix}},
 #'   \code{\link[=summary.sclr]{summary}}, \code{\link[=predict.sclr]{predict}},
-#'   \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package).
+#'   \code{\link[=tidy.sclr]{tidy}} (\code{\link{broom}} package),
+#'   \code{\link[=logLik.sclr]{logLik}}.
 #'
 #' @references Dunning AJ (2006). "A model for immunological correlates of
 #'   protection." Statistics in Medicine, 25(9), 1485-1497.

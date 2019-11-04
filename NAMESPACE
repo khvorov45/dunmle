@@ -2,6 +2,7 @@
 
 S3method(coef,sclr)
 S3method(confint,sclr)
+S3method(logLik,sclr)
 S3method(model.frame,sclr)
 S3method(model.matrix,sclr)
 S3method(predict,sclr)
