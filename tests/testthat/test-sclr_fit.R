@@ -61,7 +61,7 @@ test_that("Warning when doesn't converge", {
       y_ss, x_ss, nr_iter = 15, algorithm = "newton-raphson", n_conv = 3,
       seed = 20191101
     ),
-    regexp = "newton-raphson only converged 1 time out of 3"
+    regexp = "newton-raphson only converged 1 time\\(s\\) out of 3"
   )
   expect_warning(
     sclr_fit(
