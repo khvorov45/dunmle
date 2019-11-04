@@ -196,6 +196,8 @@ gradient_ascent <- function(y, x, pars_mat,
     
     if (has_converged(pars_mat, pars_mat_prev, tol) ||
         low_inc_count / cur_iter >= 0.1) {
+      if (low_inc_count / cur_iter >= 0.1)
+        warn("possible baseline of 1")
       pars <- pars_mat[, 1]
       names(pars) <- rownames(pars_mat)
       out[["found"]] <- pars

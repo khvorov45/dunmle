@@ -7,6 +7,8 @@ New baseline is the logit transformation of the old baseline.
 
 - Added the gradient ascent algorithm to handle cases with high baseline.
 
+- Added a warning for a possible baseline of 1.
+
 # sclr 0.2.0
 
 - Added `sclr_ideal_data` function to simulate ideal data for the model.
