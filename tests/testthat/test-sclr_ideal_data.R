@@ -17,7 +17,7 @@ test_that("ideal data is simulated", {
   )
   expect_named(dat, c("logHI", "logNI", "status"))
   expect_equal(attr(dat, "seed"), 1)
-  expect_equal(attr(dat, "true_values")$true_value, c(0.5, -5, 2, 1))
+  expect_equal(attr(dat, "true_values")$true_value, c(0, -5, 2, 1))
   expect_named(sclr_ideal_data(outcome_name = "outcome"), c("logHI", "outcome"))
 })
 

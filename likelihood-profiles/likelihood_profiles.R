@@ -64,7 +64,7 @@ pl_no_cov <- likelihoods %>%
   scale_fill_viridis("Log likelihood") +
   stat_function(fun = theta_fun, args = list(prob = prob), col = "black")
 ggsave_dark(
-  file.path(this_folder, "no_covariate.pdf"), pl_no_cov, dark = FALSE,
+  file.path(likeprof_folder, "no_covariate.pdf"), pl_no_cov, dark = FALSE,
   width = 11, height = 9, units = "cm"
 )
 
@@ -97,7 +97,7 @@ base1 <- likelihoods_l1 %>%
   ylab("Log likelihood") +
   geom_line()
 ggsave_dark(
-  file.path(this_folder, "baseline_1.pdf"),
+  file.path(likeprof_folder, "baseline_1.pdf"),
   base1, dark = FALSE,
   width = 10, height = 10, units = "cm"
 )

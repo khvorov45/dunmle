@@ -19,11 +19,11 @@ library(furrr)
 
 plan(multiprocess)
 
-this_folder <- "verification"
+ver_folder <- "verification"
 
-simulate_ideal_data <- function(n, lambda, beta_0, covariate_list, seed) {
+simulate_ideal_data <- function(n, theta, beta_0, covariate_list, seed) {
   sclr_ideal_data(
-    n, lambda, beta_0, covariate_list, 
+    n, theta, beta_0, covariate_list, 
     outcome_name = "status",
     seed = seed,
     attach_true_vals = TRUE,
@@ -33,9 +33,9 @@ simulate_ideal_data <- function(n, lambda, beta_0, covariate_list, seed) {
 
 fit_sclr_model <- function(data, covariate_list) {
   formula <- paste0("status~", paste(names(covariate_list), collapse = "+"))
-  tidy_fit <- sclr(as.formula(formula), data) %>% tidy()
+  tidy_fit <- sclr(as.formula(formula), data) %>% broom::tidy()
   if (!is.null(attr(data, "seed"))) tidy_fit$seed <- attr(data, "seed")
-  inner_join(tidy_fit, attr(data, "true_values"), by = "term")
+  left_join(tidy_fit, attr(data, "true_values"), by = "term")
 }
 
 simulate_one <- function(index = NULL, init_seed = NULL, ...) {
@@ -84,15 +84,15 @@ cov_list <- list(
   "logNI" = list(gen_fun = function(n) rnorm(n, 2, 2), true_par = 1)
 )
 
-n_simulations <- 1e4
+n_simulations <- 2
 
 simulation_results <- simulate_many(
   n_simulations = n_simulations,
   init_seed = 20191017,
   covariate_list = cov_list,
-  n = 1e4, lambda = 0.5, beta_0 = -5
+  n = 1e4, theta = 0, beta_0 = -5
 )
-save_csv(simulation_results, this_folder, "result", n_simulations)
+save_csv(simulation_results, ver_folder, "result", n_simulations)
 
 simulation_summary <- summarise_many(simulation_results)
-save_csv(simulation_summary, this_folder, "summary", n_simulations)
+save_csv(simulation_summary, ver_folder, "summary", n_simulations)

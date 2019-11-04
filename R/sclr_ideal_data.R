@@ -82,8 +82,8 @@ sclr_ideal_data <- function(n = 1000, theta = 0, beta_0 = -5,
   # Attach additional attributes
   if (attach_true_vals) {
     true_vals <- tibble(
-      term = c("lambda", "beta_0", paste0("beta_", names(covariate_list))),
-      true_value = c(lambda, beta_0, rep(NA, length(covariate_list)))
+      term = c("theta", "beta_0", paste0("beta_", names(covariate_list))),
+      true_value = c(theta, beta_0, rep(NA, length(covariate_list)))
     )
     for (cov_name in names(covariate_list)) {
       true_vals[true_vals$term == paste0("beta_", cov_name), "true_value"] <-
