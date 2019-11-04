@@ -39,7 +39,13 @@ sclr_fit <- function(y, x,
     "gradient-ascent" = list(fun = gradient_ascent, max = ga_iter)
   )
   
-  algorithm <- arg_match(algorithm, names(alg_dict))
+  if (!all(algorithm %in% names(alg_dict)))
+    abort(
+      paste0(
+        "`algorithm` should be in: ", 
+        paste(names(alg_dict), collapse = " ")
+      )
+    )
   
   x_coeffs <- get_x_coeffs(x) # To avoid recalculations
   

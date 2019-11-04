@@ -15,7 +15,10 @@ test_that("sclr_fit can be used directly", {
 })
 
 test_that("error with unknown algorithm", {
-  expect_error(sclr_fit(y_one, x_one, algorithm = "unknown"))
+  expect_error(
+    sclr_fit(y_one, x_one, algorithm = "unknown"),
+    "`algorithm` should be in:"
+  )
 })
 
 test_that("Parameter matrix initalisation and resetting works", {
@@ -68,3 +71,20 @@ test_that("Warning when doesn't converge", {
     regexp = "newton-raphson did not converge"
   )
 })
+
+test_that("Fallback works", {
+  l1 <- sclr_ideal_data(theta = 1e6, n = 50, seed = 20191102)
+  x_l1 <- model.matrix(status ~ logHI, l1)
+  y_l1 <- model.response(model.frame(status ~ logHI, l1))
+  fit_ga <- suppressWarnings(sclr_fit(
+    y_l1, x_l1, algorithm = c("newton-raphson", "gradient-ascent"), n_conv = 3,
+    seed = 20191101
+  ))
+  expect_named(fit_ga, c("parameters", "covariance_mat", "algorithm"))
+  expect_equal(fit_ga$algorithm, "gradient-ascent")
+  expect_true(!is.null(fit_ga$parameters))
+  expect_true(!is.null(fit_ga$covariance_mat))
+})
+
+
+
