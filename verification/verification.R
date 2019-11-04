@@ -8,7 +8,7 @@
 #
 # Arseniy Khvorov
 # Created 2019/10/17
-# Last edit 2019/10/21
+# Last edit 2019/11/04
 
 library(sclr)
 library(broom)
@@ -33,7 +33,7 @@ simulate_ideal_data <- function(n, theta, beta_0, covariate_list, seed) {
 
 fit_sclr_model <- function(data, covariate_list) {
   formula <- paste0("status~", paste(names(covariate_list), collapse = "+"))
-  tidy_fit <- sclr(as.formula(formula), data) %>% broom::tidy()
+  tidy_fit <- sclr(as.formula(formula), data) %>% tidy()
   if (!is.null(attr(data, "seed"))) tidy_fit$seed <- attr(data, "seed")
   left_join(tidy_fit, attr(data, "true_values"), by = "term")
 }

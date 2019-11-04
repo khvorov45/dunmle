@@ -1,0 +1,4 @@
+The model produces the results it's supposed to produce in large samples.
+
+Note that even in those large samples it will occasionally 
+converge multiple times to a local maximum (see seed 20198830)

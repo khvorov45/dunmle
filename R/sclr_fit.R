@@ -95,7 +95,7 @@ run_algorithm <- function(name, fun, n_conv, y, x,
   else if (sum(lls == -Inf) > 0) 
     warn(paste0(
       name, " only converged ", length(lls) - sum(lls == -Inf),
-      " time out of ", n_conv
+      " time(s) out of ", n_conv
     ))
   list(
     parameters = rets[[which.max(lls)]]$found,
