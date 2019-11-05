@@ -101,7 +101,7 @@ run_algorithm <- function(name, fun, n_conv, y, x,
     parameters = rets[[which.max(lls)]]$found,
     covariance_mat = rets[[which.max(lls)]]$cov,
     algorithm = name,
-    alorithm_return = rets
+    algorithm_return = rets
   )
 }
 

@@ -28,6 +28,10 @@
 #'
 #'   \item{covariance_mat}{The variance-covariance matrix of the parameter
 #'   estimates.}
+#'   
+#'   \item{algorithm}{Algorithm used.}
+#'   
+#'   \item{algorithm_return}{Everything the algorithm returned.}
 #'
 #'   \item{n_converge}{The number of Newton-Raphson iterations (including
 #'   resets) that were required for convergence.}

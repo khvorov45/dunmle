@@ -11,7 +11,10 @@ y_one <- model.response(mf_one)
 
 test_that("sclr_fit can be used directly", {
   fit_one <- sclr_fit(y_one, x_one)
-  expect_named(fit_one, c("parameters", "covariance_mat", "algorithm"))
+  expect_named(
+    fit_one, 
+    c("parameters", "covariance_mat", "algorithm", "algorithm_return")
+  )
 })
 
 test_that("error with unknown algorithm", {
@@ -47,8 +50,9 @@ test_that("Algorithms work", {
     y_one, x_one, pars_mat_one, x_coeffs_one, 
     max_iter = 1e4, tol = 10^(-7), seed = 20191101
   )
-  expect_named(nr, c("found", "cov", "last_iter"))
-  expect_named(ga, c("found", "cov", "last_iter"))
+  nms <- c("init_mat", "found", "cov", "last_iter")
+  expect_named(nr, nms)
+  expect_named(ga, nms)
 })
 
 test_that("Warning when doesn't converge", {
@@ -58,7 +62,7 @@ test_that("Warning when doesn't converge", {
   x_coeffs_ss <- get_x_coeffs(x_ss)
   expect_warning(
     sclr_fit(
-      y_ss, x_ss, nr_iter = 15, algorithm = "newton-raphson", n_conv = 3,
+      y_ss, x_ss, nr_iter = 100, algorithm = "newton-raphson", n_conv = 3,
       seed = 20191101
     ),
     regexp = "newton-raphson only converged 1 time\\(s\\) out of 3"
@@ -83,7 +87,10 @@ test_that("fallback works", {
     y_l1, x_l1, algorithm = c("newton-raphson", "gradient-ascent"), n_conv = 3,
     seed = 20191101
   ))
-  expect_named(fit_ga, c("parameters", "covariance_mat", "algorithm"))
+  expect_named(
+    fit_ga, 
+    c("parameters", "covariance_mat", "algorithm", "algorithm_return")
+  )
   expect_equal(fit_ga$algorithm, "gradient-ascent")
   expect_true(!is.null(fit_ga$parameters))
   expect_true(!is.null(fit_ga$covariance_mat))
