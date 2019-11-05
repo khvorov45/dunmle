@@ -1,9 +1,9 @@
 # sclr 0.2.0-dev
 
-- Added a warning message when the model is fit with no covariates.
-
 - Reparameterised the model so that all of the parameters are unconstrained.
 New baseline is the logit transformation of the old baseline.
+
+- Added a warning message when the model is fit with no covariates.
 
 - Added the gradient ascent algorithm to handle cases with high baseline.
 
