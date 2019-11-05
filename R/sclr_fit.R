@@ -70,15 +70,15 @@ sclr_fit <- function(y, x,
 run_algorithm <- function(name, fun, n_conv, y, x, 
                           x_coeffs, max_iter, tol, conventional_names, 
                           seed = NULL) {
+  if (!is.null(seed)) set.seed(seed)
+  
   init_mats <- lapply(
-    1:n_conv, function(i) get_init_pars_mat(
-      y, x, conventional_names, seed = if (is.null(seed)) NULL else seed + i
-    )
+    1:n_conv, function(i) get_init_pars_mat(y, x, conventional_names)
   )
   
   rets <- lapply(
     1:n_conv,
-    function(i) fun(y, x, init_mats[[i]], x_coeffs, max_iter, tol, seed)
+    function(i) fun(y, x, init_mats[[i]], x_coeffs, max_iter, tol)
   )
   lls <- sapply(
     rets, function(ret) {
@@ -100,7 +100,8 @@ run_algorithm <- function(name, fun, n_conv, y, x,
   list(
     parameters = rets[[which.max(lls)]]$found,
     covariance_mat = rets[[which.max(lls)]]$cov,
-    algorithm = name
+    algorithm = name,
+    alorithm_return = rets
   )
 }
 
@@ -121,14 +122,14 @@ newton_raphson <- function(y, x, pars_mat,
                            seed = NULL) {
   
   if (!is.null(seed)) set.seed(seed)
-  
+
   add_reset <- function(out, ind, reason) {
     out[["reset_index"]] <- c(out[["reset_index"]], ind)
     out[["reset_reason"]] <- c(out[["reset_reason"]], reason)
     out
   }
   
-  out <- list()
+  out <- list(init_mat = pars_mat)
   cur_iter <- 1
 
   for (cur_iter in 1:max_iter) {
@@ -138,8 +139,21 @@ newton_raphson <- function(y, x, pars_mat,
     # Calculate the commonly occuring expession
     exp_Xb <- get_exp_Xb(y, x, pars_mat)
     
+    # Scores
+    scores_mat <- get_scores(y, x, pars_mat, exp_Xb)
+    if (any(is.na(scores_mat))) {
+      pars_mat <- guess_again(pars_mat)
+      out <- add_reset(out, cur_iter, "could not calculate scores")
+      next
+    }
+    
     # Log-likelihood second derivative (negative of information) matrix
     hessian_mat <- get_hessian(y, x, pars_mat, exp_Xb, x_coeffs)
+    if (any(is.na(hessian_mat))) {
+      pars_mat <- guess_again(pars_mat)
+      out <- add_reset(out, cur_iter, "could not calculate hessian")
+      next
+    }
     
     # Invert to get the negative of the covariance matrix
     inv_hes_mat <- try(solve(hessian_mat), silent = TRUE)
@@ -150,10 +164,14 @@ newton_raphson <- function(y, x, pars_mat,
       next
     }
     
-    scores_mat <- get_scores(y, x, pars_mat, exp_Xb)
     pars_mat <- pars_mat_prev - inv_hes_mat %*% scores_mat
 
     if (has_converged(pars_mat, pars_mat_prev, tol)) {
+      if (!is_maximum(hessian_mat)) {
+        pars_mat <- guess_again(pars_mat)
+        out <- add_reset(out, cur_iter, "converged not to maximum")
+        next
+      }
       pars <- pars_mat[, 1]
       names(pars) <- rownames(pars_mat)
       out[["found"]] <- pars
@@ -180,7 +198,7 @@ gradient_ascent <- function(y, x, pars_mat,
   
   control <- 1
   low_inc_count <- 0
-  out <- list()
+  out <- list(init_mat = pars_mat)
   for (cur_iter in 1:max_iter) {
     pars_mat_prev <- pars_mat
     exp_xb <- get_exp_Xb(y, x, pars_mat)
@@ -256,4 +274,14 @@ guess_again <- function(pars_mat) {
 has_converged <- function(pars_mat, pars_mat_prev, tol) {
   deltas <- abs(pars_mat - pars_mat_prev)
   all(deltas < tol)
+}
+
+#' Check maximum
+#'
+#' @param hessian The second derivative matrix
+#'
+#' @noRd
+is_maximum <- function(hessian) {
+  eigenvals <- eigen(hessian, symmetric = TRUE, only.values = TRUE)$values
+  all(eigenvals < 0)
 }
