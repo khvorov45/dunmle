@@ -3,8 +3,6 @@
 - Reparameterised the model so that all of the parameters are unconstrained.
 New baseline is the logit transformation of the old baseline.
 
-- Added a warning message when the model is fit with no covariates.
-
 - Added the gradient ascent algorithm to handle cases with high baseline.
 
 - Added a warning for a possible baseline of 1.
@@ -12,6 +10,8 @@ New baseline is the logit transformation of the old baseline.
 - Added the ability to check for a possible baseline of 1 with `check_baseline`.
 
 - Added `logLik` method to access likelihood from the fit object.
+
+- Added a warning message when the model is fit with no covariates.
 
 # sclr 0.2.0
 
