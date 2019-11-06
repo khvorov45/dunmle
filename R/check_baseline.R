@@ -49,7 +49,7 @@ check_baseline <- function(formula = NULL, data = NULL,
   ll_sclr <- sclr_log_likelihood(fit_sclr)
   ll_lr <- logLik(fit_lr)
   test_stat <-  2 * (ll_sclr - ll_lr)
-  p_value <- pchisq(test_stat, attr(ll_lr, "df"), lower.tail = FALSE)
+  p_value <- pchisq(test_stat, df = 1, lower.tail = FALSE)
   if (verbose) {
     if (p_value < 1 - conf_lvl) message("unlikely baseline of 1")
     else message("likely baseline of 1")
