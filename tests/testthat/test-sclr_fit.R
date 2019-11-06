@@ -74,7 +74,7 @@ test_that("Warning when doesn't converge", {
     ),
     regexp = paste0(
       "newton-raphson did not converge,", 
-      " check for boundary with baseline_boundary"
+      " check for boundary with check_baseline"
     )
   )
 })

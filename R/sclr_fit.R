@@ -89,7 +89,7 @@ run_algorithm <- function(name, fun, n_conv, y, x,
   if (all(lls == -Inf)) 
     warn(
       paste0(
-        name, " did not converge, check for boundary with baseline_boundary()"
+        name, " did not converge, check for boundary with check_baseline()"
       )
     )
   else if (sum(lls == -Inf) > 0) 
