@@ -31,10 +31,16 @@ simulate_ideal_data <- function(n, theta, beta_0, covariate_list, seed) {
   )
 }
 
-fit_sclr_model <- function(data, covariate_list) {
+fit_sclr_model <- function(data, covariate_list, seed = NULL) {
   formula <- paste0("status~", paste(names(covariate_list), collapse = "+"))
-  tidy_fit <- sclr(as.formula(formula), data) %>% tidy()
-  if (!is.null(attr(data, "seed"))) tidy_fit$seed <- attr(data, "seed")
+  fit <- sclr(as.formula(formula), data, seed = seed)
+  tidy_fit <- fit %>% tidy() %>% mutate(logl = logLik(fit))
+  if (xor(is.null(seed), is.null(attr(data, "seed")))) 
+    warn("seeds don't match")
+  if (!is.null(seed)) {
+    if (attr(data, "seed") != seed) warn("seeds don't match")
+    tidy_fit$seed <- seed
+  }
   left_join(tidy_fit, attr(data, "true_values"), by = "term")
 }
 
@@ -49,7 +55,7 @@ simulate_one <- function(index = NULL, init_seed = NULL, ...) {
   args <- list(...)
   args$seed <- seed
   result <- do.call(simulate_ideal_data, args) %>%
-    fit_sclr_model(args$covariate_list)
+    fit_sclr_model(args$covariate_list, seed = seed)
   if (!is.null(index)) result$index <- index
   result
 }
