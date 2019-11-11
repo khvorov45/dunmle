@@ -9,8 +9,7 @@
 #'
 #' @noRd
 invlogit <- function(x) {
-  x[x > 20] <- 20 # To avoid NaN. Negatives are handled by R.
-  exp(x) / (1 + exp(x))
+  1 - 1 / (1 + exp(x))
 }
 
 #' Commonly occuring exp(Xb) expression
