@@ -4,9 +4,17 @@
 \alias{sclr_fit}
 \title{Fitter function for the scaled logit model}
 \usage{
-sclr_fit(y, x, tol = 10^(-7), algorithm = c("newton-raphson",
-  "gradient-ascent"), nr_iter = 2000, ga_iter = 2000, n_conv = 3,
-  conventional_names = FALSE, seed = NULL)
+sclr_fit(
+  y,
+  x,
+  tol = 10^(-7),
+  algorithm = c("newton-raphson", "gradient-ascent"),
+  nr_iter = 2000,
+  ga_iter = 2000,
+  n_conv = 3,
+  conventional_names = FALSE,
+  seed = NULL
+)
 }
 \arguments{
 \item{y}{A vector of observations.}

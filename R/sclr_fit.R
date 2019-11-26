@@ -8,7 +8,7 @@
 #' Computing engine behind \code{\link{sclr}}.
 #'
 #' The likelihood maximisation can use the Newton-Raphson or the gradient
-#' ascent algprithms.
+#' ascent algorithms.
 #'
 #' @param y A vector of observations.
 #' @param x A design matrix.

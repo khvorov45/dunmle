@@ -4,8 +4,14 @@
 \alias{check_baseline}
 \title{Check for baseline boundary}
 \usage{
-check_baseline(formula = NULL, data = NULL, fit_sclr = NULL,
-  fit_lr = NULL, conf_lvl = 0.95, verbose = TRUE)
+check_baseline(
+  formula = NULL,
+  data = NULL,
+  fit_sclr = NULL,
+  fit_lr = NULL,
+  conf_lvl = 0.95,
+  verbose = TRUE
+)
 }
 \arguments{
 \item{formula}{Formula to use for model fitting.}

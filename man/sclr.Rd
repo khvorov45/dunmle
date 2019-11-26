@@ -4,10 +4,18 @@
 \alias{sclr}
 \title{Fits the scaled logit model}
 \usage{
-sclr(formula, data = NULL, ci_lvl = 0.95, tol = 10^(-7),
-  algorithm = c("newton-raphson", "gradient-ascent"), nr_iter = 2000,
-  ga_iter = 2000, n_conv = 3, conventional_names = FALSE,
-  seed = NULL)
+sclr(
+  formula,
+  data = NULL,
+  ci_lvl = 0.95,
+  tol = 10^(-7),
+  algorithm = c("newton-raphson", "gradient-ascent"),
+  nr_iter = 2000,
+  ga_iter = 2000,
+  n_conv = 3,
+  conventional_names = FALSE,
+  seed = NULL
+)
 }
 \arguments{
 \item{formula}{an object of class "formula": a symbolic description of the
