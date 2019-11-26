@@ -1,4 +1,4 @@
-# sclr 0.2.0-dev
+# sclr 0.3.0
 
 - Reparameterised the model so that all of the parameters are unconstrained.
 New baseline is the logit transformation of the old baseline.
