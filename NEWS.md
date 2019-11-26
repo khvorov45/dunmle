@@ -1,3 +1,5 @@
+# sclr 0.3.0-dev
+
 # sclr 0.3.0
 
 - Reparameterised the model so that all of the parameters are unconstrained.
