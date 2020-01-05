@@ -12,3 +12,6 @@
 ^likelihood-profiles$
 ^doc$
 ^Meta$
+^docs$
+^_pkgdown\.yml$
+^pkgdown$
