@@ -10,6 +10,7 @@ Description:
     Maximum likelihood estimation of the scaled logit model parameters
     proposed in Dunning (2006) <doi:10.1002/sim.2282>.
 License: MIT + file LICENSE
+URL: https://khvorov45.github.io/sclr/
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.0.2

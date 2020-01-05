@@ -84,20 +84,20 @@
 <a href="#sclr" class="anchor"></a>sclr</h1></div>
 <!-- badges: start -->
 
-<p>The goal of sclr is to fit the scaled logit model from Dunning (2006) using the maximum likelihood method.</p>
+<p>The goal of sclr is to fit the scaled logit model from Dunning (2006) using the maximum likelihood method. The <a href="https://khvorov45.github.io/sclr/">package website</a> contains all documentation, vignettes and version history.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<p>Install the <a href="https://CRAN.R-project.org">CRAN</a> version with</p>
+<p>Install the <a href="https://cloud.r-project.org/package=sclr">CRAN</a> version with</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span>(<span class="st">"sclr"</span>)</a></code></pre></div>
-<p>Or the development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>Or the development version from <a href="https://github.com/khvorov45/sclr">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># install.packages("devtools")</span></a>
 <a class="sourceLine" id="cb2-2" title="2">devtools<span class="op">::</span><span class="kw"><a href="https://rdrr.io/pkg/devtools/man/remote-reexports.html">install_github</a></span>(<span class="st">"khvorov45/sclr"</span>)</a></code></pre></div>
 </div>
 <div id="model" class="section level2">
 <h2 class="hasAnchor">
 <a href="#model" class="anchor"></a>Model</h2>
-<p>The model is logistic regression with an added parameter for the top asymptote. For model specification, log likelihood, scores and second derivatives see <code><a href="articles/sclr-math.html">vignette("sclr-math")</a></code>. Documentation of the main fitting function <code><a href="reference/sclr.html">?sclr</a></code> has details on how the model is fit.</p>
+<p>The model is logistic regression with an added parameter for the top asymptote. For model specification, log likelihood, scores and second derivatives see the <a href="https://khvorov45.github.io/sclr/articles/sclr-math.html">math vignette</a>. Documentation of the main fitting function <code><a href="reference/sclr.html">?sclr</a></code> has details on how the model is fit.</p>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
@@ -119,7 +119,7 @@
 <a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; beta_logHI  1.8146909  2.48286390</span></a>
 <a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; Log likelihood: -2469.765</span></a></code></pre></div>
-<p>For more details see <code><a href="articles/sclr-usage.html">vignette("sclr-usage")</a></code>.</p>
+<p>For more details see the <a href="https://khvorov45.github.io/sclr/articles/sclr-usage.html">usage vignette</a>.</p>
 </div>
 <div id="references" class="section level2">
 <h2 class="hasAnchor">
