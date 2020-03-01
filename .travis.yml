@@ -6,4 +6,3 @@ after_success:
 cache: packages
 os:
   - linux
-  - osx
