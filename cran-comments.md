@@ -1,10 +1,9 @@
 ## Test environments
-- Windows 10 (local install), R 3.6.1
-- Windows Server 2008 (on rhub), R-devel
+- ubuntu 18.04 (local install), R 3.6.2
+- ubuntu 16.04 (on travis-ci), R 3.6.2
+- Windows Server 2008 R2 SP1 (on rhub), R-devel
 - ubuntu 16.04 (on rhub), R-release
-- ubuntu 16.04 (on travis-ci), R 3.6.1
 - fedora 24 (on rhub), R-devel
-- OS X 10.13.3 (on travis-ci), R 3.6.1
 
 ## R CMD check results
 No ERRORs, WARNINGs or NOTEs.
