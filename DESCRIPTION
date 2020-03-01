@@ -1,6 +1,6 @@
 Package: sclr
 Title: Scaled Logistic Regression
-Version: 0.3.0.9000
+Version: 0.3.1
 Authors@R: 
     person(given = "Arseniy",
            family = "Khvorov",
@@ -20,7 +20,8 @@ Imports:
     tibble,
     dplyr,
     rlang,
-    stats
+    stats,
+    purrr
 Suggests: 
     knitr,
     rmarkdown,
