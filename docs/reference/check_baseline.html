@@ -70,7 +70,7 @@ a likelihood ratio test." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">sclr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.3.1</span>
       </span>
     </div>
 
@@ -175,9 +175,9 @@ a likelihood ratio test.</p>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>sclr</span>)
 <span class='no'>l1</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='sclr_ideal_data.html'>sclr_ideal_data</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>50</span>, <span class='kw'>theta</span> <span class='kw'>=</span> <span class='fl'>1e6</span>, <span class='kw'>seed</span> <span class='kw'>=</span> <span class='fl'>20191104</span>)
 <span class='fu'>check_baseline</span>(<span class='no'>status</span> ~ <span class='no'>logHI</span>, <span class='no'>l1</span>)</div><div class='output co'>#&gt; <span class='message'>likely baseline of 1</span></div><div class='output co'>#&gt; <span style='color: #555555;'># A tibble: 1 x 4</span><span>
-#&gt;   sclr_log_lkhd lr_log_lkhd test_statistic p_value
-#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>          </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>   </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span>
-#&gt; </span><span style='color: #555555;'>1</span><span>         -</span><span style='color: #BB0000;'>15.4</span><span>       -</span><span style='color: #BB0000;'>15.3</span><span>         -</span><span style='color: #BB0000;'>0.161</span><span>       1</div></span></pre>
+#&gt;   sclr_log_lkhd lr_log_lkhd test_statistic p_value 
+#&gt;           </span><span style='color: #555555;font-style: italic;'>&lt;dbl&gt;</span><span> </span><span style='color: #555555;font-style: italic;'>&lt;logLik&gt;</span><span>    </span><span style='color: #555555;font-style: italic;'>&lt;logLik&gt;</span><span>       </span><span style='color: #555555;font-style: italic;'>&lt;logLik&gt;</span><span>
+#&gt; </span><span style='color: #555555;'>1</span><span>         -</span><span style='color: #BB0000;'>15.4</span><span> -15.2758    -0.1608735     1       </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
