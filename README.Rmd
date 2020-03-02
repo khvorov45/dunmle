@@ -26,7 +26,7 @@ maximum likelihood method. The [package website](https://khvorov45.github.io/scl
 
 ## Installation
 
-Install the [CRAN](https://cloud.r-project.org/package=sclr) version with
+Install the [CRAN](https://CRAN.R-project.org/package=sclr) version with
 
 ``` r
 install.packages("sclr")

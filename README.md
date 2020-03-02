@@ -19,8 +19,7 @@ vignettes and version history.
 
 ## Installation
 
-Install the [CRAN](https://cloud.r-project.org/package=sclr) version
-with
+Install the [CRAN](https://CRAN.R-project.org/package=sclr) version with
 
 ``` r
 install.packages("sclr")
