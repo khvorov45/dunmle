@@ -1,3 +1,7 @@
+## Resubmission
+
+Changed https://cloud.r-project.org/package=sclr to https://CRAN.R-project.org/package=sclr in README.md
+
 ## Test environments
 - ubuntu 18.04 (local install), R 3.6.2
 - ubuntu 16.04 (on travis-ci), R 3.6.2
